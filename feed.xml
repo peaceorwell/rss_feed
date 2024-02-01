@@ -1,7 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
 <rss version="2.0">
 <channel>
   <title>Commit Updates</title>
   <link>https://peaceorwell.github.io/rss_feed/feed.xml</link>
   <description>Recent commits containing specific keywords</description>
-<item><title>New commit found at 2025-02-01 20:38:40.876159</title><link>https://github.com/pytorch/pytorch/commit/2b48891e62e5c4b57c8cac92cee5eb71228a203a</link></item><item><title>New commit found at 2024-02-01 20:38:40.876204</title><link>https://github.com/pytorch/pytorch/commit/6c67f3333a539e8f29515375a87612897214f8f2</link></item><item><title>New commit found at 2024-02-01 20:38:40.876218</title><link>https://github.com/pytorch/pytorch/commit/483001e8468209911292aa7f23c2a25fbfb6e31b</link></item><item><title>New commit found at 2024-02-01 20:38:40.876228</title><link>https://github.com/pytorch/pytorch/commit/1128cf96f078a76f27b038d7adbc2b72fe8927e2</link></item><item><title>New commit found at 2024-02-01 20:38:40.876238</title><link>https://github.com/pytorch/pytorch/commit/dd52939438834545632ccc9e986029d63f68e064</link></item><item><title>New commit found at 2024-02-01 20:38:40.876247</title><link>https://github.com/pytorch/pytorch/commit/35f3ccffd4dd836d71b1db6d560800597979ec5b</link></item><item><title>New commit found at 2024-02-01 20:38:40.876256</title><link>https://github.com/pytorch/pytorch/commit/6fa162e68148c10626bc824bc3eb31d56db4c2d8</link></item><item><title>New commit found at 2024-02-01 20:38:40.876265</title><link>https://github.com/pytorch/pytorch/commit/f2682e75e6fd735c4a84afe59eafd541f7643f4a</link></item><item><title>New commit found at 2024-02-01 20:38:40.876274</title><link>https://github.com/pytorch/pytorch/commit/e332653eb38b6f97e8088b4d3adc5b112fe8f761</link></item><item><title>New commit found at 2024-02-01 20:38:40.876283</title><link>https://github.com/pytorch/pytorch/commit/e5bb527d3e91b244404e142dfac8e9e55e02aa81</link></item><item><title>New commit found at 2024-02-01 20:38:40.876292</title><link>https://github.com/pytorch/pytorch/commit/8be6dee14b76f63dea1e9329d6cd0fdc9552a2d6</link></item></channel>
-</rss>
+</channel>
+<item><title>[inductor] Handle special values correctly in ir.Scan codegen (#118788)</title><link>https://github.com/pytorch/pytorch/commit/9c2b43cc5057cb840879224e3bdced58d6334c0a</link><description>[inductor] Handle special values correctly in ir.Scan codegen (#118788)
+
+Special values (`NaN`/`+/-Inf`) are not correctly during codegen for `ir.Scan` nodes. This
+is a fairly minor bugfix that has not come up since the only two scan
+ops with lowerings use "normal" values.
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118788
+Approved by: https://github.com/peterbell10</description><pubDate>2024-02-01T14:54:20Z</pubDate></item><item><title>[AOTInductor] Add Runtime Constant-folding for AOTInductor (#118765)</title><link>https://github.com/pytorch/pytorch/commit/2b48891e62e5c4b57c8cac92cee5eb71228a203a</link><description>[AOTInductor] Add Runtime Constant-folding for AOTInductor (#118765)
+
+Summary:
+Add Runtime Constant-folding for AOTInductor.
+This also include the invocation of constant folding at load time.
+
+The constant folding lowering is a 2-step process.
+First, we split the graph into 2 modules, one of it is the constant module, which doesn't depend on any input and the whole module could be inferred (constant-folded) one-time and be reused. The constant module, is lowered, and being codegen-ed as usual and cached (let's call this constant code). The constant code reuses the whole lowering/profiling/etc. process, only difference is that we do not generate any headers or initialization for the constant code.
+Second, after handling the constant module, we take care of the main module (which is the part that would depend on the user input.) For the main module, we take in one additional component, the constant code, compare with a normal lowering. Addition step we do here is that, we inject the constant code into the codegen-ed main module, and create the caller for the main module to consume the result of the constant module.
+
+Test Plan: Unit tests included in commit.
+
+Differential Revision: D53274382
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118765
+Approved by: https://github.com/chenyang78</description><pubDate>2024-02-01T04:54:25Z</pubDate></item><item><title>[Inductor] Skip triton templates for mixedmm on SM70- (#118591)</title><link>https://github.com/pytorch/pytorch/commit/6c67f3333a539e8f29515375a87612897214f8f2</link><description>[Inductor] Skip triton templates for mixedmm on SM70- (#118591)
+
+As it results in numerical errors, see https://github.com/pytorch/pytorch/issues/117144
+
+Fixes https://github.com/pytorch/pytorch/issues/117144
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118591
+Approved by: https://github.com/jansel</description><pubDate>2024-01-31T23:30:45Z</pubDate></item></rss>
