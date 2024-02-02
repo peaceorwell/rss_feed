@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0"><channel><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description></channel><item><title>[inductor] skip launching kernels with zero grid in AOTInductor when using backed symints (#118654)</title><link>https://github.com/pytorch/pytorch/commit/babd6c776dfdc5db0f0f1bc69e41a5a5d76ca719</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; [inductor] skip launching kernels with zero grid in AOTInductor when using backed symints (#118654)
+<rss version="2.0"><channel><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[inductor] skip launching kernels with zero grid in AOTInductor when using backed symints (#118654)</title><link>https://github.com/pytorch/pytorch/commit/babd6c776dfdc5db0f0f1bc69e41a5a5d76ca719</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; [inductor] skip launching kernels with zero grid in AOTInductor when using backed symints (#118654)
 
 Like #110312 but we also run this check when backed symints are in the grid (e.g. s1 / 512)
 
@@ -591,28 +591,4 @@ Below's the tail-end of the stack trace. Here's the important bits:
 Since [translation validation](https://github.com/pytorch/pytorch/blob/c6be5d55a56cc12b7a004acdb6a7da92ee2142f7/torch/fx/experimental/validator.py#L574) may not be on during Inductor lowering, we can check if that's True and return the FX node's name in this case.
 
 Pull Request resolved: https://github.com/pytorch/pytorch/pull/118066
-Approved by: https://github.com/ezyang, https://github.com/peterbell10&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/21e8546b1180d16425c82dbececc87e31d544328'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-01-24T03:07:30Z</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/21e8546b1180d16425c82dbececc87e31d544328</guid></item><item><title>Remove optimizer.step patching for profiler hook (#115772)</title><link>https://github.com/pytorch/pytorch/commit/13d2cdffa29803c73cf6a4282894d5c4ee42cf1b</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; Remove optimizer.step patching for profiler hook (#115772)
-
-1. I'd like to remove the patching that avoids the profiler hook, but it adds an additional graph break due to nested wrappers. #117767 if interested, see (internal only) paste for [before](P996529232) and [after](P997507449) this PR.
-
-```
-I've locally run perf benchmarks for yolov3: Before the speedup is 4.183x, and after it is 4.208x.
-I've also run it for resnet50: before, speedup is 3.706x and now it is 3.924x.
-```
-
-2. @mlazos I now unwrap twice in the dynamo and inductor tests. This feels like we're testing deficiently--should we add tests to test that tracing through the profiler hook and the use_grad hook are functioning according to expectations (I know there's at least one graph break in one).
-3. There's a strange memory thing going on...what is happening? This has been resolved with @voznesenskym's [change](https://github.com/pytorch/pytorch/pull/116169). (for details see below)
-
-&lt;details&gt;
-This PR will fail the test_static_address_finalizer test due to a mysterious thing that is happening (idk what, but maybe the dynamo cache or a frame _expecting_ the patching to have been done).
-
-There is no Python refcycle, as the backrefs for `p_ref()` look like:
-![image](https://github.com/pytorch/pytorch/assets/31798555/4d6cbf50-3924-4efe-b578-d93389eebec8)
-(so 5 backrefs but none of them python)
-
-And the refs:
-![image](https://github.com/pytorch/pytorch/assets/31798555/25e01105-bcb9-44ca-997a-2cf1670a6d42)
-&lt;/details&gt;
-
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/115772
-Approved by: https://github.com/jansel, https://github.com/mlazos&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/13d2cdffa29803c73cf6a4282894d5c4ee42cf1b'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-01-23T20:15:41Z</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/13d2cdffa29803c73cf6a4282894d5c4ee42cf1b</guid></item></rss>
+Approved by: https://github.com/ezyang, https://github.com/peterbell10&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/21e8546b1180d16425c82dbececc87e31d544328'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-01-24T03:07:30Z</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/21e8546b1180d16425c82dbececc87e31d544328</guid></item></channel></rss>
