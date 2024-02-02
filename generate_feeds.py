@@ -1,8 +1,17 @@
 import requests
-import xml.etree.ElementTree as ET
+import markdown
+from lxml import etree as ET
+from lxml.etree import CDATA
+from email.utils import formatdate
+from time import mktime
 from datetime import datetime, timedelta
 
-def get_commits_with_keyword(repo, keyword, days=1):
+def format_rfc2822(datetime_str):
+    dt = datetime.fromisoformat(datetime_str.rstrip('Z'))  # Remove Z if present
+    timestamp = mktime(dt.timetuple())
+    return formatdate(timestamp, localtime=False, usegmt=True)
+
+def get_commits_with_keyword(repo, keyword, days=10):
     since_date = datetime.now() - timedelta(days=days)
     since = since_date.isoformat()
 
@@ -10,8 +19,10 @@ def get_commits_with_keyword(repo, keyword, days=1):
     page = 1
     while True:
         url = f"https://api.github.com/repos/{repo}/commits?since={since}&page={page}&per_page=100"
-        response = requests.get(url)
+        headers = {"Authorization": "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"}
+        response = requests.get(url, headers=headers)
         if response.status_code != 200 or not response.json():
+            print("response error")
             break
 
         for commit_data in response.json():
@@ -21,7 +32,7 @@ def get_commits_with_keyword(repo, keyword, days=1):
                     'title': commit_message.split("\n")[0],
                     'url': commit_data['html_url'],
                     'message': commit_message,
-                    'date': commit_data['commit']['committer']['date']
+                    'date': format_rfc2822(commit_data['commit']['committer']['date'])
                 }
                 commits.append(commit_info)
 
@@ -32,7 +43,7 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
     try:
         tree = ET.parse(feed_path)
         root = tree.getroot()
-    except (ET.ParseError, FileNotFoundError):
+    except (ET.ParseError, FileNotFoundError, OSError):
         root = ET.Element('rss', version='2.0')
         channel = ET.SubElement(root, 'channel')
         tree = ET.ElementTree(root)
@@ -50,17 +61,23 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
         title.text = commit['title']
         link = ET.SubElement(item, 'link')
         link.text = commit['url']
+
         description = ET.SubElement(item, 'description')
-        description.text = (
-            f"<p><b>Commit Message:</b> {commit['message']}</p>"
-            f"<p><a href='{commit['url']}'>View Commit on GitHub</a></p>"
-        )
+        commit_message_html = markdown.markdown(commit['message'], extensions=['nl2br'])
+        commit_message_html = commit_message_html.replace('<br><br>', '<br>')
+        description.text = CDATA(commit_message_html)
+
         pubDate = ET.SubElement(item, 'pubDate')
         pubDate.text = commit['date']
 
-        root.append(item)
+        guid = ET.SubElement(item, 'guid')
+        guid.text = commit['url']  # 使用commit的URL作为guid
+        guid.set('isPermaLink', 'true')  # 如果guid是URL，将isPermaLink设置为"true"
 
-    tree.write(feed_path, encoding='utf-8', xml_declaration=True)
+        channel.append(item)
+
+    tree.write(feed_path, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+
 
 # 设置仓库和关键词
 repo = "pytorch/pytorch"
@@ -68,5 +85,6 @@ keyword = "inductor"
 
 # 获取commits并更新RSS feed
 commits = get_commits_with_keyword(repo, keyword)
+print(commits)
 if commits:
     append_to_rss_feed(commits)
