@@ -634,4 +634,44 @@ python -u -m pytest -s -v test_cpu_repro.py -k test_transpose_mxn_32_32_bf16_fp1
 ```
 
 Pull Request resolved: https://github.com/pytorch/pytorch/pull/117958
-Approved by: https://github.com/jgong5, https://github.com/lezcano&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/4cfd16cb6da3c9cc7ba09d47456e850065dd5187'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-01-23T09:43:35Z</pubDate></item></rss>
+Approved by: https://github.com/jgong5, https://github.com/lezcano&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/4cfd16cb6da3c9cc7ba09d47456e850065dd5187'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-01-23T09:43:35Z</pubDate></item><item><title>Revert "[inductor] make multi-kernel work with cpp-wrapper (#117813)"</title><link>https://github.com/pytorch/pytorch/commit/796278b57e95c9a6c2bdcdea413d61b31fb6344a</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; Revert "[inductor] make multi-kernel work with cpp-wrapper (#117813)"
+
+This reverts commit 20484a193626ef72e0b3f35914f17deb2a89b8fc.
+
+Reverted https://github.com/pytorch/pytorch/pull/117813 on behalf of https://github.com/atalman due to broke linux-focal-rocm5.7-py3.8 tests ([comment](https://github.com/pytorch/pytorch/pull/117813#issuecomment-1922613135))&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/796278b57e95c9a6c2bdcdea413d61b31fb6344a'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-02-02T01:19:19Z</pubDate></item><item><title>Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)</title><link>https://github.com/pytorch/pytorch/commit/08d90a1ea97d17b9fb233a17c605415e13497922</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)
+
+Info about super in dynamic classes:
+https://stackoverflow.com/questions/71879642/how-to-pass-function-with-super-when-creating-class-dynamically
+https://stackoverflow.com/questions/43782944/super-does-not-work-together-with-type-supertype-obj-obj-must-be-an-i
+
+Calling super(TestCase) actually calls TestCase's parent's functions, bypassing TestCase itself's functions
+
+Mainly doing this because it's making disable bot spam
+
+Test: checked locally and check that https://github.com/pytorch/pytorch/issues/117954 actually got skipped
+
+Logs for `inductor/test_torchinductor_dynamic_shapes.py::TestInductorDynamicCUDA::test_unbacked_index_select_cuda`
+https://ossci-raw-job-status.s3.amazonaws.com/log/21083466405
+Afaik this PR doesn't actually cause the test to fail, it just surfaces the error since the mem leak check wasn't running previously
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118586
+Approved by: https://github.com/huydhn&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/08d90a1ea97d17b9fb233a17c605415e13497922'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-02-02T00:40:37Z</pubDate></item><item><title>[inductor] more accurate throughput calculations for kernel benchmarks (#118858)</title><link>https://github.com/pytorch/pytorch/commit/61b572ed5638dea4b47c16672eb7e7361e806bfc</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; [inductor] more accurate throughput calculations for kernel benchmarks (#118858)
+
+Our current throughput calculations for kernel benchmarks have some issues,
+particularly when we slice inputs in the kernel. In such cases, we count
+the original inputs as part of the memory traffic passed across the kernel.
+This is incorrect because it may result in a much larger throughput
+calculation, which can even exceed the theoretical bandwidth.
+
+Instead, we should only count the size of the "slices" that contribute to
+the actual memory traffic.
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118858
+Approved by: https://github.com/jansel&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/61b572ed5638dea4b47c16672eb7e7361e806bfc'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-02-01T21:42:14Z</pubDate></item><item><title>[inductor] make multi-kernel work with cpp-wrapper (#117813)</title><link>https://github.com/pytorch/pytorch/commit/20484a193626ef72e0b3f35914f17deb2a89b8fc</link><description>&lt;p&gt;&lt;b&gt;Commit Message:&lt;/b&gt; [inductor] make multi-kernel work with cpp-wrapper (#117813)
+
+Make multi-kernel work with cpp-wrapper. multi-kernel generates two equivalent variants for a reduction. At runtime the faster one is picked. But cpp-wrapper need save cubin file during codegen. They don't work with each other at the beginning.
+
+Thanks Jason for suggesting a neat way to integrate these two. cpp-wrapper does 2 passes codegen right now. For the first pass, we still generate multi-kernel code and run it; for the second pass, we load the cubin file for the faster kernel directly. And multi-kernel python code is not generated for the second pass since they should not be needed.
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/117813
+Approved by: https://github.com/jansel&lt;/p&gt;&lt;p&gt;&lt;a href='https://github.com/pytorch/pytorch/commit/20484a193626ef72e0b3f35914f17deb2a89b8fc'&gt;View Commit on GitHub&lt;/a&gt;&lt;/p&gt;</description><pubDate>2024-02-01T21:29:02Z</pubDate></item></rss>
