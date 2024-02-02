@@ -64,7 +64,7 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
 
         description = ET.SubElement(item, 'description')
         commit_message_html = markdown.markdown(commit['message'], extensions=['nl2br'])
-        commit_message_html = commit_message_html.replace('<br><br>', '<br>')
+        commit_message_html = commit_message_html.replace('<br />', '<br>')
         description.text = CDATA(commit_message_html)
 
         pubDate = ET.SubElement(item, 'pubDate')
