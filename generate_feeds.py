@@ -1,5 +1,6 @@
 import requests
 import markdown
+from bs4 import BeautifulSoup
 from lxml import etree as ET
 from lxml.etree import CDATA
 from email.utils import formatdate
@@ -39,6 +40,18 @@ def get_commits_with_keyword(repo, keyword, days=1):
         page += 1
     return commits
 
+def replace_br_with_p(html_content):
+    soup = BeautifulSoup(html_content, 'html.parser')
+    # 查找所有包含<br>的<p>标签
+    for p_tag in soup.find_all('p'):
+        br_tags = p_tag.find_all('br')
+        for br in br_tags:
+            br.replace_with(soup.new_tag('p'))
+    # 把原来的<p>标签分割成多个<p>标签，每个<br>现在都是新的<p>
+    new_html = str(soup)
+    return new_html
+
+
 def append_to_rss_feed(commits, feed_path='feed.xml'):
     try:
         tree = ET.parse(feed_path)
@@ -65,6 +78,7 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
         description = ET.SubElement(item, 'description')
         commit_message_html = markdown.markdown(commit['message'], extensions=['nl2br'])
         commit_message_html = commit_message_html.replace('<br />', '<br>')
+        commit_message_html = replace_br_with_p(commit_message_html)
         description.text = CDATA(commit_message_html)
 
         pubDate = ET.SubElement(item, 'pubDate')
