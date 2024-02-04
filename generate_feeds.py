@@ -12,7 +12,7 @@ def format_rfc2822(datetime_str):
     timestamp = mktime(dt.timetuple())
     return formatdate(timestamp, localtime=False, usegmt=True)
 
-def get_commits_with_keyword(repo, keyword, days=2):
+def get_commits_with_keyword(repo, keyword, days=1):
     since_date = datetime.now() - timedelta(days=days)
     since = since_date.isoformat()
 
