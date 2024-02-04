@@ -12,7 +12,7 @@ def format_rfc2822(datetime_str):
     timestamp = mktime(dt.timetuple())
     return formatdate(timestamp, localtime=False, usegmt=True)
 
-def get_commits_with_keyword(repo, keyword, days=1):
+def get_commits_with_keyword(repo, keyword, days=2):
     since_date = datetime.now() - timedelta(days=days)
     since = since_date.isoformat()
 
@@ -58,15 +58,16 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
         root = tree.getroot()
     except (ET.ParseError, FileNotFoundError, OSError):
         root = ET.Element('rss', version='2.0')
-        channel = ET.SubElement(root, 'channel')
         tree = ET.ElementTree(root)
 
-        title = ET.SubElement(channel, 'title')
-        title.text = 'GitHub Commits Feed'
-        link = ET.SubElement(channel, 'link')
-        link.text = 'https://github.com/username/repo/commits'  # Update with actual repo URL
-        description = ET.SubElement(channel, 'description')
-        description.text = 'Recent commits from GitHub repo'
+    channel = ET.SubElement(root, 'channel')
+
+    title = ET.SubElement(channel, 'title')
+    title.text = 'GitHub Commits Feed'
+    link = ET.SubElement(channel, 'link')
+    link.text = 'https://github.com/username/repo/commits'  # Update with actual repo URL
+    description = ET.SubElement(channel, 'description')
+    description.text = 'Recent commits from GitHub repo'
 
     for commit in commits:
         item = ET.Element('item')
@@ -100,4 +101,5 @@ keyword = "inductor"
 # 获取commits并更新RSS feed
 commits = get_commits_with_keyword(repo, keyword)
 if commits:
+    print("append new commits")
     append_to_rss_feed(commits)
