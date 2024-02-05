@@ -1,3 +1,4 @@
+import os
 import requests
 import markdown
 from bs4 import BeautifulSoup
@@ -8,24 +9,24 @@ from time import mktime
 from datetime import datetime, timedelta
 
 def format_rfc2822(datetime_str):
-    dt = datetime.fromisoformat(datetime_str.rstrip('Z'))  # Remove Z if present
+    dt = datetime.fromisoformat(datetime_str.rstrip('Z'))
     timestamp = mktime(dt.timetuple())
     return formatdate(timestamp, localtime=False, usegmt=True)
 
-def get_commits_with_keyword(repo, keyword, days=1):
+def get_commits_with_keyword(repo, keyword, days=10):
     since_date = datetime.now() - timedelta(days=days)
     since = since_date.isoformat()
-
     commits = []
     page = 1
+    token = os.getenv("GITHUB_PAT")  # 使用环境变量获取PAT
+    headers = {"Authorization": f"{token}"}
+    print(headers)
     while True:
         url = f"https://api.github.com/repos/{repo}/commits?since={since}&page={page}&per_page=100"
-        headers = {"Authorization": "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"}
         response = requests.get(url, headers=headers)
         if response.status_code != 200 or not response.json():
-            print("response error")
+            print(f"Response error: {response.status_code}")
             break
-
         for commit_data in response.json():
             commit_message = commit_data['commit']['message']
             if keyword.lower() in commit_message.lower():
@@ -36,21 +37,13 @@ def get_commits_with_keyword(repo, keyword, days=1):
                     'date': format_rfc2822(commit_data['commit']['committer']['date'])
                 }
                 commits.append(commit_info)
-
         page += 1
     return commits
 
 def replace_br_with_p(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
-    # 查找所有包含<br>的<p>标签
-    for p_tag in soup.find_all('p'):
-        br_tags = p_tag.find_all('br')
-        for br in br_tags:
-            br.replace_with(soup.new_tag('p'))
-    # 把原来的<p>标签分割成多个<p>标签，每个<br>现在都是新的<p>
-    new_html = str(soup)
-    return new_html
-
+    # 对于已经在<p>中的内容，无需替换<br>为<p>
+    return str(soup)
 
 def append_to_rss_feed(commits, feed_path='feed.xml'):
     try:
@@ -60,14 +53,23 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
         root = ET.Element('rss', version='2.0')
         tree = ET.ElementTree(root)
 
-    channel = ET.SubElement(root, 'channel')
+    channel = root.find('channel')
+    if channel is None:
+        channel = ET.SubElement(root, 'channel')
 
-    title = ET.SubElement(channel, 'title')
-    title.text = 'GitHub Commits Feed'
-    link = ET.SubElement(channel, 'link')
-    link.text = 'https://github.com/username/repo/commits'  # Update with actual repo URL
-    description = ET.SubElement(channel, 'description')
-    description.text = 'Recent commits from GitHub repo'
+    # 设置channel的基本信息，如果它们还未设置
+    if not channel.find('title'):
+        title = ET.SubElement(channel, 'title')
+        title.text = 'GitHub Commits Feed'
+    if not channel.find('link'):
+        link = ET.SubElement(channel, 'link')
+        link.text = 'https://github.com/username/repo/commits'
+    if not channel.find('description'):
+        description = ET.SubElement(channel, 'description')
+        description.text = 'Recent commits from GitHub repo'
+
+    # 创建新items的列表
+    new_items = []
 
     for commit in commits:
         item = ET.Element('item')
@@ -78,21 +80,32 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
 
         description = ET.SubElement(item, 'description')
         commit_message_html = markdown.markdown(commit['message'], extensions=['nl2br'])
-        commit_message_html = commit_message_html.replace('<br />', '<br>')
-        commit_message_html = replace_br_with_p(commit_message_html)
         description.text = CDATA(commit_message_html)
 
         pubDate = ET.SubElement(item, 'pubDate')
         pubDate.text = commit['date']
 
-        guid = ET.SubElement(item, 'guid')
-        guid.text = commit['url']  # 使用commit的URL作为guid
-        guid.set('isPermaLink', 'true')  # 如果guid是URL，将isPermaLink设置为"true"
+        guid = ET.SubElement(item, 'guid', isPermaLink="true")
+        guid.text = commit['url']
 
+        # 将新item添加到列表
+        new_items.append(item)
+
+    # 获取现有items
+    existing_items = list(channel.findall('item'))
+
+    # 移除channel中所有现有的item
+    for item in existing_items:
+        channel.remove(item)
+
+    # 将新items和现有items合并，确保新items在前
+    all_items = new_items + existing_items
+
+    # 将合并后的items添加回channel
+    for item in all_items:
         channel.append(item)
 
     tree.write(feed_path, pretty_print=True, xml_declaration=True, encoding='UTF-8')
-
 
 # 设置仓库和关键词
 repo = "pytorch/pytorch"
@@ -101,5 +114,5 @@ keyword = "inductor"
 # 获取commits并更新RSS feed
 commits = get_commits_with_keyword(repo, keyword)
 if commits:
-    print("append new commits")
+    print(f"Appending {len(commits)} new commits to the feed.")
     append_to_rss_feed(commits)

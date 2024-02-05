@@ -5,12 +5,33 @@
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
     <item>
+      <title>[AOTI] Make abi_compatible as default for OSS CI (#119126)</title>
+      <link>https://github.com/pytorch/pytorch/commit/b41f3e8df1b6ac2240d591f5e53b36589e90299b</link>
+      <description><![CDATA[<p>[AOTI] Make abi_compatible as default for OSS CI (#119126)</p>
+<p>Summary: Introduce an environment varible AOT_INDUCTOR_ABI_COMPATIBLE to control the ABI-compatible mode, and turn it on for OSS CI.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119126<br />
+Approved by: https://github.com/chenyang78<br />
+ghstack dependencies: #119125</p>]]></description>
+      <pubDate>Sun, 04 Feb 2024 07:48:58 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b41f3e8df1b6ac2240d591f5e53b36589e90299b</guid>
+    </item>
+    <item>
+      <title>[AOTI] Support copy_, _fft_c2c and view_as_real in C shim (#119125)</title>
+      <link>https://github.com/pytorch/pytorch/commit/79b20aec764c62e7a086aa2e2515b21731c9a831</link>
+      <description><![CDATA[<p>[AOTI] Support copy_, _fft_c2c and view_as_real in C shim (#119125)</p>
+<p>Summary: These ops exist in GoogleFnet. Also add a Complex fallback for convert_element_type. After this PR, we can enable ABI-compatible for AOTInductor OSS CI.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119125<br />
+Approved by: https://github.com/chenyang78</p>]]></description>
+      <pubDate>Sun, 04 Feb 2024 07:48:58 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/79b20aec764c62e7a086aa2e2515b21731c9a831</guid>
+    </item>
+    <item>
       <title>[auto_functionalize] Remove mutated_args_name from args (#119050)</title>
       <link>https://github.com/pytorch/pytorch/commit/440b7d52793be046354c03521295ab7f2d3969f2</link>
       <description><![CDATA[<p>[auto_functionalize] Remove mutated_args_name from args (#119050)</p>
 <p><code>auto_functionalize</code> currently takes a custom op, a list of mutated argument names, and inputs to the custom op as kwargs. The list of mutated argument names is computed from the schema, and gets created when we're tracing. However, it seems that having the list of mutated argument names is a little unnecessary since we can always recompute it from the schema during runtime.</p>
 <p>This also prevents the case where users might incorrectly modify the inputs to this operator, as we will now just recompute it during the runtime. This probably won't affect things too much because inductor will decompose auto_functionalize.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119050<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119050<br />
 Approved by: https://github.com/zou3519</p>]]></description>
       <pubDate>Fri, 02 Feb 2024 16:27:14 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/440b7d52793be046354c03521295ab7f2d3969f2</guid>
@@ -19,22 +40,22 @@ Approved by: https://github.com/zou3519</p>]]></description>
       <title>Expose aggressive_recomputation as an inductor config (#118943)</title>
       <link>https://github.com/pytorch/pytorch/commit/de6a9060932f4541863130d4cb8e90267f22dd56</link>
       <description><![CDATA[<p>Expose aggressive_recomputation as an inductor config (#118943)</p>
-<p>Summary:<p></p>
+<p>Summary:<br />
 As title.</p>
 <p>We found aggressive_recomputation shows memory savings (7% on APS COFFEE model) with 2% QPS loss.</p>
 <p>It also gives very promising signal on our auto ac experiments: https://docs.google.com/document/d/1S2qgMg1CwAQ4U1Ffuk2epbEOx06ogZhioX2jKCwL7ZQ/edit</p>
 <p>{F1426175073}</p>
-<p>Test Plan:<p></p>
-APS COFFEE from silverlakeli<p></p>
-- Zoom of baseline job: https://www.internalfb.com/intern/zoomer/?profiling_run_fbid=927380488801910&amp;tab=overview<p></p>
+<p>Test Plan:<br />
+APS COFFEE from silverlakeli<br />
+- Zoom of baseline job: https://www.internalfb.com/intern/zoomer/?profiling_run_fbid=927380488801910&amp;tab=overview<br />
 - Zoom of job with aggressive_recomputation: https://www.internalfb.com/intern/zoomer/?profiling_run_fbid=1126815608217470&amp;tab=overview</p>
-<p>APS 1100x shrunk version:<p></p>
-- baseline: https://www.internalfb.com/mast/job/aps-yuzhenhuang-afe049505a<p></p>
-- test: https://www.internalfb.com/mast/job/aps-yuzhenhuang-709e41bf0d<p></p>
+<p>APS 1100x shrunk version:<br />
+- baseline: https://www.internalfb.com/mast/job/aps-yuzhenhuang-afe049505a<br />
+- test: https://www.internalfb.com/mast/job/aps-yuzhenhuang-709e41bf0d<br />
 Memory from 42.98% -&gt; 41.04%.</p>
 <p>Reviewed By: yf225, yuxihu, silverlakeli, richqyz</p>
 <p>Differential Revision: D53248057</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118943<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118943<br />
 Approved by: https://github.com/anijain2305, https://github.com/yanboliang</p>]]></description>
       <pubDate>Fri, 02 Feb 2024 16:17:03 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/de6a9060932f4541863130d4cb8e90267f22dd56</guid>
@@ -45,7 +66,7 @@ Approved by: https://github.com/anijain2305, https://github.com/yanboliang</p>]]
       <description><![CDATA[<p>[inductor] make multi-kernel work with cpp-wrapper (#117813)</p>
 <p>Make multi-kernel work with cpp-wrapper. multi-kernel generates two equivalent variants for a reduction. At runtime the faster one is picked. But cpp-wrapper need save cubin file during codegen. They don't work with each other at the beginning.</p>
 <p>Thanks Jason for suggesting a neat way to integrate these two. cpp-wrapper does 2 passes codegen right now. For the first pass, we still generate multi-kernel code and run it; for the second pass, we load the cubin file for the faster kernel directly. And multi-kernel python code is not generated for the second pass since they should not be needed.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117813<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117813<br />
 Approved by: https://github.com/jansel</p>]]></description>
       <pubDate>Fri, 02 Feb 2024 16:06:21 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c24ffc3f66b2270dfc65a404687b91b55ed580e9</guid>
@@ -56,13 +77,13 @@ Approved by: https://github.com/jansel</p>]]></description>
       <description><![CDATA[<p>[Inductor] GEMM shape padding improvements (#118522)</p>
 <p>Improvements to shape padding logic in torch/_inductor/pad_mm.py</p>
 <p>These changes could lead up to 14% perf improvement for certain Meta internal models in experiments.</p>
-<p>Most notably:<p></p>
-  * 1.) Use aten.const_pad_nd operation to pad Tensors in a single op instead of using multiple steps involving intermediate buffers. This appears to be more performant than the previous logic, confirmed by Profiling &amp; Benchmarking results ( Meta internal )<p></p>
- * 2.) Make many paddings unneccessary using explicitly transposed GEMM when either M or N dimension is properly aligned but the other is not, configurable via config.shape_pad_use_transpose (default: True).<p></p>
-  * 3.) Enable shape padding for the Inductor CUDA  /  Cutlass backend for all GEMM ops where Cutlass would be enabled, without benchmarking in that case.<p></p>
-  * Add config flag to always pad shapes (without benchmarking first), configurable via config.force_shape_pad (default: False )<p></p>
+<p>Most notably:<br />
+  * 1.) Use aten.const_pad_nd operation to pad Tensors in a single op instead of using multiple steps involving intermediate buffers. This appears to be more performant than the previous logic, confirmed by Profiling &amp; Benchmarking results ( Meta internal )<br />
+ * 2.) Make many paddings unneccessary using explicitly transposed GEMM when either M or N dimension is properly aligned but the other is not, configurable via config.shape_pad_use_transpose (default: True).<br />
+  * 3.) Enable shape padding for the Inductor CUDA  /  Cutlass backend for all GEMM ops where Cutlass would be enabled, without benchmarking in that case.<br />
+  * Add config flag to always pad shapes (without benchmarking first), configurable via config.force_shape_pad (default: False )<br />
   * Added several new unit tests to ensure tensors are padded such that they meet all alignment requirements after padding.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118522<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118522<br />
 Approved by: https://github.com/jansel, https://github.com/eellison</p>]]></description>
       <pubDate>Fri, 02 Feb 2024 00:50:06 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/cc46829f96dba05b9b46bae31a1e6d2a053f667e</guid>
@@ -77,17 +98,17 @@ Approved by: https://github.com/jansel, https://github.com/eellison</p>]]></desc
 <p>To avoid this, we check for a <code>0</code> sized grid whenever there's symbolic shapes which includes backed and unbacked symints.</p>
 <p>This adds non-zero overhead to the CPU. However, in return, we get better reliability when encountering this scenario. This scenario happened when serving an internal model.</p>
 <h3>Test</h3>
-<p>```<p></p>
-$ python test/inductor/test_aot_inductor.py -k test_zero_grid_with_unbacked_symbols<p></p>
+<p>```<br />
+$ python test/inductor/test_aot_inductor.py -k test_zero_grid_with_unbacked_symbols<br />
 OK (skipped=3)</p>
 <p>$ python test/inductor/test_aot_inductor.py -k test_zero_grid_with_backed_symbols</p>
 <h1>Before</h1>
-<p>Error: CUDA driver error: invalid argument<p></p>
+<p>Error: CUDA driver error: invalid argument<br />
 FAILED (errors=2, skipped=3)</p>
 <h1>Now</h1>
-<p>OK (skipped=3)<p></p>
+<p>OK (skipped=3)<br />
 ```</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118654<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118654<br />
 Approved by: https://github.com/chenyang78, https://github.com/desertfire</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 19:19:52 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/babd6c776dfdc5db0f0f1bc69e41a5a5d76ca719</guid>
@@ -97,8 +118,8 @@ Approved by: https://github.com/chenyang78, https://github.com/desertfire</p>]]>
       <link>https://github.com/pytorch/pytorch/commit/946ea47a4fcf7883560743e3b290547dc506056a</link>
       <description><![CDATA[<p>[inductor] Fix an internal test issue (#118903)</p>
 <p>Summary: test_add_complex4 that introduced in https://github.com/pytorch/pytorch/pull/117929  fails internally, because of a cpp compilation issue for cpu. Specify the right device in the test instead.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53333919">D53333919</a><p></p>
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/118903<p></p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53333919">D53333919</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118903<br />
 Approved by: https://github.com/clee2000</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 19:18:12 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/946ea47a4fcf7883560743e3b290547dc506056a</guid>
@@ -116,16 +137,16 @@ Approved by: https://github.com/clee2000</p>]]></description>
       <title>Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)</title>
       <link>https://github.com/pytorch/pytorch/commit/08d90a1ea97d17b9fb233a17c605415e13497922</link>
       <description><![CDATA[<p>Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)</p>
-<p>Info about super in dynamic classes:<p></p>
-https://stackoverflow.com/questions/71879642/how-to-pass-function-with-super-when-creating-class-dynamically<p></p>
+<p>Info about super in dynamic classes:<br />
+https://stackoverflow.com/questions/71879642/how-to-pass-function-with-super-when-creating-class-dynamically<br />
 https://stackoverflow.com/questions/43782944/super-does-not-work-together-with-type-supertype-obj-obj-must-be-an-i</p>
 <p>Calling super(TestCase) actually calls TestCase's parent's functions, bypassing TestCase itself's functions</p>
 <p>Mainly doing this because it's making disable bot spam</p>
 <p>Test: checked locally and check that https://github.com/pytorch/pytorch/issues/117954 actually got skipped</p>
-<p>Logs for <code>inductor/test_torchinductor_dynamic_shapes.py::TestInductorDynamicCUDA::test_unbacked_index_select_cuda</code><p></p>
-https://ossci-raw-job-status.s3.amazonaws.com/log/21083466405<p></p>
+<p>Logs for <code>inductor/test_torchinductor_dynamic_shapes.py::TestInductorDynamicCUDA::test_unbacked_index_select_cuda</code><br />
+https://ossci-raw-job-status.s3.amazonaws.com/log/21083466405<br />
 Afaik this PR doesn't actually cause the test to fail, it just surfaces the error since the mem leak check wasn't running previously</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118586<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118586<br />
 Approved by: https://github.com/huydhn</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 16:40:37 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/08d90a1ea97d17b9fb233a17c605415e13497922</guid>
@@ -134,14 +155,14 @@ Approved by: https://github.com/huydhn</p>]]></description>
       <title>[inductor] more accurate throughput calculations for kernel benchmarks (#118858)</title>
       <link>https://github.com/pytorch/pytorch/commit/61b572ed5638dea4b47c16672eb7e7361e806bfc</link>
       <description><![CDATA[<p>[inductor] more accurate throughput calculations for kernel benchmarks (#118858)</p>
-<p>Our current throughput calculations for kernel benchmarks have some issues,<p></p>
-particularly when we slice inputs in the kernel. In such cases, we count<p></p>
-the original inputs as part of the memory traffic passed across the kernel.<p></p>
-This is incorrect because it may result in a much larger throughput<p></p>
+<p>Our current throughput calculations for kernel benchmarks have some issues,<br />
+particularly when we slice inputs in the kernel. In such cases, we count<br />
+the original inputs as part of the memory traffic passed across the kernel.<br />
+This is incorrect because it may result in a much larger throughput<br />
 calculation, which can even exceed the theoretical bandwidth.</p>
-<p>Instead, we should only count the size of the "slices" that contribute to<p></p>
+<p>Instead, we should only count the size of the "slices" that contribute to<br />
 the actual memory traffic.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118858<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118858<br />
 Approved by: https://github.com/jansel</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 13:42:14 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/61b572ed5638dea4b47c16672eb7e7361e806bfc</guid>
@@ -152,7 +173,7 @@ Approved by: https://github.com/jansel</p>]]></description>
       <description><![CDATA[<p>[inductor] make multi-kernel work with cpp-wrapper (#117813)</p>
 <p>Make multi-kernel work with cpp-wrapper. multi-kernel generates two equivalent variants for a reduction. At runtime the faster one is picked. But cpp-wrapper need save cubin file during codegen. They don't work with each other at the beginning.</p>
 <p>Thanks Jason for suggesting a neat way to integrate these two. cpp-wrapper does 2 passes codegen right now. For the first pass, we still generate multi-kernel code and run it; for the second pass, we load the cubin file for the faster kernel directly. And multi-kernel python code is not generated for the second pass since they should not be needed.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117813<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117813<br />
 Approved by: https://github.com/jansel</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 13:29:02 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/20484a193626ef72e0b3f35914f17deb2a89b8fc</guid>
@@ -161,10 +182,10 @@ Approved by: https://github.com/jansel</p>]]></description>
       <title>[inductor] Handle special values correctly in ir.Scan codegen (#118788)</title>
       <link>https://github.com/pytorch/pytorch/commit/9c2b43cc5057cb840879224e3bdced58d6334c0a</link>
       <description><![CDATA[<p>[inductor] Handle special values correctly in ir.Scan codegen (#118788)</p>
-<p>Special values (<code>NaN</code>/<code>+/-Inf</code>) are not correctly during codegen for <code>ir.Scan</code> nodes. This<p></p>
-is a fairly minor bugfix that has not come up since the only two scan<p></p>
+<p>Special values (<code>NaN</code>/<code>+/-Inf</code>) are not correctly during codegen for <code>ir.Scan</code> nodes. This<br />
+is a fairly minor bugfix that has not come up since the only two scan<br />
 ops with lowerings use "normal" values.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118788<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118788<br />
 Approved by: https://github.com/peterbell10</p>]]></description>
       <pubDate>Thu, 01 Feb 2024 06:54:20 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9c2b43cc5057cb840879224e3bdced58d6334c0a</guid>
@@ -173,15 +194,15 @@ Approved by: https://github.com/peterbell10</p>]]></description>
       <title>[AOTInductor] Add Runtime Constant-folding for AOTInductor (#118765)</title>
       <link>https://github.com/pytorch/pytorch/commit/2b48891e62e5c4b57c8cac92cee5eb71228a203a</link>
       <description><![CDATA[<p>[AOTInductor] Add Runtime Constant-folding for AOTInductor (#118765)</p>
-<p>Summary:<p></p>
-Add Runtime Constant-folding for AOTInductor.<p></p>
+<p>Summary:<br />
+Add Runtime Constant-folding for AOTInductor.<br />
 This also include the invocation of constant folding at load time.</p>
-<p>The constant folding lowering is a 2-step process.<p></p>
-First, we split the graph into 2 modules, one of it is the constant module, which doesn't depend on any input and the whole module could be inferred (constant-folded) one-time and be reused. The constant module, is lowered, and being codegen-ed as usual and cached (let's call this constant code). The constant code reuses the whole lowering/profiling/etc. process, only difference is that we do not generate any headers or initialization for the constant code.<p></p>
+<p>The constant folding lowering is a 2-step process.<br />
+First, we split the graph into 2 modules, one of it is the constant module, which doesn't depend on any input and the whole module could be inferred (constant-folded) one-time and be reused. The constant module, is lowered, and being codegen-ed as usual and cached (let's call this constant code). The constant code reuses the whole lowering/profiling/etc. process, only difference is that we do not generate any headers or initialization for the constant code.<br />
 Second, after handling the constant module, we take care of the main module (which is the part that would depend on the user input.) For the main module, we take in one additional component, the constant code, compare with a normal lowering. Addition step we do here is that, we inject the constant code into the codegen-ed main module, and create the caller for the main module to consume the result of the constant module.</p>
 <p>Test Plan: Unit tests included in commit.</p>
 <p>Differential Revision: D53274382</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118765<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118765<br />
 Approved by: https://github.com/chenyang78</p>]]></description>
       <pubDate>Wed, 31 Jan 2024 20:54:25 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2b48891e62e5c4b57c8cac92cee5eb71228a203a</guid>
@@ -192,7 +213,7 @@ Approved by: https://github.com/chenyang78</p>]]></description>
       <description><![CDATA[<p>[Inductor] Skip triton templates for mixedmm on SM70- (#118591)</p>
 <p>As it results in numerical errors, see https://github.com/pytorch/pytorch/issues/117144</p>
 <p>Fixes https://github.com/pytorch/pytorch/issues/117144</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118591<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118591<br />
 Approved by: https://github.com/jansel</p>]]></description>
       <pubDate>Wed, 31 Jan 2024 15:30:45 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/6c67f3333a539e8f29515375a87612897214f8f2</guid>
@@ -211,9 +232,9 @@ Approved by: https://github.com/jansel</p>]]></description>
       <link>https://github.com/pytorch/pytorch/commit/1128cf96f078a76f27b038d7adbc2b72fe8927e2</link>
       <description><![CDATA[<p>[AOTI] Support _embedding_bag in C shim (#118706)</p>
 <p>Summary: At some point I will stop manually adding ops to C shim, but use torchgen to generate those code. For the near term, I need to add a few more in order to switch the AOTInductor dashboard run.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53249074">D53249074</a><p></p>
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/118706<p></p>
-Approved by: https://github.com/frank-wei, https://github.com/aakhundov<p></p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53249074">D53249074</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118706<br />
+Approved by: https://github.com/frank-wei, https://github.com/aakhundov<br />
 ghstack dependencies: #118704, #118705</p>]]></description>
       <pubDate>Wed, 31 Jan 2024 07:02:40 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1128cf96f078a76f27b038d7adbc2b72fe8927e2</guid>
@@ -223,8 +244,8 @@ ghstack dependencies: #118704, #118705</p>]]></description>
       <link>https://github.com/pytorch/pytorch/commit/dd52939438834545632ccc9e986029d63f68e064</link>
       <description><![CDATA[<p>[inductor] Refactor ir.ComplexView (#118704)</p>
 <p>Summary: Make ir.ComplexView a subclass of ir.FallbackKernel, to unify the codegen logic</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53248972">D53248972</a><p></p>
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/118704<p></p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53248972">D53248972</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/118704<br />
 Approved by: https://github.com/frank-wei</p>]]></description>
       <pubDate>Wed, 31 Jan 2024 06:42:29 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/dd52939438834545632ccc9e986029d63f68e064</guid>
@@ -234,15 +255,15 @@ Approved by: https://github.com/frank-wei</p>]]></description>
       <link>https://github.com/pytorch/pytorch/commit/35f3ccffd4dd836d71b1db6d560800597979ec5b</link>
       <description><![CDATA[<p>[Cutlass 3.3.0 submodule upgrade] (#118629)</p>
 <p>Cutlass 3.3 offers the following improvements:</p>
-<p>Adds support for mixed precision GEMMs On Hopper and Ampere Adds support for &lt; 16B aligned GEMMs on Hopper<p></p>
-Enhancements to EVT<p></p>
-Enhancements to Python interface<p></p>
-Enhancements to Sub-byte type handling in CuTe<p></p>
-Several other bug-fixes and performance improvements. minor doc update<p></p>
+<p>Adds support for mixed precision GEMMs On Hopper and Ampere Adds support for &lt; 16B aligned GEMMs on Hopper<br />
+Enhancements to EVT<br />
+Enhancements to Python interface<br />
+Enhancements to Sub-byte type handling in CuTe<br />
+Several other bug-fixes and performance improvements. minor doc update<br />
 Test Plan:</p>
-<p>CI ( ciflow/trunk, ciflow/inductor )<p></p>
+<p>CI ( ciflow/trunk, ciflow/inductor )<br />
 pytest test/inductor/test_max_autotune.py</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118629<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118629<br />
 Approved by: https://github.com/drisspg, https://github.com/Skylion007, https://github.com/khabinov</p>]]></description>
       <pubDate>Wed, 31 Jan 2024 05:53:58 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/35f3ccffd4dd836d71b1db6d560800597979ec5b</guid>
@@ -251,19 +272,19 @@ Approved by: https://github.com/drisspg, https://github.com/Skylion007, https://
       <title>Reland: [aotinductor] Replicate split_cat from torch IR to predispatch IR" (#118590)</title>
       <link>https://github.com/pytorch/pytorch/commit/6fa162e68148c10626bc824bc3eb31d56db4c2d8</link>
       <description><![CDATA[<p>Reland: [aotinductor] Replicate split_cat from torch IR to predispatch IR" (#118590)</p>
-<p>Summary:<p></p>
-This is part the pass migration efforts. The final target is removing the acc tracer in AOTI.<p></p>
-In this diff, I did a few things:<p></p>
-1. copy and modify the <code>fx_passes/split_cat.py</code> passes based on predispatch IR.<p></p>
-2. verify the correctness by copying the <code>test_split_cat_fx_passes.py</code> and create a new file <code>test_split_cat_fx_passes_aten_fb.py</code> which is executed in AOTI and checked the counters<p></p>
-3. create a util function to execute the pass and compare the before/after graph to give user more information like pass effect and time spent. It will create logs like<p></p>
+<p>Summary:<br />
+This is part the pass migration efforts. The final target is removing the acc tracer in AOTI.<br />
+In this diff, I did a few things:<br />
+1. copy and modify the <code>fx_passes/split_cat.py</code> passes based on predispatch IR.<br />
+2. verify the correctness by copying the <code>test_split_cat_fx_passes.py</code> and create a new file <code>test_split_cat_fx_passes_aten_fb.py</code> which is executed in AOTI and checked the counters<br />
+3. create a util function to execute the pass and compare the before/after graph to give user more information like pass effect and time spent. It will create logs like<br />
 <code>[2024-01-25 20:26:48,997] torch._inductor.utils: [INFO] [Pre grad(predispatch IR)]Apply split_cat, index: 0, save before/after graph to /tmp/tmpvlpwrklp, graph before/after are the same = False, time elapsed = 0:00:00.001585
 [2024-01-25 20:26:49,000] torch._inductor.utils: [INFO] [Pre grad(predispatch IR)]Apply split_cat, index: 1, save before/after graph to /tmp/tmpz_onjfeu, graph before/after are the same = False, time elapsed = 0:00:00.001873
 [2024-01-25 20:26:49,002] torch._inductor.utils: [INFO] [Pre grad(predispatch IR)]Apply split_cat, index: 2, save before/after graph to /tmp/tmpgkck8yko, graph before/after are the same = True, time elapsed = 0:00:00.000269
 [2024-01-25 20:26:49,007] torch._inductor.utils: [INFO] [Pre grad(predispatch IR)]Apply split_cat, index: 3, save before/after graph to /tmp/tmpquenq06y, graph before/after are the same = False, time elapsed = 0:00:00.003621
 [2024-01-25 20:26:49,009] torch._inductor.utils: [INFO] [Pre grad(predispatch IR)]Apply split_cat, index: 4, save before/after graph to /tmp/tmpi8fia0dv, graph before/after are the same = True, time elapsed = 0:00:00.000190</code></p>
 <p>Differential Revision: D53171027</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118590<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118590<br />
 Approved by: https://github.com/kflu, https://github.com/khabinov, https://github.com/chenyang78</p>]]></description>
       <pubDate>Tue, 30 Jan 2024 16:09:46 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/6fa162e68148c10626bc824bc3eb31d56db4c2d8</guid>
@@ -272,13 +293,13 @@ Approved by: https://github.com/kflu, https://github.com/khabinov, https://githu
       <title>Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)</title>
       <link>https://github.com/pytorch/pytorch/commit/f2682e75e6fd735c4a84afe59eafd541f7643f4a</link>
       <description><![CDATA[<p>Workaround for super() calls in test_torchinductor_dynamic_shapes (#118586)</p>
-<p>Info about super in dynamic classes:<p></p>
-https://stackoverflow.com/questions/71879642/how-to-pass-function-with-super-when-creating-class-dynamically<p></p>
+<p>Info about super in dynamic classes:<br />
+https://stackoverflow.com/questions/71879642/how-to-pass-function-with-super-when-creating-class-dynamically<br />
 https://stackoverflow.com/questions/43782944/super-does-not-work-together-with-type-supertype-obj-obj-must-be-an-i</p>
 <p>Calling super(TestCase) actually calls TestCase's parent's functions, bypassing TestCase itself's functions</p>
 <p>Mainly doing this because it's making disable bot spam</p>
 <p>Test: checked locally and check that https://github.com/pytorch/pytorch/issues/117954 actually got skipped</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118586<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118586<br />
 Approved by: https://github.com/huydhn</p>]]></description>
       <pubDate>Tue, 30 Jan 2024 13:34:05 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f2682e75e6fd735c4a84afe59eafd541f7643f4a</guid>
@@ -287,7 +308,7 @@ Approved by: https://github.com/huydhn</p>]]></description>
       <title>[inductor] Use at::detail::empty_strided_* in cpp_wraper mode (#118490)</title>
       <link>https://github.com/pytorch/pytorch/commit/e332653eb38b6f97e8088b4d3adc5b112fe8f761</link>
       <description><![CDATA[<p>[inductor] Use at::detail::empty_strided_* in cpp_wraper mode (#118490)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118490<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118490<br />
 Approved by: https://github.com/desertfire</p>]]></description>
       <pubDate>Tue, 30 Jan 2024 13:03:19 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e332653eb38b6f97e8088b4d3adc5b112fe8f761</guid>
@@ -297,7 +318,7 @@ Approved by: https://github.com/desertfire</p>]]></description>
       <link>https://github.com/pytorch/pytorch/commit/e5bb527d3e91b244404e142dfac8e9e55e02aa81</link>
       <description><![CDATA[<p>[inductor][cpp] support scalar value in vec reduction (#118511)</p>
 <p>Fix https://github.com/pytorch/pytorch/issues/118379</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118511<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118511<br />
 Approved by: https://github.com/leslie-fang-intel, https://github.com/lezcano, https://github.com/jansel</p>]]></description>
       <pubDate>Tue, 30 Jan 2024 05:07:43 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e5bb527d3e91b244404e142dfac8e9e55e02aa81</guid>
@@ -308,10 +329,10 @@ Approved by: https://github.com/leslie-fang-intel, https://github.com/lezcano, h
       <description><![CDATA[<p>[inductor] Fix codegen bug with Native Triton kernels with  ReinterpretView args (#118569)</p>
 <p>Summary:</p>
 <h3>Context</h3>
-<p>It's possible for the args of a user-defined Triton Kernel to be codegen-ed twiced. But this only happens if the arg is a <code>ReinterpretView</code>.<p></p>
-* First via <code>arg.codegen_reference()</code> in <code>define_user_defined_triton_kernel()</code><p></p>
+<p>It's possible for the args of a user-defined Triton Kernel to be codegen-ed twiced. But this only happens if the arg is a <code>ReinterpretView</code>.<br />
+* First via <code>arg.codegen_reference()</code> in <code>define_user_defined_triton_kernel()</code><br />
 * Second in <code>self.codegen_kwargs()</code>.</p>
-<p>When using <code>abi_compatible=True</code>, the duplicate codegen will look like the code below. The issue in the code is that one of the Tensors, internal to the graph, isn't properly freed. This scenario was eventually exposed as a memory leak when we re-ran an AOTInductor model many times and observed <code>memory.used</code> increase after each iteration.<p></p>
+<p>When using <code>abi_compatible=True</code>, the duplicate codegen will look like the code below. The issue in the code is that one of the Tensors, internal to the graph, isn't properly freed. This scenario was eventually exposed as a memory leak when we re-ran an AOTInductor model many times and observed <code>memory.used</code> increase after each iteration.<br />
 <code>auto tmp_tensor_handle_0 = reinterpret_tensor_wrapper(buf1, 2, int_array_0, int_array_1, 0L);
 auto tmp_tensor_handle_1 = reinterpret_tensor_wrapper(buf1, 2, int_array_0, int_array_1, 0L);
 ...
@@ -329,23 +350,23 @@ launchKernel(kernels.add_kernel_0, ..., kernel_args_var_2);</code></p>
 <h3>Inspect device memory allocated</h3>
 <p>```</p>
 <h1>Before diff</h1>
-<p>0 device memory 2048<p></p>
-1 device memory 2560<p></p>
-2 device memory 3072<p></p>
-3 device memory 3584<p></p>
-4 device memory 4096<p></p>
+<p>0 device memory 2048<br />
+1 device memory 2560<br />
+2 device memory 3072<br />
+3 device memory 3584<br />
+4 device memory 4096<br />
 5 device memory 4608</p>
 <h1>With diff (memory usage doesn't grow)</h1>
-<p>0 device memory 1536<p></p>
-1 device memory 1536<p></p>
-2 device memory 1536<p></p>
-3 device memory 1536<p></p>
-4 device memory 1536<p></p>
-5 device memory 1536<p></p>
+<p>0 device memory 1536<br />
+1 device memory 1536<br />
+2 device memory 1536<br />
+3 device memory 1536<br />
+4 device memory 1536<br />
+5 device memory 1536<br />
 ```</p>
 <p>Reviewed By: jingsh, tissue3</p>
 <p>Differential Revision: D53190934</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118569<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118569<br />
 Approved by: https://github.com/oulgen</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 21:19:32 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8be6dee14b76f63dea1e9329d6cd0fdc9552a2d6</guid>
@@ -356,7 +377,7 @@ Approved by: https://github.com/oulgen</p>]]></description>
       <description><![CDATA[<p>Reland PR117393 [inductor/fb] log config dict when compilation finishes (#118552)</p>
 <p>Summary: Reverted due to merge conflict</p>
 <p>Differential Revision: D53188124</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118552<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118552<br />
 Approved by: https://github.com/mengluy0125</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 20:34:22 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5dfcf07449c9ffc7a2277c9782c88444ca11a77c</guid>
@@ -365,7 +386,7 @@ Approved by: https://github.com/mengluy0125</p>]]></description>
       <title>[ez][inductor] fix a typo in should_pad_bench (#118598)</title>
       <link>https://github.com/pytorch/pytorch/commit/0d47f6a44f4a72324ee096c5bbdb107b379a55c2</link>
       <description><![CDATA[<p>[ez][inductor] fix a typo in should_pad_bench (#118598)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118598<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118598<br />
 Approved by: https://github.com/eellison</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 19:49:44 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0d47f6a44f4a72324ee096c5bbdb107b379a55c2</guid>
@@ -375,9 +396,9 @@ Approved by: https://github.com/eellison</p>]]></description>
       <link>https://github.com/pytorch/pytorch/commit/f99adbb4ec7a738684925d111f81f6b523cc83d0</link>
       <description><![CDATA[<p>[inductor] Remove ROCm xfail on test_cum{sum,prod}_zero_dim (#118558)</p>
 <p>Fixes #118540, fixes #118541</p>
-<p>Since the zero-dim case reduces to a pointwise operation, we don't fallback on<p></p>
+<p>Since the zero-dim case reduces to a pointwise operation, we don't fallback on<br />
 ROCm.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118558<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118558<br />
 Approved by: https://github.com/malfet</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 12:23:40 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f99adbb4ec7a738684925d111f81f6b523cc83d0</guid>
@@ -386,9 +407,9 @@ Approved by: https://github.com/malfet</p>]]></description>
       <title>[inductor][cpp] enable vectorization with constant bool (#118380)</title>
       <link>https://github.com/pytorch/pytorch/commit/04c1df651aa58bea50977f4efcf19b09ce27cefd</link>
       <description><![CDATA[<p>[inductor][cpp] enable vectorization with constant bool (#118380)</p>
-<p>Related model DebertaForQuestionAnswering etc. For DebertaForQuestionAnswering, single thread, measured on ICX:<p></p>
+<p>Related model DebertaForQuestionAnswering etc. For DebertaForQuestionAnswering, single thread, measured on ICX:<br />
 Before: 0.990x, After: 1.043x</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118380<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118380<br />
 Approved by: https://github.com/leslie-fang-intel, https://github.com/jansel</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 05:31:22 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/04c1df651aa58bea50977f4efcf19b09ce27cefd</guid>
@@ -397,12 +418,12 @@ Approved by: https://github.com/leslie-fang-intel, https://github.com/jansel</p>
       <title>[Inductor] Fix Argmax codegen with Nan input (#118358)</title>
       <link>https://github.com/pytorch/pytorch/commit/ee3dfbbe470822a50516310384ecce071ec79f7c</link>
       <description><![CDATA[<p>[Inductor] Fix Argmax codegen with Nan input (#118358)</p>
-<p><strong>Summary</strong><p></p>
+<p><strong>Summary</strong><br />
 Fix issue https://github.com/pytorch/pytorch/issues/118266, current <code>torch.argmax</code> and <code>torch.argmin</code> has different return values with eager and Inductor cpp backend when inputs has <code>Nan</code> value. Align cpp backend results to eager by reusing the compare function.</p>
-<p><strong>Test Plan</strong><p></p>
+<p><strong>Test Plan</strong><br />
 <code>python -u -m pytest -s -v test_cpu_repro.py -k test_argmin_cpu_only
 python -u -m pytest -s -v test_cpu_repro.py -k test_argmax_argmin_with_nan_value</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118358<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118358<br />
 Approved by: https://github.com/lezcano, https://github.com/jgong5, https://github.com/jansel</p>]]></description>
       <pubDate>Mon, 29 Jan 2024 01:09:46 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ee3dfbbe470822a50516310384ecce071ec79f7c</guid>
@@ -411,8 +432,8 @@ Approved by: https://github.com/lezcano, https://github.com/jgong5, https://gith
       <title>Add some type annotations to torch._inductor.codegen.wrapper (#118491)</title>
       <link>https://github.com/pytorch/pytorch/commit/2951bbf0f72dcbf8841dafbd6e764c07eb72edc6</link>
       <description><![CDATA[<p>Add some type annotations to torch._inductor.codegen.wrapper (#118491)</p>
-<p>Signed-off-by: Edward Z. Yang <a href="mailto:ezyang@meta.com">ezyang@meta.com</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118491<p></p>
+<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118491<br />
 Approved by: https://github.com/Skylion007</p>]]></description>
       <pubDate>Sun, 28 Jan 2024 22:17:27 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2951bbf0f72dcbf8841dafbd6e764c07eb72edc6</guid>
@@ -423,9 +444,9 @@ Approved by: https://github.com/Skylion007</p>]]></description>
       <description><![CDATA[<p>Unify MYPYINDUCTOR and MYPY (#118432)</p>
 <p>The original motivation for MYPYINDUCTOR was a faster type checking configuration that only checked a subset of files. With the removal of <code>follow_imports = ignore</code>, we are now able to use dmypy to do fast incremental typechecking, eliminating the need for this.</p>
 <p>Perhaps erroneously, when I tee'ed up this PR I elected to delete the <code>follow_imports = skip</code> designations in the mypy-inductor.ini. This lead to a number of extra type error suppressions that I manually edited. You will need to review.</p>
-<p>Signed-off-by: Edward Z. Yang <a href="mailto:ezyang@meta.com">ezyang@meta.com</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118432<p></p>
-Approved by: https://github.com/Skylion007<p></p>
+<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118432<br />
+Approved by: https://github.com/Skylion007<br />
 ghstack dependencies: #118414, #118418</p>]]></description>
       <pubDate>Sat, 27 Jan 2024 09:23:20 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d03173e88cf43544fbeb458e1b8d7122038bef5b</guid>
@@ -446,21 +467,21 @@ ghstack dependencies: #118414, #118418</p>]]></description>
 </ul>
 <p>In the future, to start type checking a file, just remove the ignore-errors directive from the top of the file.</p>
 <p>The codemod was done with this script authored by GPT-4:</p>
-<p>```<p></p>
+<p>```<br />
 import glob</p>
-<p>exclude_patterns = [<p></p>
-    ...<p></p>
+<p>exclude_patterns = [<br />
+    ...<br />
 ]</p>
-<p>for pattern in exclude_patterns:<p></p>
-    for filepath in glob.glob(pattern, recursive=True):<p></p>
-        if filepath.endswith('.py'):<p></p>
-            with open(filepath, 'r+') as f:<p></p>
-                content = f.read()<p></p>
-                f.seek(0, 0)<p></p>
-                f.write('# mypy: ignore-errors\n\n' + content)<p></p>
+<p>for pattern in exclude_patterns:<br />
+    for filepath in glob.glob(pattern, recursive=True):<br />
+        if filepath.endswith('.py'):<br />
+            with open(filepath, 'r+') as f:<br />
+                content = f.read()<br />
+                f.seek(0, 0)<br />
+                f.write('# mypy: ignore-errors\n\n' + content)<br />
 ```</p>
-<p>Signed-off-by: Edward Z. Yang <a href="mailto:ezyang@meta.com">ezyang@meta.com</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118414<p></p>
+<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118414<br />
 Approved by: https://github.com/thiagocrepaldi, https://github.com/albanD</p>]]></description>
       <pubDate>Fri, 26 Jan 2024 18:44:11 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9bce208dfbdb71e38f9e9ee38a07d43645ffb82a</guid>
@@ -469,203 +490,10 @@ Approved by: https://github.com/thiagocrepaldi, https://github.com/albanD</p>]]>
       <title>[inductor] Handle cum{sum,prod} on zero-dim tensors (#117990)</title>
       <link>https://github.com/pytorch/pytorch/commit/f129e3fe034c0052d1d45856ac10fc4b3a1e9700</link>
       <description><![CDATA[<p>[inductor] Handle cum{sum,prod} on zero-dim tensors (#117990)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117990<p></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117990<br />
 Approved by: https://github.com/lezcano</p>]]></description>
       <pubDate>Fri, 26 Jan 2024 14:21:42 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f129e3fe034c0052d1d45856ac10fc4b3a1e9700</guid>
-    </item>
-    <item>
-      <title>Fix several bugs related to unbacked SymInt codegen in inductor (#117862)</title>
-      <link>https://github.com/pytorch/pytorch/commit/96d94f574e32c63421dc7badb0a5c42bb29324c7</link>
-      <description><![CDATA[<p>Fix several bugs related to unbacked SymInt codegen in inductor (#117862)</p>
-<p>Let me tell you, this was a <em>journey.</em></p>
-<ul>
-<li>When we repropagate through FX interpreter in AOTAutograd, this will reallocate unbacked SymInts. We can eliminate all of these fresh allocations by appropriately asserting equalities on them setting up replacements. See also https://github.com/pytorch/pytorch/issues/111950</li>
-<li>The <code>inner_fn</code> of Loops can contain references to unbacked SymInts. We must collect them to prevent DCE.</li>
-<li>Export naughtily accessed <code>_expr</code> when it should have accessed <code>expr</code> on SymNode. Fixed two sites of this.</li>
-</ul>
-<p>Signed-off-by: Edward Z. Yang <a href="mailto:ezyang@meta.com">ezyang@meta.com</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117862<p></p>
-Approved by: https://github.com/bdhirsh</p>]]></description>
-      <pubDate>Fri, 26 Jan 2024 10:08:03 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/96d94f574e32c63421dc7badb0a5c42bb29324c7</guid>
-    </item>
-    <item>
-      <title>[Inductor] Add Thread Number Checker in scatter_reduce_ fallback for CPP backend (#118278)</title>
-      <link>https://github.com/pytorch/pytorch/commit/b66c4eda61f4e6be536a096c3fcdf464a3608aef</link>
-      <description><![CDATA[<p>[Inductor] Add Thread Number Checker in scatter_reduce_ fallback for CPP backend (#118278)</p>
-<p><strong>Summary</strong><p></p>
-Follow up of https://github.com/pytorch/pytorch/pull/108220 which improves performance of <code>basic_gnn_gin</code>, <code>basic_gnn_sage</code> and <code>basic_gnn_gcn</code> in multi thread test cases. However, it causes performance regression of these 3 models in single thread test case as reported in https://github.com/pytorch/pytorch/issues/117740. Fix the single thread issues in this PR by adding the thread number check to decide whether fallback <code>scatter_reduce_</code> or not.</p>
-<p><strong>Test Plan</strong><p></p>
-<code>python -u -m pytest -s -v test_cpu_repro.py -k test_scatter_using_atomic_add</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118278<p></p>
-Approved by: https://github.com/jansel, https://github.com/jgong5</p>]]></description>
-      <pubDate>Fri, 26 Jan 2024 04:43:25 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b66c4eda61f4e6be536a096c3fcdf464a3608aef</guid>
-    </item>
-    <item>
-      <title>[c10d_functional] fix an issue where mutation on views fails in inductor (#118333)</title>
-      <link>https://github.com/pytorch/pytorch/commit/0857a3a753b5d04e01a57c313dec7e0b53f1bf2d</link>
-      <description><![CDATA[<p>[c10d_functional] fix an issue where mutation on views fails in inductor (#118333)</p>
-<p><code>_CollectiveKernel.create_inplace</code> expresses mutation with the newly introduced <code>MutationOutput</code> which requires the <code>layout</code> of the input. Currently, there's a bug where if the input is a view, <code>inp.layout</code> fails. This PR fixes the issue by unwrapping the input if it's a view.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118333<p></p>
-Approved by: https://github.com/wanchaol</p>]]></description>
-      <pubDate>Fri, 26 Jan 2024 03:13:30 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0857a3a753b5d04e01a57c313dec7e0b53f1bf2d</guid>
-    </item>
-    <item>
-      <title>fix key error in pre_grad fx_passes_numeric_check (#118325)</title>
-      <link>https://github.com/pytorch/pytorch/commit/4d0b471389dd38865a2ff214ba7df185d02b18b1</link>
-      <description><![CDATA[<p>fix key error in pre_grad fx_passes_numeric_check (#118325)</p>
-<p>Summary:<p></p>
-<code>I0125 121749.865 pyper_config_utils.py:8225] torchdynamo pyper config = TorchDynamoConfig(backend='inductor', optimize_ddp=False, log_compile_graph=False, inductor_config=TorchInductorConfig(enable_cudagraph=False, max_autotune=False, max_autotune_pointwise=True, max_autotune_gemm=False, search_autotune_cache=False, autotune_in_subproc=False, aggressive_fusion=False, shape_padding=True, permute_fusion=False, epilogue_fusion_first=False, debug=True, triton=None, trace_enabled=False, log_kernel_source=False, split_cat_fx_passes=False, group_fusion=False, batch_fusion=False, coordinate_descent_tuning=False, coordinate_descent_check_all_directions=False, coordinate_descent_search_radius=1, layout_optimization=True, pre_grad_fusion_options={}, post_grad_fusion_options={}, max_pointwise_cat_inputs=4, fx_passes_numeric_check={}), automatic_dynamic_shapes=True)</code><p></p>
-In trainer<p></p>
-<code>I0125 12:58:51.832000 4011.139732263132160 torchdynamo_wrapper.py:291  trainer:0:1 ] [pt2] creating torchdynamo backend wrapper with settings TorchDynamoConfig(backend='inductor', optimize_ddp=False, log_compile_graph=False, inductor_config=TorchInductorConfig(enable_cudagraph=False, max_autotune=False, max_autotune_pointwise=True, max_autotune_gemm=False, search_autotune_cache=False, autotune_in_subproc=False, aggressive_fusion=False, shape_padding=True, permute_fusion=False, epilogue_fusion_first=False, debug=True, triton=None, trace_enabled=False, log_kernel_source=False, split_cat_fx_passes=False, group_fusion=False, batch_fusion=False, coordinate_descent_tuning=False, coordinate_descent_check_all_directions=False, coordinate_descent_search_radius=1, layout_optimization=True, pre_grad_fusion_options={}, post_grad_fusion_options={}, max_pointwise_cat_inputs=4, fx_passes_numeric_check={}), automatic_dynamic_shapes=True) #ai_training_job_id="febe34d9-b2fb-493e-a5cc-6a0b1dc85ad4" #ai_training_local_rank="1" #ai_training_role_rank="1" #mast_job_attempt="2" #mast_job_name="f525072920-TrainingApplication"
-...
-if config.fx_passes_numeric_check["pre_grad"]:</code></p>
-<p>https://www.internalfb.com/diff/D52826442?dst_version_fbid=1115735309429172&amp;transaction_fbid=682438900759710</p>
-<p>https://www.internalfb.com/diff/D51838043?dst_version_fbid=336373395892373&amp;transaction_fbid=349901787874069</p>
-<p>This diff first fixes the key error to restore broken tests.  Its pyper changes can be addressed later.</p>
-<p>https://www.internalfb.com/code/fbsource/[72c19313ed73]/fbcode/caffe2/torch/_inductor/config.py?lines=142-147</p>
-<p>Test Plan: buck2 run //caffe2/torch/fb/training_toolkit/integration_tests/training_lifecycle/cogwheel_tests/pyper_release_v2:cogwheel_smallworld_mimo_cmf_deterministic_ne_pt2_training_platform__canary_offline_training-launcher -- --build-fbpkg --run-disabled --tests test</p>
-<p>Reviewed By: yusuo</p>
-<p>Differential Revision: D53102344</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118325<p></p>
-Approved by: https://github.com/mengluy0125</p>]]></description>
-      <pubDate>Fri, 26 Jan 2024 03:02:12 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4d0b471389dd38865a2ff214ba7df185d02b18b1</guid>
-    </item>
-    <item>
-      <title>[Inductor] Use sleef implementation for CPP backend acosh codegen (#118350)</title>
-      <link>https://github.com/pytorch/pytorch/commit/8dd1be49b7c17223ed6de18fac4471abc6735aae</link>
-      <description><![CDATA[<p>[Inductor] Use sleef implementation for CPP backend acosh codegen (#118350)</p>
-<p><strong>Summary</strong><p></p>
-Fix https://github.com/pytorch/pytorch/issues/118267. Current cpp backend using <code>f"({x} + ({x}*{x} - {vec_one}).sqrt()).log()"</code> to calculate <code>acosh</code>, the issue happens when input is a large negative value like <code>-910685.8125</code>. In this case, <code>(x*x - 1).sqrt() + x</code> equals to 0, and <code>0.log()</code> returns <code>-inf</code>. However, based on the document: https://pytorch.org/docs/stable/generated/torch.acosh.html, negative inputs should returns <code>Nan</code>. Using acosh sleef implementation to fix this issue.</p>
-<p><strong>Test Plan</strong><p></p>
-<code>python -u -m pytest -s -v test_cpu_repro.py -k test_acosh_with_negative_large_input</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118350<p></p>
-Approved by: https://github.com/jgong5, https://github.com/lezcano</p>]]></description>
-      <pubDate>Fri, 26 Jan 2024 02:19:40 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8dd1be49b7c17223ed6de18fac4471abc6735aae</guid>
-    </item>
-    <item>
-      <title>Fix mergeability check for ghstack PRs (#118258)</title>
-      <link>https://github.com/pytorch/pytorch/commit/b599f5608c309331df7a599c3b7f21a74375b2fa</link>
-      <description><![CDATA[<p>Fix mergeability check for ghstack PRs (#118258)</p>
-<h1>Changes</h1>
-<ul>
-<li>introduce <code>--check-mergeability</code> trymerge flag that attempts to merge PR locally, using the same merge logic as the mergebot, but requires just a read-only <code>GITHUB_TOKEN</code> and git repo.</li>
-<li>change mergeability workflow to utilize the new --check-mergeability logic</li>
-</ul>
-<h1>Alternatives considered</h1>
-<p>1.</p>
-<blockquote>
-<p>Rewrite <code>https://github.com/pytorch/test-infra/actions/workflows/pr-dependencies-check.yml</code> to correctly support partially merged ghstacks.</p>
-</blockquote>
-<p>That would be a slightly better approach, but ROI is lower, as it requires reimplementing trymerge logic and additional effort to consolidate the codebase (trymerge lives in pytorch repo).</p>
-<p><code>pr-dependencies-check.yml</code> still produces human-readable results for partially merged ghstack prs (even if it falsely reports them as non-mergeable).</p>
-<p>2.</p>
-<blockquote>
-<p>Instead of introducing new trymerge flag, use existing flags, including <code>--dry-run</code>.</p>
-</blockquote>
-<p>That didn't work, as no combination of existing flags skips the rule checks and ROCKSET lookups.</p>
-<h1>Testing</h1>
-<ol>
-<li>Manual testing  <code>trymerge.py --check-mergeability</code>  on the regular and ghstack PRs:</li>
-</ol>
-<p><code>``
-export GITHUB_TOKEN=
-export GIT_REPO_DIR=</code>pwd`<p></p>
-export GITHUB_REPOSITORY=pytorch/pytorch<p></p>
-export GIT_REMOTE_URL=https://github.com/pytorch/pytorch</p>
-<h1>Test 1 (2 prs, 1 is closed)</h1>
-<p>python3 ../pytorch/.github/scripts/trymerge.py --check-mergeability  117862<p></p>
-Skipping 1 of 2 PR (#117859) as its already been merged</p>
-<p>echo $?<p></p>
-0</p>
-<h1>Test 2 (3 prs, 1 is closed)</h1>
-<p>python3 ../pytorch/.github/scripts/trymerge.py --check-mergeability  118125<p></p>
-Skipping 1 of 3 PR (#117859) as its already been merged</p>
-<p>echo $?<p></p>
-0</p>
-<h1>Test 3 (3 prs, intentional conflicts introduced into <code>main</code>):</h1>
-<p>python3 ../pytorch/.github/scripts/trymerge.py --check-mergeability  118125<p></p>
-Skipping 1 of 3 PR (#117859) as its already been merged<p></p>
-stdout:<p></p>
-Auto-merging torch/_inductor/ir.py<p></p>
-Auto-merging torch/_inductor/lowering.py<p></p>
-CONFLICT (content): Merge conflict in torch/_inductor/lowering.py<p></p>
-error: could not apply 66ba5b8792f... Realize inputs to DynamicScalar before unwrapping<p></p>
-...<p></p>
-RuntimeError: Command <code>git -C /Users/ivanzaitsev/pytorch2 cherry-pick -x 66ba5b8792fa076c4e512d920651e5b6b7e466f4</code> returned non-zero exit code 1<p></p>
-```</p>
-<ol>
-<li>Workflow run:<br/>
-https://github.com/pytorch/pytorch/actions/runs/7660736172/job/20878651852?pr=118258</li>
-</ol>
-<p><img alt="image" src="https://github.com/pytorch/pytorch/assets/108101595/28fbf0d2-ac2a-4518-b41d-b32b41373747" width="516"/><p></p>
-<img alt="image" src="https://github.com/pytorch/pytorch/assets/108101595/ddbf8566-a417-43ec-9d0e-f623f4a71313" width="621"/></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118258<p></p>
-Approved by: https://github.com/PaliC, https://github.com/huydhn</p>]]></description>
-      <pubDate>Thu, 25 Jan 2024 19:15:56 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b599f5608c309331df7a599c3b7f21a74375b2fa</guid>
-    </item>
-    <item>
-      <title>[inductor][easy] dump triton kernel names in the log (#118313)</title>
-      <link>https://github.com/pytorch/pytorch/commit/3cdd4e236e2c58deeb39b620b5aa1c2bf70ec602</link>
-      <description><![CDATA[<p>[inductor][easy] dump triton kernel names in the log (#118313)</p>
-<p>This may help debugging.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118313<p></p>
-Approved by: https://github.com/desertfire</p>]]></description>
-      <pubDate>Thu, 25 Jan 2024 18:00:04 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3cdd4e236e2c58deeb39b620b5aa1c2bf70ec602</guid>
-    </item>
-    <item>
-      <title>[inductor] Slightly faster memory allocation on CUDA (#118255)</title>
-      <link>https://github.com/pytorch/pytorch/commit/2de24c11f66e0a11ccd392983f865e1b216281e6</link>
-      <description><![CDATA[<p>[inductor] Slightly faster memory allocation on CUDA (#118255)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118255<p></p>
-Approved by: https://github.com/peterbell10<p></p>
-ghstack dependencies: #118065, #118070, #118171</p>]]></description>
-      <pubDate>Thu, 25 Jan 2024 12:49:14 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2de24c11f66e0a11ccd392983f865e1b216281e6</guid>
-    </item>
-    <item>
-      <title>[inductor] correctly generate grid info for benchmark_kernel (#118202)</title>
-      <link>https://github.com/pytorch/pytorch/commit/1565d58ad909dfa1b058cbe97cf5c51088721a9f</link>
-      <description><![CDATA[<p>[inductor] correctly generate grid info for benchmark_kernel (#118202)</p>
-<p>Previously, we generated the grid argument with tree.numel for<p></p>
-a benchmark TritonKernel. This was not correct, because it<p></p>
-didn't match the launch config used for profiling and running.</p>
-<p>This PR fixed the issue by emitting the grid value computed<p></p>
-by the kernel's grid_fn, which is used by the profiler and<p></p>
-the kernel's runner.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118202<p></p>
-Approved by: https://github.com/shunting314, https://github.com/jansel</p>]]></description>
-      <pubDate>Thu, 25 Jan 2024 12:37:44 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1565d58ad909dfa1b058cbe97cf5c51088721a9f</guid>
-    </item>
-    <item>
-      <title>[mypy] Enable follow_imports = normal for mypy-torch.backends.* (#116311)</title>
-      <link>https://github.com/pytorch/pytorch/commit/1f6aa4b336a7aac756092759fc54eacc0b84fbba</link>
-      <description><![CDATA[<p>[mypy] Enable follow_imports = normal for mypy-torch.backends.* (#116311)</p>
-<p>Summary:</p>
-<p>Test Plan:</p>
-<p>```<p></p>
-lintrunner --take MYPYINDUCTOR --all-files<p></p>
-ok No lint issues.</p>
-<p>lintrunner -a<p></p>
-ok No lint issues.<p></p>
-Successfully applied all patches.<p></p>
-```</p>
-<p>Reviewers:</p>
-<p>Subscribers:</p>
-<p>Tasks:</p>
-<p>Tags:</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/116311<p></p>
-Approved by: https://github.com/int3</p>]]></description>
-      <pubDate>Thu, 25 Jan 2024 12:17:22 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1f6aa4b336a7aac756092759fc54eacc0b84fbba</guid>
     </item>
   </channel>
 </rss>
