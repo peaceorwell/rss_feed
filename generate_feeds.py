@@ -19,11 +19,11 @@ def get_commits_with_keyword(repo, keyword, days=10):
     commits = []
     page = 1
     token = os.getenv("GITHUB_PAT")  # 使用环境变量获取PAT
-    headers = {"Authorization": f"{token}"}
+    headers = {"Authorization": f"token {token}"}
     print(headers)
     while True:
         url = f"https://api.github.com/repos/{repo}/commits?since={since}&page={page}&per_page=100"
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         if response.status_code != 200 or not response.json():
             print(f"Response error: {response.status_code}")
             break
@@ -115,4 +115,5 @@ keyword = "inductor"
 commits = get_commits_with_keyword(repo, keyword)
 if commits:
     print(f"Appending {len(commits)} new commits to the feed.")
-    append_to_rss_feed(commits)
+    #append_to_rss_feed(commits)
+    append_to_rss_feed(commits, "inductor_feeds.xml")
