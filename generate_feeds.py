@@ -8,12 +8,29 @@ from email.utils import formatdate
 from time import mktime
 from datetime import datetime, timedelta
 
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504, 408), session=None):
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
 def format_rfc2822(datetime_str):
     dt = datetime.fromisoformat(datetime_str.rstrip('Z'))
     timestamp = mktime(dt.timetuple())
     return formatdate(timestamp, localtime=False, usegmt=True)
 
-def get_commits_with_keyword(repo, keyword, days=10):
+def get_commits_with_keyword(repo, keyword, days=1):
     since_date = datetime.now() - timedelta(days=days)
     since = since_date.isoformat()
     commits = []
@@ -22,10 +39,11 @@ def get_commits_with_keyword(repo, keyword, days=10):
     headers = {"Authorization": f"token {token}"}
     print(headers)
     while True:
-        url = f"https://api.github.com/repos/{repo}/commits?since={since}&page={page}&per_page=100"
-        response = requests.get(url, headers=headers, timeout=10)
+        url = f"https://api.github.com/repos/{repo}/commits?since={since}&page={page}&per_page=50"
+        response = requests_retry_session().get(url, headers=headers, timeout=10)
         if response.status_code != 200 or not response.json():
             print(f"Response error: {response.status_code}")
+            print("json:", response.json())
             break
         for commit_data in response.json():
             commit_message = commit_data['commit']['message']
@@ -115,5 +133,5 @@ keyword = "inductor"
 commits = get_commits_with_keyword(repo, keyword)
 if commits:
     print(f"Appending {len(commits)} new commits to the feed.")
-    #append_to_rss_feed(commits)
-    append_to_rss_feed(commits, "inductor_feeds.xml")
+    append_to_rss_feed(commits)
+    #append_to_rss_feed(commits, "inductor_feeds.xml")
