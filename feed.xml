@@ -4,118 +4,129 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[inductor] allow padding mm/bmm/addmm in the presence of dynamic dims (#120073)</title><link>https://github.com/pytorch/pytorch/commit/fac598c4aef9eab7a0dabc4e1b21831438c1cecf</link><description><![CDATA[<p>[inductor] allow padding mm/bmm/addmm in the presence of dynamic dims (#120073)</p>
-<p>Previously, pad_mm skips cases where any input tensor has symbolic<br />
-dimension or stride. This is too constraint in practise.<br />
-This PR enables this pass to pad non-symbolic dimensions in<br />
-the presence of dynamic dims. For example, with this PR, we could<br />
-pad the K dimension (i.e. 1921) for torch.mm(A[s0, 1921], B[2048, 1921]).</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120073<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Sat, 17 Feb 2024 04:22:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fac598c4aef9eab7a0dabc4e1b21831438c1cecf</guid></item><item><title>[inductor] Add torch.cond support to JIT Inductor (#119759)</title><link>https://github.com/pytorch/pytorch/commit/badf84bd6bd33c19d1723b64bd72bdb715d3d3b7</link><description><![CDATA[<p>[inductor] Add torch.cond support to JIT Inductor (#119759)</p>
-<p>Summary: <code>torch.cond</code> is already supported in Dynamo and Export: the <code>true_fn</code> and <code>false_fn</code> subgraphs are traced as child fx graphs of the main graph and passed to the <code>torch.cond</code> higher-order operator in the fx graph. However, this breaks in Inductor, as the latter doesn't have the ways of dealing with child fx subgraphs and properly lowering and codegen-ing them.</p>
-<p>In this PR, we add <code>torch.cond</code> support in Inductor. This is achieved by adding subgraph lowering and codegen-ing infrastructure as well as new <code>Conditional</code> IR node type weaving the parent graph with the true and false child subgraphs.</p>
-<p>Here we only implement <code>torch.cond</code> support in JIT Inductor (Python wrapper codegen). The implementation in AOT Inductor (C++ wrapper codegen), including ABI-compatibility mode, will follow.</p>
-<p>Test Plan:</p>
-<p>```<br />
-$ python test/inductor/test_control_flow.py<br />
-...</p>
-<hr />
-<p>Ran 24 tests in 86.790s<br />
-```</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119759<br />
-Approved by: https://github.com/jansel, https://github.com/eellison</p>]]></description><pubDate>Fri, 16 Feb 2024 23:25:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/badf84bd6bd33c19d1723b64bd72bdb715d3d3b7</guid></item><item><title>[inductor] logging meta data for inductor generated triton kernel (#120048)</title><link>https://github.com/pytorch/pytorch/commit/36e118b8107cce2dcdcbeae47c4c7048ef9a2296</link><description><![CDATA[<p>[inductor] logging meta data for inductor generated triton kernel (#120048)</p>
-<p>I want to log metadata for inductor generated triton kernels for a couple of purposes<br />
-1. with these metadata, it should be convenient to find unaligned reduction kernels and try the idea here https://github.com/pytorch/pytorch/issues/119929 . I think it's nice to try on kernels that are used in real models<br />
-2. I'm thinking that based on the collected kernel metadata, I can build a simple offline tool by benchmarking each kernel with ncu and augment each kernel metadata with: latency, theoretical membw (estimated memory access / latency), and actually achieved membw. Hopefully this can point us to some good optimization opportunities.</p>
-<p>Command:<br />
-<code>TORCHINDUCTOR_CACHE_DIR=`realpath ~/inductor-caches/kernel-metadata-log` TORCHINDUCTOR_ENABLED_METRIC_TABLES=kernel_metadata TORCHINDUCTOR_BENCHMARK_KERNEL=1 TORCHINDUCTOR_UNIQUE_KERNEL_NAMES=1 time python benchmarks/dynamo/huggingface.py --backend inductor --amp --performance --training</code></p>
-<p>The best practice here is to point inductor cache to a folder outside of /tmp so that one can always run the kernel again based on the path stored in kernel metadata. (folders under /tmp may get removed by the system)</p>
-<p>Here is first 1000 rows of collected metadata for huggingface: https://gist.github.com/shunting314/cf4ebdaaaa7e852efcaa93524c868e5f</p>
-<p>And here is the total 10K kernels collected for huggingface. The gist can not be rendered as a csv since it's too large: https://gist.github.com/shunting314/7f841528e2debdc2ae05dece4ac591be .</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120048<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Fri, 16 Feb 2024 18:09:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/36e118b8107cce2dcdcbeae47c4c7048ef9a2296</guid></item><item><title>Support broadcast in native funcol (#119229)</title><link>https://github.com/pytorch/pytorch/commit/4ac857f94e8900d3e89db5f9119247bfa5ddffb6</link><description><![CDATA[<p>Support broadcast in native funcol (#119229)</p>
-<h3>Summary</h3>
-<p>@LucasLLC recently implemented <code>broadcast</code> in funcol. This is not yet available in the native funcol ops. This PR adds support for broadcast for native funcol.</p>
-<ul>
-<li>Added <code>_c10d_functional::broadcast</code> and <code>_c10d_functional::broadcast_</code></li>
-<li>Integrated with python functol broadcast and <code>AsyncCollectiveTensor</code></li>
-<li>Implemented Inductor lowering. Verified correctness and buffer reuse behavior</li>
-<li>Validated dynamo traceability</li>
-<li>Validated AOTInductor compile-ability</li>
-</ul>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119229<br />
-Approved by: https://github.com/wanchaol<br />
-ghstack dependencies: #119104</p>]]></description><pubDate>Fri, 16 Feb 2024 13:01:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4ac857f94e8900d3e89db5f9119247bfa5ddffb6</guid></item><item><title>[aot_inductor] move CppWrapperCodeGen into a separate file (#119871)</title><link>https://github.com/pytorch/pytorch/commit/bc7f3efb0987ed02599a34bd688f04e10a8308a9</link><description><![CDATA[<p>[aot_inductor] move CppWrapperCodeGen into a separate file (#119871)</p>
-<p>This reverts commit d8e319a961bb872027f0abdc413d6beb7502ac9b.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53817853">D53817853</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119871<br />
-Approved by: https://github.com/albanD, https://github.com/khabinov<br />
-ghstack dependencies: #119870</p>]]></description><pubDate>Fri, 16 Feb 2024 00:14:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bc7f3efb0987ed02599a34bd688f04e10a8308a9</guid></item><item><title>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119870)</title><link>https://github.com/pytorch/pytorch/commit/78c9b2948ad00b1c853838b95b51e1c4f5a035aa</link><description><![CDATA[<p>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119870)</p>
-<p>This reverts commit 3ab08946d5052eaeda11d683d6a58e801a032755.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53817852">D53817852</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119870<br />
-Approved by: https://github.com/khabinov</p>]]></description><pubDate>Fri, 16 Feb 2024 00:10:51 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/78c9b2948ad00b1c853838b95b51e1c4f5a035aa</guid></item><item><title>Add Runtime Constant-Folding function of AOTInductor for AOTInductorModels used internally. (#119823)</title><link>https://github.com/pytorch/pytorch/commit/b8be8b639f21f574e5e2bf90d03691a9f1aad14d</link><description><![CDATA[<p>Add Runtime Constant-Folding function of AOTInductor for AOTInductorModels used internally. (#119823)</p>
-<p>Summary:<br />
-1. Make sure folded constants generated internally doesn't get exposed.<br />
-2. Add runConstantFolding and related API calls</p>
-<p>Test Plan:<br />
-<code>buck2 run mode/opt-split-dwarf -c fbcode.nvcc_arch=v100,a100 caffe2/caffe2/fb/predictor/tests_gpu:pytorch_predictor_container_gpu_test -- --gtest_filter=*PyTorchPredictorContainerTest.LoadAOTInductorModel*</code><br />
-The test triggers the added predictor tests <code>test_aot_inductor_merge_net_file_*.predictor_20240206</code>,<br />
-which would trigger runConstantFolding from predictor's module loading.</p>
-<p>Reviewed By: SherlockNoMad</p>
-<p>Differential Revision: D53718139</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119823<br />
-Approved by: https://github.com/chenyang78</p>]]></description><pubDate>Thu, 15 Feb 2024 22:45:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b8be8b639f21f574e5e2bf90d03691a9f1aad14d</guid></item><item><title>Change native funcol inductor tests to use fake pg (#119104)</title><link>https://github.com/pytorch/pytorch/commit/02fb04352275d18529fd10741a0626f0bc3eab5e</link><description><![CDATA[<p>Change native funcol inductor tests to use fake pg (#119104)</p>
-<p>Summary:<br />
-Previously these tests require more than 2 GPUs to run. Changing them to use fake pg so they can run more often.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119104<br />
-Approved by: https://github.com/wconstab<br />
-ghstack dependencies: #119103</p>]]></description><pubDate>Thu, 15 Feb 2024 21:18:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/02fb04352275d18529fd10741a0626f0bc3eab5e</guid></item><item><title>[inductor][eazy] fix profiler (#119959)</title><link>https://github.com/pytorch/pytorch/commit/3f4f91f2eb7d878c138c688aa2f27853a1cbc5de</link><description><![CDATA[<p>[inductor][eazy] fix profiler (#119959)</p>
-<p>print_performance previously returns the execution time for <code>times</code> runs in total but now it returns the average execution time of a single run.  Change the profiler to be consistent with that. Not sure if there is a good way to add test though.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119959<br />
-Approved by: https://github.com/eellison</p>]]></description><pubDate>Thu, 15 Feb 2024 13:47:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3f4f91f2eb7d878c138c688aa2f27853a1cbc5de</guid></item><item><title>[export] Log private api uses. (#119848)</title><link>https://github.com/pytorch/pytorch/commit/8f27fde2f54eb3a93f20360fe0707b5c729ddf93</link><description><![CDATA[<p>[export] Log private api uses. (#119848)</p>
-<p>Summary:<br />
-as title.<br />
-The following APIs are logged:<br />
-- capture_preautograd_graph<br />
-- torch._export.aot_compile<br />
-- external usage of _export_to_torch_ir (AOTInductor, Pippy)<br />
-- constraints API<br />
-- public use of torch._dynamo.export</p>
-<p>Test Plan: CI</p>
-<p>Differential Revision: D53735599</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119848<br />
-Approved by: https://github.com/suo</p>]]></description><pubDate>Wed, 14 Feb 2024 14:58:23 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8f27fde2f54eb3a93f20360fe0707b5c729ddf93</guid></item><item><title>Revert "[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)"</title><link>https://github.com/pytorch/pytorch/commit/3713103db48183fe323ea15e6e0fdb0603e495b7</link><description><![CDATA[<p>Revert "[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)"</p>
-<p>This reverts commit 4e93b00b692118b8531f3807ec95eb4c538ea419.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/119450 on behalf of https://github.com/soulitzer due to Regressed perf on the dashboard (<a href="https://github.com/pytorch/pytorch/pull/119450#issuecomment-1944876761">comment</a>)</p>]]></description><pubDate>Wed, 14 Feb 2024 14:44:21 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3713103db48183fe323ea15e6e0fdb0603e495b7</guid></item><item><title>[inductor][scheduler] Use set for origin (#119861)</title><link>https://github.com/pytorch/pytorch/commit/6b04251b87952a349f2e7e579d8322bcf0496e6a</link><description><![CDATA[<p>[inductor][scheduler] Use set for origin (#119861)</p>
-<p>xref - https://github.com/pytorch/pytorch/issues/119440</p>
-<p>This avoids node &gt; node comparison if the origin order is same in the origins tuple. However, I am unable to come up with a test case where this could happen.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119861<br />
-Approved by: https://github.com/Skylion007, https://github.com/eellison</p>]]></description><pubDate>Wed, 14 Feb 2024 14:00:38 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/6b04251b87952a349f2e7e579d8322bcf0496e6a</guid></item><item><title>[testing][inductor] Allow grad tolerance override (#119844)</title><link>https://github.com/pytorch/pytorch/commit/7797a8c2cbe153d3f654ec56c7bac0a1cece753f</link><description><![CDATA[<p>[testing][inductor] Allow grad tolerance override (#119844)</p>
-<p>Introduce <code>grad_atol</code> and <code>grad_rtol</code> kwargs, default behavior is<br />
-preserved by using <code>atol</code> and <code>rtol</code> values.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119844<br />
-Approved by: https://github.com/peterbell10</p>]]></description><pubDate>Wed, 14 Feb 2024 12:18:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7797a8c2cbe153d3f654ec56c7bac0a1cece753f</guid></item><item><title>[ROCm] Initial ir.Scan/aten.cumsum lowering support on ROCm (#119369)</title><link>https://github.com/pytorch/pytorch/commit/3e21c785a4be06a75791bcae5179f830cc62d557</link><description><![CDATA[<p>[ROCm] Initial ir.Scan/aten.cumsum lowering support on ROCm (#119369)</p>
-<p>It was noted in https://github.com/pytorch/pytorch/pull/117992 that ROCm is still falling back to eager with scan's with inductor.</p>
-<p>Initially as part of https://github.com/pytorch/pytorch/pull/106581 ROCm was disabled on this feature due to lack of triton support.</p>
-<p>This PR will enable support for lowering scan operations on ROCm.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119369<br />
-Approved by: https://github.com/peterbell10</p>]]></description><pubDate>Wed, 14 Feb 2024 08:13:46 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3e21c785a4be06a75791bcae5179f830cc62d557</guid></item><item><title>[inductor] Reorder if check to avoid more expensive check. (#119817)</title><link>https://github.com/pytorch/pytorch/commit/fb492f7ca14ee429a522589f9c71da53f56fc323</link><description><![CDATA[<p>[inductor] Reorder if check to avoid more expensive check. (#119817)</p>
-<p>If <code>mkldnn</code> is not enabled or not available there is no point in performing a relatively expensive <code>all</code> check.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119817<br />
-Approved by: https://github.com/Skylion007</p>]]></description><pubDate>Wed, 14 Feb 2024 08:04:31 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fb492f7ca14ee429a522589f9c71da53f56fc323</guid></item><item><title>[inductor] Replace generators with map. (#119818)</title><link>https://github.com/pytorch/pytorch/commit/184605ae7d97f0425d3ad853ecff482995206dd2</link><description><![CDATA[<p>[inductor] Replace generators with map. (#119818)</p>
-<p>It's more concise and efficient.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119818<br />
-Approved by: https://github.com/Skylion007, https://github.com/Neilblaze</p>]]></description><pubDate>Wed, 14 Feb 2024 08:02:52 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/184605ae7d97f0425d3ad853ecff482995206dd2</guid></item><item><title>[inductor] Recursivly unwrap_storage_for_input when convert_to_reinterpret_view fails (#119867)</title><link>https://github.com/pytorch/pytorch/commit/4a50572c924214e32b093ba5fb8270675abb20bf</link><description><![CDATA[<p>[inductor] Recursivly unwrap_storage_for_input when convert_to_reinterpret_view fails (#119867)</p>
-<p>Summary:<br />
-When, during <code>ExternKernel.realize_input</code> call, underlying <code>ExternKernel.convert_to_reinterpret_view</code> fails, we currently fall back to <code>cls.copy_input</code> here:</p>
-<p>https://github.com/pytorch/pytorch/blob/31e59766e7e7b51e8dddd4a6967891ac01f4d37b/torch/_inductor/ir.py#L3805-L3816</p>
-<p>This creates a <code>TensorBox(StorageBox(...))</code> wrapped output, which causes a problem for this assertion:</p>
-<p>https://github.com/pytorch/pytorch/blob/31e59766e7e7b51e8dddd4a6967891ac01f4d37b/torch/_inductor/ir.py#L3479</p>
-<p>Here we add a special case handling for this to unwrap <code>x</code> recursively.</p>
-<p>Test Plan:<br />
-This local repro:</p>
-<p><code>torch.compile()
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[Inductor] Enable the decomposition of quant/dequant per channel (#119177)</title><link>https://github.com/pytorch/pytorch/commit/84de85153972e4384d2f400c20afd4dc799303df</link><description><![CDATA[<p>[Inductor] Enable the decomposition of quant/dequant per channel (#119177)</p>
+<p><strong>Summary</strong><br />
+Part 2 of fixing https://github.com/pytorch/pytorch/issues/119141 which needs vectorized code generation of per channel quant and int8 data type.<br />
+Enable decomposition of quant/dequant per channel to make it vectorized code generation.</p>
+<p><strong>TestPlan</strong><br />
+<code>python -u -m pytest -s -v test_cpu_repro.py -k test_per_channel_fake_quant_uint8
+python -u -m pytest -s -v test_cpu_repro.py -k test_per_channel_fake_quant_int8
+python -u -m pytest -s -v test_cpu_repro.py -k test_per_channel_fake_quant_uint8_bf16_input
+python -u -m pytest -s -v test_cpu_repro.py -k test_per_channel_fake_quant_int8_bf16_input</code></p>
+<p>Co-authored-by: Jiong Gong <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#105;&#111;&#110;&#103;&#46;&#103;&#111;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;">&#106;&#105;&#111;&#110;&#103;&#46;&#103;&#111;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119177<br />
+Approved by: https://github.com/peterbell10, https://github.com/jansel</p>]]></description><pubDate>Sun, 18 Feb 2024 17:30:44 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/84de85153972e4384d2f400c20afd4dc799303df</guid></item><item><title>[inductor] allow padding mm/bmm/addmm in the presence of dynamic dims (#120073)</title><link>https://github.com/pytorch/pytorch/commit/fac598c4aef9eab7a0dabc4e1b21831438c1cecf</link><description>&lt;p&gt;[inductor] allow padding mm/bmm/addmm in the presence of dynamic dims (#120073)&lt;/p&gt;
+&lt;p&gt;Previously, pad_mm skips cases where any input tensor has symbolic&lt;br /&gt;
+dimension or stride. This is too constraint in practise.&lt;br /&gt;
+This PR enables this pass to pad non-symbolic dimensions in&lt;br /&gt;
+the presence of dynamic dims. For example, with this PR, we could&lt;br /&gt;
+pad the K dimension (i.e. 1921) for torch.mm(A[s0, 1921], B[2048, 1921]).&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120073&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Sat, 17 Feb 2024 04:22:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fac598c4aef9eab7a0dabc4e1b21831438c1cecf</guid></item><item><title>[inductor] Add torch.cond support to JIT Inductor (#119759)</title><link>https://github.com/pytorch/pytorch/commit/badf84bd6bd33c19d1723b64bd72bdb715d3d3b7</link><description>&lt;p&gt;[inductor] Add torch.cond support to JIT Inductor (#119759)&lt;/p&gt;
+&lt;p&gt;Summary: &lt;code&gt;torch.cond&lt;/code&gt; is already supported in Dynamo and Export: the &lt;code&gt;true_fn&lt;/code&gt; and &lt;code&gt;false_fn&lt;/code&gt; subgraphs are traced as child fx graphs of the main graph and passed to the &lt;code&gt;torch.cond&lt;/code&gt; higher-order operator in the fx graph. However, this breaks in Inductor, as the latter doesn't have the ways of dealing with child fx subgraphs and properly lowering and codegen-ing them.&lt;/p&gt;
+&lt;p&gt;In this PR, we add &lt;code&gt;torch.cond&lt;/code&gt; support in Inductor. This is achieved by adding subgraph lowering and codegen-ing infrastructure as well as new &lt;code&gt;Conditional&lt;/code&gt; IR node type weaving the parent graph with the true and false child subgraphs.&lt;/p&gt;
+&lt;p&gt;Here we only implement &lt;code&gt;torch.cond&lt;/code&gt; support in JIT Inductor (Python wrapper codegen). The implementation in AOT Inductor (C++ wrapper codegen), including ABI-compatibility mode, will follow.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+$ python test/inductor/test_control_flow.py&lt;br /&gt;
+...&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Ran 24 tests in 86.790s&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119759&lt;br /&gt;
+Approved by: https://github.com/jansel, https://github.com/eellison&lt;/p&gt;</description><pubDate>Fri, 16 Feb 2024 23:25:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/badf84bd6bd33c19d1723b64bd72bdb715d3d3b7</guid></item><item><title>[inductor] logging meta data for inductor generated triton kernel (#120048)</title><link>https://github.com/pytorch/pytorch/commit/36e118b8107cce2dcdcbeae47c4c7048ef9a2296</link><description>&lt;p&gt;[inductor] logging meta data for inductor generated triton kernel (#120048)&lt;/p&gt;
+&lt;p&gt;I want to log metadata for inductor generated triton kernels for a couple of purposes&lt;br /&gt;
+1. with these metadata, it should be convenient to find unaligned reduction kernels and try the idea here https://github.com/pytorch/pytorch/issues/119929 . I think it's nice to try on kernels that are used in real models&lt;br /&gt;
+2. I'm thinking that based on the collected kernel metadata, I can build a simple offline tool by benchmarking each kernel with ncu and augment each kernel metadata with: latency, theoretical membw (estimated memory access / latency), and actually achieved membw. Hopefully this can point us to some good optimization opportunities.&lt;/p&gt;
+&lt;p&gt;Command:&lt;br /&gt;
+&lt;code&gt;TORCHINDUCTOR_CACHE_DIR=`realpath ~/inductor-caches/kernel-metadata-log` TORCHINDUCTOR_ENABLED_METRIC_TABLES=kernel_metadata TORCHINDUCTOR_BENCHMARK_KERNEL=1 TORCHINDUCTOR_UNIQUE_KERNEL_NAMES=1 time python benchmarks/dynamo/huggingface.py --backend inductor --amp --performance --training&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The best practice here is to point inductor cache to a folder outside of /tmp so that one can always run the kernel again based on the path stored in kernel metadata. (folders under /tmp may get removed by the system)&lt;/p&gt;
+&lt;p&gt;Here is first 1000 rows of collected metadata for huggingface: https://gist.github.com/shunting314/cf4ebdaaaa7e852efcaa93524c868e5f&lt;/p&gt;
+&lt;p&gt;And here is the total 10K kernels collected for huggingface. The gist can not be rendered as a csv since it's too large: https://gist.github.com/shunting314/7f841528e2debdc2ae05dece4ac591be .&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120048&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Fri, 16 Feb 2024 18:09:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/36e118b8107cce2dcdcbeae47c4c7048ef9a2296</guid></item><item><title>Support broadcast in native funcol (#119229)</title><link>https://github.com/pytorch/pytorch/commit/4ac857f94e8900d3e89db5f9119247bfa5ddffb6</link><description>&lt;p&gt;Support broadcast in native funcol (#119229)&lt;/p&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;p&gt;@LucasLLC recently implemented &lt;code&gt;broadcast&lt;/code&gt; in funcol. This is not yet available in the native funcol ops. This PR adds support for broadcast for native funcol.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Added &lt;code&gt;_c10d_functional::broadcast&lt;/code&gt; and &lt;code&gt;_c10d_functional::broadcast_&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Integrated with python functol broadcast and &lt;code&gt;AsyncCollectiveTensor&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Implemented Inductor lowering. Verified correctness and buffer reuse behavior&lt;/li&gt;
+&lt;li&gt;Validated dynamo traceability&lt;/li&gt;
+&lt;li&gt;Validated AOTInductor compile-ability&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119229&lt;br /&gt;
+Approved by: https://github.com/wanchaol&lt;br /&gt;
+ghstack dependencies: #119104&lt;/p&gt;</description><pubDate>Fri, 16 Feb 2024 13:01:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4ac857f94e8900d3e89db5f9119247bfa5ddffb6</guid></item><item><title>[aot_inductor] move CppWrapperCodeGen into a separate file (#119871)</title><link>https://github.com/pytorch/pytorch/commit/bc7f3efb0987ed02599a34bd688f04e10a8308a9</link><description>&lt;p&gt;[aot_inductor] move CppWrapperCodeGen into a separate file (#119871)&lt;/p&gt;
+&lt;p&gt;This reverts commit d8e319a961bb872027f0abdc413d6beb7502ac9b.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D53817853"&gt;D53817853&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119871&lt;br /&gt;
+Approved by: https://github.com/albanD, https://github.com/khabinov&lt;br /&gt;
+ghstack dependencies: #119870&lt;/p&gt;</description><pubDate>Fri, 16 Feb 2024 00:14:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bc7f3efb0987ed02599a34bd688f04e10a8308a9</guid></item><item><title>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119870)</title><link>https://github.com/pytorch/pytorch/commit/78c9b2948ad00b1c853838b95b51e1c4f5a035aa</link><description>&lt;p&gt;[aot_inductor] move CudaWrapperCodeGen into a separate file (#119870)&lt;/p&gt;
+&lt;p&gt;This reverts commit 3ab08946d5052eaeda11d683d6a58e801a032755.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D53817852"&gt;D53817852&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119870&lt;br /&gt;
+Approved by: https://github.com/khabinov&lt;/p&gt;</description><pubDate>Fri, 16 Feb 2024 00:10:51 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/78c9b2948ad00b1c853838b95b51e1c4f5a035aa</guid></item><item><title>Add Runtime Constant-Folding function of AOTInductor for AOTInductorModels used internally. (#119823)</title><link>https://github.com/pytorch/pytorch/commit/b8be8b639f21f574e5e2bf90d03691a9f1aad14d</link><description>&lt;p&gt;Add Runtime Constant-Folding function of AOTInductor for AOTInductorModels used internally. (#119823)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+1. Make sure folded constants generated internally doesn't get exposed.&lt;br /&gt;
+2. Add runConstantFolding and related API calls&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+&lt;code&gt;buck2 run mode/opt-split-dwarf -c fbcode.nvcc_arch=v100,a100 caffe2/caffe2/fb/predictor/tests_gpu:pytorch_predictor_container_gpu_test -- --gtest_filter=*PyTorchPredictorContainerTest.LoadAOTInductorModel*&lt;/code&gt;&lt;br /&gt;
+The test triggers the added predictor tests &lt;code&gt;test_aot_inductor_merge_net_file_*.predictor_20240206&lt;/code&gt;,&lt;br /&gt;
+which would trigger runConstantFolding from predictor's module loading.&lt;/p&gt;
+&lt;p&gt;Reviewed By: SherlockNoMad&lt;/p&gt;
+&lt;p&gt;Differential Revision: D53718139&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119823&lt;br /&gt;
+Approved by: https://github.com/chenyang78&lt;/p&gt;</description><pubDate>Thu, 15 Feb 2024 22:45:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b8be8b639f21f574e5e2bf90d03691a9f1aad14d</guid></item><item><title>Change native funcol inductor tests to use fake pg (#119104)</title><link>https://github.com/pytorch/pytorch/commit/02fb04352275d18529fd10741a0626f0bc3eab5e</link><description>&lt;p&gt;Change native funcol inductor tests to use fake pg (#119104)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+Previously these tests require more than 2 GPUs to run. Changing them to use fake pg so they can run more often.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119104&lt;br /&gt;
+Approved by: https://github.com/wconstab&lt;br /&gt;
+ghstack dependencies: #119103&lt;/p&gt;</description><pubDate>Thu, 15 Feb 2024 21:18:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/02fb04352275d18529fd10741a0626f0bc3eab5e</guid></item><item><title>[inductor][eazy] fix profiler (#119959)</title><link>https://github.com/pytorch/pytorch/commit/3f4f91f2eb7d878c138c688aa2f27853a1cbc5de</link><description>&lt;p&gt;[inductor][eazy] fix profiler (#119959)&lt;/p&gt;
+&lt;p&gt;print_performance previously returns the execution time for &lt;code&gt;times&lt;/code&gt; runs in total but now it returns the average execution time of a single run.  Change the profiler to be consistent with that. Not sure if there is a good way to add test though.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119959&lt;br /&gt;
+Approved by: https://github.com/eellison&lt;/p&gt;</description><pubDate>Thu, 15 Feb 2024 13:47:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3f4f91f2eb7d878c138c688aa2f27853a1cbc5de</guid></item><item><title>[export] Log private api uses. (#119848)</title><link>https://github.com/pytorch/pytorch/commit/8f27fde2f54eb3a93f20360fe0707b5c729ddf93</link><description>&lt;p&gt;[export] Log private api uses. (#119848)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+as title.&lt;br /&gt;
+The following APIs are logged:&lt;br /&gt;
+- capture_preautograd_graph&lt;br /&gt;
+- torch._export.aot_compile&lt;br /&gt;
+- external usage of _export_to_torch_ir (AOTInductor, Pippy)&lt;br /&gt;
+- constraints API&lt;br /&gt;
+- public use of torch._dynamo.export&lt;/p&gt;
+&lt;p&gt;Test Plan: CI&lt;/p&gt;
+&lt;p&gt;Differential Revision: D53735599&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119848&lt;br /&gt;
+Approved by: https://github.com/suo&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 14:58:23 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8f27fde2f54eb3a93f20360fe0707b5c729ddf93</guid></item><item><title>Revert "[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)"</title><link>https://github.com/pytorch/pytorch/commit/3713103db48183fe323ea15e6e0fdb0603e495b7</link><description>&lt;p&gt;Revert "[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 4e93b00b692118b8531f3807ec95eb4c538ea419.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/119450 on behalf of https://github.com/soulitzer due to Regressed perf on the dashboard (&lt;a href="https://github.com/pytorch/pytorch/pull/119450#issuecomment-1944876761"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 14:44:21 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3713103db48183fe323ea15e6e0fdb0603e495b7</guid></item><item><title>[inductor][scheduler] Use set for origin (#119861)</title><link>https://github.com/pytorch/pytorch/commit/6b04251b87952a349f2e7e579d8322bcf0496e6a</link><description>&lt;p&gt;[inductor][scheduler] Use set for origin (#119861)&lt;/p&gt;
+&lt;p&gt;xref - https://github.com/pytorch/pytorch/issues/119440&lt;/p&gt;
+&lt;p&gt;This avoids node &amp;gt; node comparison if the origin order is same in the origins tuple. However, I am unable to come up with a test case where this could happen.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119861&lt;br /&gt;
+Approved by: https://github.com/Skylion007, https://github.com/eellison&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 14:00:38 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/6b04251b87952a349f2e7e579d8322bcf0496e6a</guid></item><item><title>[testing][inductor] Allow grad tolerance override (#119844)</title><link>https://github.com/pytorch/pytorch/commit/7797a8c2cbe153d3f654ec56c7bac0a1cece753f</link><description>&lt;p&gt;[testing][inductor] Allow grad tolerance override (#119844)&lt;/p&gt;
+&lt;p&gt;Introduce &lt;code&gt;grad_atol&lt;/code&gt; and &lt;code&gt;grad_rtol&lt;/code&gt; kwargs, default behavior is&lt;br /&gt;
+preserved by using &lt;code&gt;atol&lt;/code&gt; and &lt;code&gt;rtol&lt;/code&gt; values.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119844&lt;br /&gt;
+Approved by: https://github.com/peterbell10&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 12:18:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7797a8c2cbe153d3f654ec56c7bac0a1cece753f</guid></item><item><title>[ROCm] Initial ir.Scan/aten.cumsum lowering support on ROCm (#119369)</title><link>https://github.com/pytorch/pytorch/commit/3e21c785a4be06a75791bcae5179f830cc62d557</link><description>&lt;p&gt;[ROCm] Initial ir.Scan/aten.cumsum lowering support on ROCm (#119369)&lt;/p&gt;
+&lt;p&gt;It was noted in https://github.com/pytorch/pytorch/pull/117992 that ROCm is still falling back to eager with scan's with inductor.&lt;/p&gt;
+&lt;p&gt;Initially as part of https://github.com/pytorch/pytorch/pull/106581 ROCm was disabled on this feature due to lack of triton support.&lt;/p&gt;
+&lt;p&gt;This PR will enable support for lowering scan operations on ROCm.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119369&lt;br /&gt;
+Approved by: https://github.com/peterbell10&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 08:13:46 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3e21c785a4be06a75791bcae5179f830cc62d557</guid></item><item><title>[inductor] Reorder if check to avoid more expensive check. (#119817)</title><link>https://github.com/pytorch/pytorch/commit/fb492f7ca14ee429a522589f9c71da53f56fc323</link><description>&lt;p&gt;[inductor] Reorder if check to avoid more expensive check. (#119817)&lt;/p&gt;
+&lt;p&gt;If &lt;code&gt;mkldnn&lt;/code&gt; is not enabled or not available there is no point in performing a relatively expensive &lt;code&gt;all&lt;/code&gt; check.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119817&lt;br /&gt;
+Approved by: https://github.com/Skylion007&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 08:04:31 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fb492f7ca14ee429a522589f9c71da53f56fc323</guid></item><item><title>[inductor] Replace generators with map. (#119818)</title><link>https://github.com/pytorch/pytorch/commit/184605ae7d97f0425d3ad853ecff482995206dd2</link><description>&lt;p&gt;[inductor] Replace generators with map. (#119818)&lt;/p&gt;
+&lt;p&gt;It's more concise and efficient.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119818&lt;br /&gt;
+Approved by: https://github.com/Skylion007, https://github.com/Neilblaze&lt;/p&gt;</description><pubDate>Wed, 14 Feb 2024 08:02:52 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/184605ae7d97f0425d3ad853ecff482995206dd2</guid></item><item><title>[inductor] Recursivly unwrap_storage_for_input when convert_to_reinterpret_view fails (#119867)</title><link>https://github.com/pytorch/pytorch/commit/4a50572c924214e32b093ba5fb8270675abb20bf</link><description>&lt;p&gt;[inductor] Recursivly unwrap_storage_for_input when convert_to_reinterpret_view fails (#119867)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+When, during &lt;code&gt;ExternKernel.realize_input&lt;/code&gt; call, underlying &lt;code&gt;ExternKernel.convert_to_reinterpret_view&lt;/code&gt; fails, we currently fall back to &lt;code&gt;cls.copy_input&lt;/code&gt; here:&lt;/p&gt;
+&lt;p&gt;https://github.com/pytorch/pytorch/blob/31e59766e7e7b51e8dddd4a6967891ac01f4d37b/torch/_inductor/ir.py#L3805-L3816&lt;/p&gt;
+&lt;p&gt;This creates a &lt;code&gt;TensorBox(StorageBox(...))&lt;/code&gt; wrapped output, which causes a problem for this assertion:&lt;/p&gt;
+&lt;p&gt;https://github.com/pytorch/pytorch/blob/31e59766e7e7b51e8dddd4a6967891ac01f4d37b/torch/_inductor/ir.py#L3479&lt;/p&gt;
+&lt;p&gt;Here we add a special case handling for this to unwrap &lt;code&gt;x&lt;/code&gt; recursively.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+This local repro:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;torch.compile()
 def f(a, b, mat1, mat2):
     bias = torch.bmm(a + 3.14, b).permute(0, 2, 1).reshape(3992, -1)
     return torch.addmm(bias, mat1, mat2)
@@ -124,115 +135,115 @@ f(
     torch.randn(3992, 40, 192).cuda(),
     torch.empty(3992, 1024).cuda(),
     torch.empty(1024, 3840).cuda(),
-)</code></p>
-<p>with this line:</p>
-<p>https://github.com/pytorch/pytorch/blob/690f54b0f5fa911ba9f7cb6f2ef9719ec765d2d2/torch/_inductor/fx_passes/post_grad.py#L650</p>
-<p>changed to <code>if cond(*args, **kwargs):</code> fails before and succeeds after this PR.</p>
-<p>Differential Revision: D53743146</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119867<br />
-Approved by: https://github.com/xw285cornell</p>]]></description><pubDate>Tue, 13 Feb 2024 23:50:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4a50572c924214e32b093ba5fb8270675abb20bf</guid></item><item><title>[inductor] Use torch.cuda.clock_rate instead of triton.testing.nvsmi (#118662)</title><link>https://github.com/pytorch/pytorch/commit/563f1b9fef052d346249917101d440d5fc11c704</link><description><![CDATA[<p>[inductor] Use torch.cuda.clock_rate instead of triton.testing.nvsmi (#118662)</p>
-<p><code>triton.testing.nvsmi</code> invokes <code>nvidia-smi</code> as a subprocess, and Meta<br />
-prod usually doesn't make nvidia-smi available.  Might as well just use<br />
-something that's native to torch.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53235814/">D53235814</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118662<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Tue, 13 Feb 2024 19:23:49 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/563f1b9fef052d346249917101d440d5fc11c704</guid></item><item><title>[inductor] Support storage resizing (#119749)</title><link>https://github.com/pytorch/pytorch/commit/75a6d6aef7e5cbc2aa515183916ee97d8e914d43</link><description><![CDATA[<p>[inductor] Support storage resizing (#119749)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119749<br />
-Approved by: https://github.com/yf225<br />
-ghstack dependencies: #119647, #119671</p>]]></description><pubDate>Tue, 13 Feb 2024 19:03:38 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/75a6d6aef7e5cbc2aa515183916ee97d8e914d43</guid></item><item><title>Rewrite group_batch_fusion.find_independent_subset_greedy() to be iterative. (#118324)</title><link>https://github.com/pytorch/pytorch/commit/e9b78f2db0784fadcc09150f64f54d233993ee6e</link><description><![CDATA[<p>Rewrite group_batch_fusion.find_independent_subset_greedy() to be iterative. (#118324)</p>
-<p>Improve performance of inductor searching large graphs for potential fusions.<br />
-Also adds some direct unit tests of find_independent_subset_greedy() to ensure that the rewrite didn't break behavior.</p>
-<p>Fixes #98467</p>
-<p>Previously find_independent_subset_greedy() was recursive and the example from the issue would cause it to blow out the stack. This changes it to be iterative and also caches some of the computed dependencies (it can't cache all of them because the caller is allowed to change the graph during the iteration).</p>
-<p>Fusion is still slow - but at least finishes.</p>
-<p>After this change the example given in #98467 has the following backend timings (on one particular CPU):<br />
-eager timing: 3m:23s<br />
-aot_eager timing: 4m:12s<br />
-inductor timing: 22m:24s</p>
-<p>Possible future work to improve this further:<br />
-1. In dynamo limit the amount of inlining allowed before falling back to a graph break. This test ends up tracing through 483k bytecodes generating the graph.<br />
-2. In inductor have a limit so we don't exhaustively search the graph for fusion possibilities.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118324<br />
-Approved by: https://github.com/oulgen</p>]]></description><pubDate>Tue, 13 Feb 2024 14:54:53 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e9b78f2db0784fadcc09150f64f54d233993ee6e</guid></item><item><title>Fixed FxGraphDrawer compat constructor (#119767)</title><link>https://github.com/pytorch/pytorch/commit/8ec3d8e35faa8b37a0f6639dc56fe0c444d2ca48</link><description><![CDATA[<p>Fixed FxGraphDrawer compat constructor (#119767)</p>
-<p>Match FxGraphDrawer compat constructor signature to avoid the following failure when <code>pydot</code> is not installed:<br />
-<code>File "/pytorch/torch/_functorch/partitioners.py", line 933, in draw_graph
+)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;with this line:&lt;/p&gt;
+&lt;p&gt;https://github.com/pytorch/pytorch/blob/690f54b0f5fa911ba9f7cb6f2ef9719ec765d2d2/torch/_inductor/fx_passes/post_grad.py#L650&lt;/p&gt;
+&lt;p&gt;changed to &lt;code&gt;if cond(*args, **kwargs):&lt;/code&gt; fails before and succeeds after this PR.&lt;/p&gt;
+&lt;p&gt;Differential Revision: D53743146&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119867&lt;br /&gt;
+Approved by: https://github.com/xw285cornell&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 23:50:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4a50572c924214e32b093ba5fb8270675abb20bf</guid></item><item><title>[inductor] Use torch.cuda.clock_rate instead of triton.testing.nvsmi (#118662)</title><link>https://github.com/pytorch/pytorch/commit/563f1b9fef052d346249917101d440d5fc11c704</link><description>&lt;p&gt;[inductor] Use torch.cuda.clock_rate instead of triton.testing.nvsmi (#118662)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;triton.testing.nvsmi&lt;/code&gt; invokes &lt;code&gt;nvidia-smi&lt;/code&gt; as a subprocess, and Meta&lt;br /&gt;
+prod usually doesn't make nvidia-smi available.  Might as well just use&lt;br /&gt;
+something that's native to torch.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D53235814/"&gt;D53235814&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118662&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 19:23:49 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/563f1b9fef052d346249917101d440d5fc11c704</guid></item><item><title>[inductor] Support storage resizing (#119749)</title><link>https://github.com/pytorch/pytorch/commit/75a6d6aef7e5cbc2aa515183916ee97d8e914d43</link><description>&lt;p&gt;[inductor] Support storage resizing (#119749)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119749&lt;br /&gt;
+Approved by: https://github.com/yf225&lt;br /&gt;
+ghstack dependencies: #119647, #119671&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 19:03:38 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/75a6d6aef7e5cbc2aa515183916ee97d8e914d43</guid></item><item><title>Rewrite group_batch_fusion.find_independent_subset_greedy() to be iterative. (#118324)</title><link>https://github.com/pytorch/pytorch/commit/e9b78f2db0784fadcc09150f64f54d233993ee6e</link><description>&lt;p&gt;Rewrite group_batch_fusion.find_independent_subset_greedy() to be iterative. (#118324)&lt;/p&gt;
+&lt;p&gt;Improve performance of inductor searching large graphs for potential fusions.&lt;br /&gt;
+Also adds some direct unit tests of find_independent_subset_greedy() to ensure that the rewrite didn't break behavior.&lt;/p&gt;
+&lt;p&gt;Fixes #98467&lt;/p&gt;
+&lt;p&gt;Previously find_independent_subset_greedy() was recursive and the example from the issue would cause it to blow out the stack. This changes it to be iterative and also caches some of the computed dependencies (it can't cache all of them because the caller is allowed to change the graph during the iteration).&lt;/p&gt;
+&lt;p&gt;Fusion is still slow - but at least finishes.&lt;/p&gt;
+&lt;p&gt;After this change the example given in #98467 has the following backend timings (on one particular CPU):&lt;br /&gt;
+eager timing: 3m:23s&lt;br /&gt;
+aot_eager timing: 4m:12s&lt;br /&gt;
+inductor timing: 22m:24s&lt;/p&gt;
+&lt;p&gt;Possible future work to improve this further:&lt;br /&gt;
+1. In dynamo limit the amount of inlining allowed before falling back to a graph break. This test ends up tracing through 483k bytecodes generating the graph.&lt;br /&gt;
+2. In inductor have a limit so we don't exhaustively search the graph for fusion possibilities.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118324&lt;br /&gt;
+Approved by: https://github.com/oulgen&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 14:54:53 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e9b78f2db0784fadcc09150f64f54d233993ee6e</guid></item><item><title>Fixed FxGraphDrawer compat constructor (#119767)</title><link>https://github.com/pytorch/pytorch/commit/8ec3d8e35faa8b37a0f6639dc56fe0c444d2ca48</link><description>&lt;p&gt;Fixed FxGraphDrawer compat constructor (#119767)&lt;/p&gt;
+&lt;p&gt;Match FxGraphDrawer compat constructor signature to avoid the following failure when &lt;code&gt;pydot&lt;/code&gt; is not installed:&lt;br /&gt;
+&lt;code&gt;File "/pytorch/torch/_functorch/partitioners.py", line 933, in draw_graph
     g = graph_drawer.FxGraphDrawer(
 torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-TypeError: __init__() got an unexpected keyword argument 'dot_graph_shape'</code><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119767<br />
-Approved by: https://github.com/eellison</p>]]></description><pubDate>Tue, 13 Feb 2024 11:36:01 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8ec3d8e35faa8b37a0f6639dc56fe0c444d2ca48</guid></item><item><title>[dynamo] Capture untyped_storage().resize_() (#119647)</title><link>https://github.com/pytorch/pytorch/commit/39c68efd851efc1cf5c5321b8f8f8e298019e274</link><description><![CDATA[<p>[dynamo] Capture untyped_storage().resize_() (#119647)</p>
-<p>This makes storage resizing work with <code>backend=eager</code>, the next two PRs make it work for inductor.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119647<br />
-Approved by: https://github.com/yf225</p>]]></description><pubDate>Tue, 13 Feb 2024 11:03:28 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/39c68efd851efc1cf5c5321b8f8f8e298019e274</guid></item><item><title>[inductor] Refactor device guard Python codegen to allow nested indentation (#119673)</title><link>https://github.com/pytorch/pytorch/commit/c2a835d71023359d3fcf3657298413f2c36f93ed</link><description><![CDATA[<p>[inductor] Refactor device guard Python codegen to allow nested indentation (#119673)</p>
-<p>Summary: The codegen of <code>with torch.cuda._DeviceGuard</code> context manager in the Python wrapper code is implemented via <code>device_cm_stack: contextlib.ExitStack()</code>. As the context managers in the stack are <code>code.indent()</code>, this means that the whole stack is unindented at once on <code>device_cm_stack.close()</code>. This becomes problematic when attempting to codegen indented code (e.g., for control flow in Python and / or nested subgraph codegen-ing).</p>
-<p>In this PR, we refactor the device guard codegen-ing in Python by replacing the <code>device_cm_stack</code> by explicit indent and unindent calls for entering and exiting the <code>with torch.cuda._DeviceGuard</code> context manager. This allows for nested device guard context managers and better aligns with other indented codegen-ing intertwined with it (e.g., for nested subgraph codegen-ing).</p>
-<p>This is necessary for the upcoming support for <code>torch.cond</code> (and other control flow operators) in Inductor. Before that, the only change in the Python wrapper codegen is that the <code>return outputs</code> is now happening outside the <code>with torch.cuda._DeviceGuard</code> context manager.</p>
-<p>Test Plan: CI</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119673<br />
-Approved by: https://github.com/peterbell10</p>]]></description><pubDate>Tue, 13 Feb 2024 07:05:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c2a835d71023359d3fcf3657298413f2c36f93ed</guid></item><item><title>Restore OpInfo/ModuleInfo tests in Inductor-wrapped tests (#119693)</title><link>https://github.com/pytorch/pytorch/commit/b3df3e4e941defbd73dd998fa48ba283f6644d5d</link><description><![CDATA[<p>Restore OpInfo/ModuleInfo tests in Inductor-wrapped tests (#119693)</p>
-<p>I accidentally disabled this without realizing it. It turns out that<br />
-PYTORCH_TEST_WITH_INDUCTOR=1 implies PYTORCH_TEST_WITH_DYNAMO=1, which<br />
-activates skipIfTorchDynamo decorators.</p>
-<p>Test Plan:<br />
-- wait for CI<br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119693<br />
-Approved by: https://github.com/bdhirsh</p>]]></description><pubDate>Mon, 12 Feb 2024 14:44:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b3df3e4e941defbd73dd998fa48ba283f6644d5d</guid></item><item><title>[inductor] Update JIT Inductor cpp wrapper entry function signature (#119280)</title><link>https://github.com/pytorch/pytorch/commit/70c93c6097484652dbef079e31d08cd72490980f</link><description><![CDATA[<p>[inductor] Update JIT Inductor cpp wrapper entry function signature (#119280)</p>
-<p>Summary: Change JIT Inductor cpp wrapper entry function to use similar signature as AOTInductor, i.e. using an array of AtenTensorHandle instead of a vector of at::Tensor as the inputs and return output through a pointer. This makes it easier to consolidate the ABI compatible and non-compatible modes.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53478825">D53478825</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119280<br />
-Approved by: https://github.com/chenyang78</p>]]></description><pubDate>Mon, 12 Feb 2024 14:24:35 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/70c93c6097484652dbef079e31d08cd72490980f</guid></item><item><title>[reland] Fix estimate_nccl_collective_runtime (#118986)</title><link>https://github.com/pytorch/pytorch/commit/27ffede8784e43df4ed43ce37f86dbffb5b05f49</link><description><![CDATA[<p>[reland] Fix estimate_nccl_collective_runtime (#118986)</p>
-<p><code>estimate_nccl_collective_runtime</code> has been broken and the errors have been silently swallowed by inductor. This PR:<br />
-- Fixes the issues described in https://github.com/pytorch/pytorch/issues/118497.<br />
-- Adds white-box testing so future issues can be surfaced in tests.<br />
-- Add support for native funcol IRs.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118986<br />
-Approved by: https://github.com/yf225<br />
-ghstack dependencies: #119102</p>]]></description><pubDate>Mon, 12 Feb 2024 10:48:06 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/27ffede8784e43df4ed43ce37f86dbffb5b05f49</guid></item><item><title>Decompose torch.ops.higher_order.auto_functionalized in Inductor (#118673)</title><link>https://github.com/pytorch/pytorch/commit/cf474a09f56ffa707f062ed4f042cdcbedc82093</link><description><![CDATA[<p>Decompose torch.ops.higher_order.auto_functionalized in Inductor (#118673)</p>
-<p>We'd like to get auto_functionalized to work with AOTInductor. To get<br />
-there, we decompose <code>output = auto_functionalized(inplace_op, ...)</code> into its<br />
-corresponding aten ops (clones + inplace_op) before the Inductor lowering phase.</p>
-<p>This decomposition must happen at the end of the Inductor FX passes<br />
-because it introduces in-place operations.</p>
-<p>The pattern matcher's "replace this single node with multiple nodes" API<br />
-isn't robust enough here. The problem is that <code>auto_functionalized</code><br />
-returns a single output (this output is a List), but the decomposition<br />
-ends up returning the unpacked List (e.g. it may return two tensors).<br />
-Previously, there was an assertion that this was not the case; I fixed<br />
-up <code>replace_with_graph</code> to handle this.</p>
-<p>Future: Not all of the clones are necessary (e.g. if the input's last<br />
-usage is this operator, then we don't need to clone it). We can add this<br />
-logic later.</p>
-<p>Test Plan:<br />
-- existing tests</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118673<br />
-Approved by: https://github.com/oulgen</p>]]></description><pubDate>Mon, 12 Feb 2024 09:30:01 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/cf474a09f56ffa707f062ed4f042cdcbedc82093</guid></item><item><title>[AOTI][refactor] Move ThreadLocalCachedOutputTensor into a separate header (#119392)</title><link>https://github.com/pytorch/pytorch/commit/52a3de6cbf31504f63b034746fae7b6d3828ca6a</link><description><![CDATA[<p>[AOTI][refactor] Move ThreadLocalCachedOutputTensor into a separate header (#119392)</p>
-<p>Summary: Move common functionality into a separate header so that later JIT and AOT Inductor can share it.</p>
-<p>Test Plan: CI</p>
-<p>Differential Revision: D53523452</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119392<br />
-Approved by: https://github.com/khabinov</p>]]></description><pubDate>Mon, 12 Feb 2024 07:56:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/52a3de6cbf31504f63b034746fae7b6d3828ca6a</guid></item><item><title>[inductor] Update the compile options for CppPythonBindingsCodeCache (#119415)</title><link>https://github.com/pytorch/pytorch/commit/663dd5d0066664c29e2ecede7ec70bcf71e25133</link><description><![CDATA[<p>[inductor] Update the compile options for CppPythonBindingsCodeCache (#119415)</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D53554681">D53554681</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119415<br />
-Approved by: https://github.com/jansel, https://github.com/khabinov</p>]]></description><pubDate>Sun, 11 Feb 2024 13:25:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/663dd5d0066664c29e2ecede7ec70bcf71e25133</guid></item><item><title>Check alignment of ReinterpretView args of custom Triton kernels (#119649)</title><link>https://github.com/pytorch/pytorch/commit/e5f46a1d359a91b5b80a749ab8c01450ec6d2961</link><description><![CDATA[<p>Check alignment of ReinterpretView args of custom Triton kernels (#119649)</p>
-<p>Summary: Currently, when a custom (user-written) Triton kernel has a ReinterpretView argument in IR, we're always skipping the alignment checking for this argument when preparing the <code>signature_of</code> for the AOT compilation of the Triton kernel (via setting <code>TensorArg.check_alignment</code> to <code>False</code>). This is problematic for user-written kernels where, albeit reinterpreted, the argument of the Triton kernel (the data pointer) can still be aligned to 16. When we skip alignment checking, the performance of the AOT-compiled internal Triton kernels can degrade 2x--3x.</p>
-<p>In this PR, we replace <code>TensorArg.check_alignment</code> by <code>TensorArg.offset</code>, in which we specify the offset of the <code>ReinterpretView.layout</code> relative to the underlying <code>ir.Buffer</code> (corresponding to the data pointer before reinterpretation). As the size and stride of the layout don't change the alignment properties, those can be skipped. Importantly, for <code>ReinterpretView</code> arguments of custom Triton kernels, we use <code>arg.data.get_name()</code> as the buffer name. That, together with the offset, is used to check the alignment.</p>
-<p>Bonus: the namedtuples in <code>codegen/common.py</code> are refactored as <code>dataclass</code>es, with nicer type hints and default values (for the newly added <code>TensorArg.offset</code>).</p>
-<p>Test Plan:</p>
-<p>```<br />
-$ python test/inductor/test_aot_inductor.py -k test_triton_kernel_reinterpret_view<br />
-...</p>
-<hr />
-<p>Ran 6 tests in 27.952s</p>
-<p>OK (skipped=4)<br />
-```</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119649<br />
-Approved by: https://github.com/oulgen</p>]]></description><pubDate>Sun, 11 Feb 2024 12:21:17 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e5f46a1d359a91b5b80a749ab8c01450ec6d2961</guid></item><item><title>[inductor] Use list comprehension to initialize unused_views. (#119618)</title><link>https://github.com/pytorch/pytorch/commit/4394e0dc2c992b9a8b47e469e18d338be816e1f2</link><description><![CDATA[<p>[inductor] Use list comprehension to initialize unused_views. (#119618)</p>
-<p>It's more idiomatic and efficient.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119618<br />
-Approved by: https://github.com/Skylion007</p>]]></description><pubDate>Sun, 11 Feb 2024 10:57:18 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4394e0dc2c992b9a8b47e469e18d338be816e1f2</guid></item><item><title>Don't skip register-spilling configs in custom Triton kernel auto-tuning (#119634)</title><link>https://github.com/pytorch/pytorch/commit/0bed0501fa21baa587a66fea5ce3c3df9b1036a2</link><description><![CDATA[<p>Don't skip register-spilling configs in custom Triton kernel auto-tuning (#119634)</p>
-<p>Summary: There has been some empirical evidence that, for (non-trivial) custom (user-written) Triton kernels, a register-spilling config yields the best result in auto-tuning. For this reason, we don't skip register-spilling config from auto-tuning of the custom Triton kernels.</p>
-<details>
-<summary>An example of auto-tuning result with the register-spilling config outperforming others</summary>
+TypeError: __init__() got an unexpected keyword argument 'dot_graph_shape'&lt;/code&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119767&lt;br /&gt;
+Approved by: https://github.com/eellison&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 11:36:01 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8ec3d8e35faa8b37a0f6639dc56fe0c444d2ca48</guid></item><item><title>[dynamo] Capture untyped_storage().resize_() (#119647)</title><link>https://github.com/pytorch/pytorch/commit/39c68efd851efc1cf5c5321b8f8f8e298019e274</link><description>&lt;p&gt;[dynamo] Capture untyped_storage().resize_() (#119647)&lt;/p&gt;
+&lt;p&gt;This makes storage resizing work with &lt;code&gt;backend=eager&lt;/code&gt;, the next two PRs make it work for inductor.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119647&lt;br /&gt;
+Approved by: https://github.com/yf225&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 11:03:28 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/39c68efd851efc1cf5c5321b8f8f8e298019e274</guid></item><item><title>[inductor] Refactor device guard Python codegen to allow nested indentation (#119673)</title><link>https://github.com/pytorch/pytorch/commit/c2a835d71023359d3fcf3657298413f2c36f93ed</link><description>&lt;p&gt;[inductor] Refactor device guard Python codegen to allow nested indentation (#119673)&lt;/p&gt;
+&lt;p&gt;Summary: The codegen of &lt;code&gt;with torch.cuda._DeviceGuard&lt;/code&gt; context manager in the Python wrapper code is implemented via &lt;code&gt;device_cm_stack: contextlib.ExitStack()&lt;/code&gt;. As the context managers in the stack are &lt;code&gt;code.indent()&lt;/code&gt;, this means that the whole stack is unindented at once on &lt;code&gt;device_cm_stack.close()&lt;/code&gt;. This becomes problematic when attempting to codegen indented code (e.g., for control flow in Python and / or nested subgraph codegen-ing).&lt;/p&gt;
+&lt;p&gt;In this PR, we refactor the device guard codegen-ing in Python by replacing the &lt;code&gt;device_cm_stack&lt;/code&gt; by explicit indent and unindent calls for entering and exiting the &lt;code&gt;with torch.cuda._DeviceGuard&lt;/code&gt; context manager. This allows for nested device guard context managers and better aligns with other indented codegen-ing intertwined with it (e.g., for nested subgraph codegen-ing).&lt;/p&gt;
+&lt;p&gt;This is necessary for the upcoming support for &lt;code&gt;torch.cond&lt;/code&gt; (and other control flow operators) in Inductor. Before that, the only change in the Python wrapper codegen is that the &lt;code&gt;return outputs&lt;/code&gt; is now happening outside the &lt;code&gt;with torch.cuda._DeviceGuard&lt;/code&gt; context manager.&lt;/p&gt;
+&lt;p&gt;Test Plan: CI&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119673&lt;br /&gt;
+Approved by: https://github.com/peterbell10&lt;/p&gt;</description><pubDate>Tue, 13 Feb 2024 07:05:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c2a835d71023359d3fcf3657298413f2c36f93ed</guid></item><item><title>Restore OpInfo/ModuleInfo tests in Inductor-wrapped tests (#119693)</title><link>https://github.com/pytorch/pytorch/commit/b3df3e4e941defbd73dd998fa48ba283f6644d5d</link><description>&lt;p&gt;Restore OpInfo/ModuleInfo tests in Inductor-wrapped tests (#119693)&lt;/p&gt;
+&lt;p&gt;I accidentally disabled this without realizing it. It turns out that&lt;br /&gt;
+PYTORCH_TEST_WITH_INDUCTOR=1 implies PYTORCH_TEST_WITH_DYNAMO=1, which&lt;br /&gt;
+activates skipIfTorchDynamo decorators.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+- wait for CI&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119693&lt;br /&gt;
+Approved by: https://github.com/bdhirsh&lt;/p&gt;</description><pubDate>Mon, 12 Feb 2024 14:44:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b3df3e4e941defbd73dd998fa48ba283f6644d5d</guid></item><item><title>[inductor] Update JIT Inductor cpp wrapper entry function signature (#119280)</title><link>https://github.com/pytorch/pytorch/commit/70c93c6097484652dbef079e31d08cd72490980f</link><description>&lt;p&gt;[inductor] Update JIT Inductor cpp wrapper entry function signature (#119280)&lt;/p&gt;
+&lt;p&gt;Summary: Change JIT Inductor cpp wrapper entry function to use similar signature as AOTInductor, i.e. using an array of AtenTensorHandle instead of a vector of at::Tensor as the inputs and return output through a pointer. This makes it easier to consolidate the ABI compatible and non-compatible modes.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D53478825"&gt;D53478825&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119280&lt;br /&gt;
+Approved by: https://github.com/chenyang78&lt;/p&gt;</description><pubDate>Mon, 12 Feb 2024 14:24:35 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/70c93c6097484652dbef079e31d08cd72490980f</guid></item><item><title>[reland] Fix estimate_nccl_collective_runtime (#118986)</title><link>https://github.com/pytorch/pytorch/commit/27ffede8784e43df4ed43ce37f86dbffb5b05f49</link><description>&lt;p&gt;[reland] Fix estimate_nccl_collective_runtime (#118986)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;estimate_nccl_collective_runtime&lt;/code&gt; has been broken and the errors have been silently swallowed by inductor. This PR:&lt;br /&gt;
+- Fixes the issues described in https://github.com/pytorch/pytorch/issues/118497.&lt;br /&gt;
+- Adds white-box testing so future issues can be surfaced in tests.&lt;br /&gt;
+- Add support for native funcol IRs.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118986&lt;br /&gt;
+Approved by: https://github.com/yf225&lt;br /&gt;
+ghstack dependencies: #119102&lt;/p&gt;</description><pubDate>Mon, 12 Feb 2024 10:48:06 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/27ffede8784e43df4ed43ce37f86dbffb5b05f49</guid></item><item><title>Decompose torch.ops.higher_order.auto_functionalized in Inductor (#118673)</title><link>https://github.com/pytorch/pytorch/commit/cf474a09f56ffa707f062ed4f042cdcbedc82093</link><description>&lt;p&gt;Decompose torch.ops.higher_order.auto_functionalized in Inductor (#118673)&lt;/p&gt;
+&lt;p&gt;We'd like to get auto_functionalized to work with AOTInductor. To get&lt;br /&gt;
+there, we decompose &lt;code&gt;output = auto_functionalized(inplace_op, ...)&lt;/code&gt; into its&lt;br /&gt;
+corresponding aten ops (clones + inplace_op) before the Inductor lowering phase.&lt;/p&gt;
+&lt;p&gt;This decomposition must happen at the end of the Inductor FX passes&lt;br /&gt;
+because it introduces in-place operations.&lt;/p&gt;
+&lt;p&gt;The pattern matcher's "replace this single node with multiple nodes" API&lt;br /&gt;
+isn't robust enough here. The problem is that &lt;code&gt;auto_functionalized&lt;/code&gt;&lt;br /&gt;
+returns a single output (this output is a List), but the decomposition&lt;br /&gt;
+ends up returning the unpacked List (e.g. it may return two tensors).&lt;br /&gt;
+Previously, there was an assertion that this was not the case; I fixed&lt;br /&gt;
+up &lt;code&gt;replace_with_graph&lt;/code&gt; to handle this.&lt;/p&gt;
+&lt;p&gt;Future: Not all of the clones are necessary (e.g. if the input's last&lt;br /&gt;
+usage is this operator, then we don't need to clone it). We can add this&lt;br /&gt;
+logic later.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+- existing tests&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118673&lt;br /&gt;
+Approved by: https://github.com/oulgen&lt;/p&gt;</description><pubDate>Mon, 12 Feb 2024 09:30:01 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/cf474a09f56ffa707f062ed4f042cdcbedc82093</guid></item><item><title>[AOTI][refactor] Move ThreadLocalCachedOutputTensor into a separate header (#119392)</title><link>https://github.com/pytorch/pytorch/commit/52a3de6cbf31504f63b034746fae7b6d3828ca6a</link><description>&lt;p&gt;[AOTI][refactor] Move ThreadLocalCachedOutputTensor into a separate header (#119392)&lt;/p&gt;
+&lt;p&gt;Summary: Move common functionality into a separate header so that later JIT and AOT Inductor can share it.&lt;/p&gt;
+&lt;p&gt;Test Plan: CI&lt;/p&gt;
+&lt;p&gt;Differential Revision: D53523452&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119392&lt;br /&gt;
+Approved by: https://github.com/khabinov&lt;/p&gt;</description><pubDate>Mon, 12 Feb 2024 07:56:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/52a3de6cbf31504f63b034746fae7b6d3828ca6a</guid></item><item><title>[inductor] Update the compile options for CppPythonBindingsCodeCache (#119415)</title><link>https://github.com/pytorch/pytorch/commit/663dd5d0066664c29e2ecede7ec70bcf71e25133</link><description>&lt;p&gt;[inductor] Update the compile options for CppPythonBindingsCodeCache (#119415)&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D53554681"&gt;D53554681&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119415&lt;br /&gt;
+Approved by: https://github.com/jansel, https://github.com/khabinov&lt;/p&gt;</description><pubDate>Sun, 11 Feb 2024 13:25:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/663dd5d0066664c29e2ecede7ec70bcf71e25133</guid></item><item><title>Check alignment of ReinterpretView args of custom Triton kernels (#119649)</title><link>https://github.com/pytorch/pytorch/commit/e5f46a1d359a91b5b80a749ab8c01450ec6d2961</link><description>&lt;p&gt;Check alignment of ReinterpretView args of custom Triton kernels (#119649)&lt;/p&gt;
+&lt;p&gt;Summary: Currently, when a custom (user-written) Triton kernel has a ReinterpretView argument in IR, we're always skipping the alignment checking for this argument when preparing the &lt;code&gt;signature_of&lt;/code&gt; for the AOT compilation of the Triton kernel (via setting &lt;code&gt;TensorArg.check_alignment&lt;/code&gt; to &lt;code&gt;False&lt;/code&gt;). This is problematic for user-written kernels where, albeit reinterpreted, the argument of the Triton kernel (the data pointer) can still be aligned to 16. When we skip alignment checking, the performance of the AOT-compiled internal Triton kernels can degrade 2x--3x.&lt;/p&gt;
+&lt;p&gt;In this PR, we replace &lt;code&gt;TensorArg.check_alignment&lt;/code&gt; by &lt;code&gt;TensorArg.offset&lt;/code&gt;, in which we specify the offset of the &lt;code&gt;ReinterpretView.layout&lt;/code&gt; relative to the underlying &lt;code&gt;ir.Buffer&lt;/code&gt; (corresponding to the data pointer before reinterpretation). As the size and stride of the layout don't change the alignment properties, those can be skipped. Importantly, for &lt;code&gt;ReinterpretView&lt;/code&gt; arguments of custom Triton kernels, we use &lt;code&gt;arg.data.get_name()&lt;/code&gt; as the buffer name. That, together with the offset, is used to check the alignment.&lt;/p&gt;
+&lt;p&gt;Bonus: the namedtuples in &lt;code&gt;codegen/common.py&lt;/code&gt; are refactored as &lt;code&gt;dataclass&lt;/code&gt;es, with nicer type hints and default values (for the newly added &lt;code&gt;TensorArg.offset&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+$ python test/inductor/test_aot_inductor.py -k test_triton_kernel_reinterpret_view&lt;br /&gt;
+...&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Ran 6 tests in 27.952s&lt;/p&gt;
+&lt;p&gt;OK (skipped=4)&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119649&lt;br /&gt;
+Approved by: https://github.com/oulgen&lt;/p&gt;</description><pubDate>Sun, 11 Feb 2024 12:21:17 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e5f46a1d359a91b5b80a749ab8c01450ec6d2961</guid></item><item><title>[inductor] Use list comprehension to initialize unused_views. (#119618)</title><link>https://github.com/pytorch/pytorch/commit/4394e0dc2c992b9a8b47e469e18d338be816e1f2</link><description>&lt;p&gt;[inductor] Use list comprehension to initialize unused_views. (#119618)&lt;/p&gt;
+&lt;p&gt;It's more idiomatic and efficient.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119618&lt;br /&gt;
+Approved by: https://github.com/Skylion007&lt;/p&gt;</description><pubDate>Sun, 11 Feb 2024 10:57:18 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4394e0dc2c992b9a8b47e469e18d338be816e1f2</guid></item><item><title>Don't skip register-spilling configs in custom Triton kernel auto-tuning (#119634)</title><link>https://github.com/pytorch/pytorch/commit/0bed0501fa21baa587a66fea5ce3c3df9b1036a2</link><description>&lt;p&gt;Don't skip register-spilling configs in custom Triton kernel auto-tuning (#119634)&lt;/p&gt;
+&lt;p&gt;Summary: There has been some empirical evidence that, for (non-trivial) custom (user-written) Triton kernels, a register-spilling config yields the best result in auto-tuning. For this reason, we don't skip register-spilling config from auto-tuning of the custom Triton kernels.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;An example of auto-tuning result with the register-spilling config outperforming others&lt;/summary&gt;
 
 ```
 BLOCK_M: 16, BLOCK_N: 16, num_warps: 2, num_ctas: 1, num_stages: 1, enable_warp_specialization: False, enable_persistent: False: 0.748896, nreg 255, nspill 0, #shared-mem 8704
@@ -291,139 +302,139 @@ BLOCK_M: 64, BLOCK_N: 64, num_warps: 4, num_ctas: 1, num_stages: 2, enable_warp_
 BLOCK_M: 64, BLOCK_N: 64, num_warps: 8, num_ctas: 1, num_stages: 2, enable_warp_specialization: False, enable_persistent: False: 0.771712, nreg 255, nspill 134, #shared-mem 40960
 ```
 
-</details>
+&lt;/details&gt;
 
-<p>In the above, the winning config is <code>BLOCK_M: 32, BLOCK_N: 16, num_warps: 2, num_ctas: 1, num_stages: 2</code>, although it has non-zero <code>nspill 28</code>. This is an example where we need to consider all configs, including the register-spilling ones, to obtain the best result from auto-tuning.</p>
-<p>In the worst case, this will just make auto-tuning longer, but can't regress the results. And, as the number of custom Triton kernels in the model is normally much smaller than the number of Inductor-generated ones, this should be acceptable.</p>
-<p>Test Plan: CI</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119634<br />
-Approved by: https://github.com/oulgen</p>]]></description><pubDate>Sat, 10 Feb 2024 18:13:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0bed0501fa21baa587a66fea5ce3c3df9b1036a2</guid></item><item><title>Revert "[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)"</title><link>https://github.com/pytorch/pytorch/commit/3ab08946d5052eaeda11d683d6a58e801a032755</link><description><![CDATA[<p>Revert "[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)"</p>
-<p>This reverts commit 0597dab523c0a341e136452a8f723f12700164c0.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/119448 on behalf of https://github.com/DanilBaibak due to Broken trunk (<a href="https://github.com/pytorch/pytorch/pull/119448#issuecomment-1937345167">comment</a>)</p>]]></description><pubDate>Sat, 10 Feb 2024 15:04:36 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3ab08946d5052eaeda11d683d6a58e801a032755</guid></item><item><title>Revert "[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)"</title><link>https://github.com/pytorch/pytorch/commit/d8e319a961bb872027f0abdc413d6beb7502ac9b</link><description><![CDATA[<p>Revert "[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)"</p>
-<p>This reverts commit 760056bbdc552314e7e81adc45e11766ac0f333c.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/119491 on behalf of https://github.com/DanilBaibak due to Reverted as a dependency for #119448 (<a href="https://github.com/pytorch/pytorch/pull/119491#issuecomment-1937344548">comment</a>)</p>]]></description><pubDate>Sat, 10 Feb 2024 15:02:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d8e319a961bb872027f0abdc413d6beb7502ac9b</guid></item><item><title>[inductor] Fix compile error on scan with no mask (#119555)</title><link>https://github.com/pytorch/pytorch/commit/c0f1183eb458f26453ae1d5cd1a0c533c70c4c5c</link><description><![CDATA[<p>[inductor] Fix compile error on scan with no mask (#119555)</p>
-<p>Fixes #119591</p>
-<p>Currently this results in invalid syntax:<br />
-<code>python
-tmp4 = tl.where(, tmp1, tmp2)</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119555<br />
-Approved by: https://github.com/lezcano</p>]]></description><pubDate>Sat, 10 Feb 2024 04:38:40 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c0f1183eb458f26453ae1d5cd1a0c533c70c4c5c</guid></item><item><title>[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)</title><link>https://github.com/pytorch/pytorch/commit/760056bbdc552314e7e81adc45e11766ac0f333c</link><description><![CDATA[<p>[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)</p>
-<p>This PR moved CppWrapperCodeGen class into a seperate file,<br />
-cpp_wrapper.py, to simplify wrapper.py</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119491<br />
-Approved by: https://github.com/desertfire, https://github.com/albanD</p>]]></description><pubDate>Fri, 09 Feb 2024 18:15:56 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/760056bbdc552314e7e81adc45e11766ac0f333c</guid></item><item><title>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)</title><link>https://github.com/pytorch/pytorch/commit/0597dab523c0a341e136452a8f723f12700164c0</link><description><![CDATA[<p>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)</p>
-<p>wrapper.py is getting more complex. Let's first split it<br />
-into smaller pieces. Will have another PR to move CppWrapperCodeGen.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119448<br />
-Approved by: https://github.com/desertfire</p>]]></description><pubDate>Fri, 09 Feb 2024 12:18:04 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0597dab523c0a341e136452a8f723f12700164c0</guid></item><item><title>Fix Inductor CSE Across Separate Reductions (#119410)</title><link>https://github.com/pytorch/pytorch/commit/bf8a5a11bebe4e7a328b6add83b4e4708217cefc</link><description><![CDATA[<p>Fix Inductor CSE Across Separate Reductions (#119410)</p>
-<p>We were CSE'ing a load across two separate reduction loop bodies. This is because we were examining an indirect indexing that did not have an explicit rindex in its load. I've commented with more details and other potentials on the fix.</p>
-<p>Tried using minifier unsuccessfully and hand minified some but could do more..</p>
-<p>Fix for https://github.com/pytorch/pytorch/issues/119327</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119410<br />
-Approved by: https://github.com/shunting314, https://github.com/jansel</p>]]></description><pubDate>Fri, 09 Feb 2024 11:34:57 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bf8a5a11bebe4e7a328b6add83b4e4708217cefc</guid></item><item><title>Fix FallbackKernel behavior on mutable ops (#118649)</title><link>https://github.com/pytorch/pytorch/commit/01e248d6f1263f875463ce27968712a2ee5b20e3</link><description><![CDATA[<p>Fix FallbackKernel behavior on mutable ops (#118649)</p>
-<p>FallbackKernel wasn't handing mutable ops correctly: it would not report<br />
-them in get_mutation_names or get_alias_names. This would lead to silent<br />
-incorrectness -- Inductor would incorrectly reorder the mutable op with other<br />
-mutable ops.</p>
-<p>This PR fixes that:<br />
-- we only support mutable operations that are "auto_functionalizable".<br />
-  That is, they mutate inputs and do not return aliases of any inputs.<br />
-- Following the Triton kernel work, any mutated inputs must be specified<br />
-  in get_alias_names and processed via mark_node_as_mutating<br />
-- We also do some minor cleanup by killing dead code (FallbackKernel no<br />
-  longer processes OpOverloadPacket) and adding some handling around<br />
-  HOPs.</p>
-<p>Test Plan:<br />
-- new tests</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118649<br />
-Approved by: https://github.com/eellison, https://github.com/oulgen</p>]]></description><pubDate>Fri, 09 Feb 2024 11:01:54 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/01e248d6f1263f875463ce27968712a2ee5b20e3</guid></item><item><title>[Inductor max autotune] Multithreaded Precompilation (#119386)</title><link>https://github.com/pytorch/pytorch/commit/5d81ade4849ca8fe1b090d7f65f8dc0f9990938b</link><description><![CDATA[<p>[Inductor max autotune] Multithreaded Precompilation (#119386)</p>
-<p>When using the Cutlass backend, the compilation<br />
-of CUDA source files can totally dominate the runtime required for the benchmarking done<br />
-as part of Autotuning.</p>
-<p>This change adds a multithreaded precompilation phase, which serves to pre-populate the compilation cache ( both in-memory, and a<br />
-possible on-disk sccache ).</p>
-<p>Also it ensures that no unneccessary compilation<br />
-and benchmarking steps are performed, which was peviously the case.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119386<br />
-Approved by: https://github.com/aakhundov</p>]]></description><pubDate>Fri, 09 Feb 2024 08:11:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5d81ade4849ca8fe1b090d7f65f8dc0f9990938b</guid></item><item><title>[Inductor] Add Int8 data type into Inductor CPP backend vectorized code generation (#119179)</title><link>https://github.com/pytorch/pytorch/commit/a050d146b7eb98e3e3e0bac0e06d351ee1a9c36d</link><description><![CDATA[<p>[Inductor] Add Int8 data type into Inductor CPP backend vectorized code generation (#119179)</p>
-<p><strong>Summary</strong><br />
-Part 1 of fixing https://github.com/pytorch/pytorch/issues/119141 which needs vectorized code generation of per channel quant and int8 data type.<br />
-In the current implementation for quantization, the vectorized code generation only supports the <code>uint8</code> data type. In this PR, we introduce support for the <code>int8</code> data type within the vectorized code generation.</p>
-<p><strong>TestPlan</strong><br />
-<code>python -u -m pytest -s -v test_cpu_repro.py -k test_decomposed_dequant_relu_quant_int8
+&lt;p&gt;In the above, the winning config is &lt;code&gt;BLOCK_M: 32, BLOCK_N: 16, num_warps: 2, num_ctas: 1, num_stages: 2&lt;/code&gt;, although it has non-zero &lt;code&gt;nspill 28&lt;/code&gt;. This is an example where we need to consider all configs, including the register-spilling ones, to obtain the best result from auto-tuning.&lt;/p&gt;
+&lt;p&gt;In the worst case, this will just make auto-tuning longer, but can't regress the results. And, as the number of custom Triton kernels in the model is normally much smaller than the number of Inductor-generated ones, this should be acceptable.&lt;/p&gt;
+&lt;p&gt;Test Plan: CI&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119634&lt;br /&gt;
+Approved by: https://github.com/oulgen&lt;/p&gt;</description><pubDate>Sat, 10 Feb 2024 18:13:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0bed0501fa21baa587a66fea5ce3c3df9b1036a2</guid></item><item><title>Revert "[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)"</title><link>https://github.com/pytorch/pytorch/commit/3ab08946d5052eaeda11d683d6a58e801a032755</link><description>&lt;p&gt;Revert "[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 0597dab523c0a341e136452a8f723f12700164c0.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/119448 on behalf of https://github.com/DanilBaibak due to Broken trunk (&lt;a href="https://github.com/pytorch/pytorch/pull/119448#issuecomment-1937345167"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Sat, 10 Feb 2024 15:04:36 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3ab08946d5052eaeda11d683d6a58e801a032755</guid></item><item><title>Revert "[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)"</title><link>https://github.com/pytorch/pytorch/commit/d8e319a961bb872027f0abdc413d6beb7502ac9b</link><description>&lt;p&gt;Revert "[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 760056bbdc552314e7e81adc45e11766ac0f333c.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/119491 on behalf of https://github.com/DanilBaibak due to Reverted as a dependency for #119448 (&lt;a href="https://github.com/pytorch/pytorch/pull/119491#issuecomment-1937344548"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Sat, 10 Feb 2024 15:02:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d8e319a961bb872027f0abdc413d6beb7502ac9b</guid></item><item><title>[inductor] Fix compile error on scan with no mask (#119555)</title><link>https://github.com/pytorch/pytorch/commit/c0f1183eb458f26453ae1d5cd1a0c533c70c4c5c</link><description>&lt;p&gt;[inductor] Fix compile error on scan with no mask (#119555)&lt;/p&gt;
+&lt;p&gt;Fixes #119591&lt;/p&gt;
+&lt;p&gt;Currently this results in invalid syntax:&lt;br /&gt;
+&lt;code&gt;python
+tmp4 = tl.where(, tmp1, tmp2)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119555&lt;br /&gt;
+Approved by: https://github.com/lezcano&lt;/p&gt;</description><pubDate>Sat, 10 Feb 2024 04:38:40 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c0f1183eb458f26453ae1d5cd1a0c533c70c4c5c</guid></item><item><title>[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)</title><link>https://github.com/pytorch/pytorch/commit/760056bbdc552314e7e81adc45e11766ac0f333c</link><description>&lt;p&gt;[aot_inductor] move CppWrapperCodeGen into a separate file (#119491)&lt;/p&gt;
+&lt;p&gt;This PR moved CppWrapperCodeGen class into a seperate file,&lt;br /&gt;
+cpp_wrapper.py, to simplify wrapper.py&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119491&lt;br /&gt;
+Approved by: https://github.com/desertfire, https://github.com/albanD&lt;/p&gt;</description><pubDate>Fri, 09 Feb 2024 18:15:56 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/760056bbdc552314e7e81adc45e11766ac0f333c</guid></item><item><title>[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)</title><link>https://github.com/pytorch/pytorch/commit/0597dab523c0a341e136452a8f723f12700164c0</link><description>&lt;p&gt;[aot_inductor] move CudaWrapperCodeGen into a separate file (#119448)&lt;/p&gt;
+&lt;p&gt;wrapper.py is getting more complex. Let's first split it&lt;br /&gt;
+into smaller pieces. Will have another PR to move CppWrapperCodeGen.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119448&lt;br /&gt;
+Approved by: https://github.com/desertfire&lt;/p&gt;</description><pubDate>Fri, 09 Feb 2024 12:18:04 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0597dab523c0a341e136452a8f723f12700164c0</guid></item><item><title>Fix Inductor CSE Across Separate Reductions (#119410)</title><link>https://github.com/pytorch/pytorch/commit/bf8a5a11bebe4e7a328b6add83b4e4708217cefc</link><description>&lt;p&gt;Fix Inductor CSE Across Separate Reductions (#119410)&lt;/p&gt;
+&lt;p&gt;We were CSE'ing a load across two separate reduction loop bodies. This is because we were examining an indirect indexing that did not have an explicit rindex in its load. I've commented with more details and other potentials on the fix.&lt;/p&gt;
+&lt;p&gt;Tried using minifier unsuccessfully and hand minified some but could do more..&lt;/p&gt;
+&lt;p&gt;Fix for https://github.com/pytorch/pytorch/issues/119327&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119410&lt;br /&gt;
+Approved by: https://github.com/shunting314, https://github.com/jansel&lt;/p&gt;</description><pubDate>Fri, 09 Feb 2024 11:34:57 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bf8a5a11bebe4e7a328b6add83b4e4708217cefc</guid></item><item><title>Fix FallbackKernel behavior on mutable ops (#118649)</title><link>https://github.com/pytorch/pytorch/commit/01e248d6f1263f875463ce27968712a2ee5b20e3</link><description>&lt;p&gt;Fix FallbackKernel behavior on mutable ops (#118649)&lt;/p&gt;
+&lt;p&gt;FallbackKernel wasn't handing mutable ops correctly: it would not report&lt;br /&gt;
+them in get_mutation_names or get_alias_names. This would lead to silent&lt;br /&gt;
+incorrectness -- Inductor would incorrectly reorder the mutable op with other&lt;br /&gt;
+mutable ops.&lt;/p&gt;
+&lt;p&gt;This PR fixes that:&lt;br /&gt;
+- we only support mutable operations that are "auto_functionalizable".&lt;br /&gt;
+  That is, they mutate inputs and do not return aliases of any inputs.&lt;br /&gt;
+- Following the Triton kernel work, any mutated inputs must be specified&lt;br /&gt;
+  in get_alias_names and processed via mark_node_as_mutating&lt;br /&gt;
+- We also do some minor cleanup by killing dead code (FallbackKernel no&lt;br /&gt;
+  longer processes OpOverloadPacket) and adding some handling around&lt;br /&gt;
+  HOPs.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+- new tests&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118649&lt;br /&gt;
+Approved by: https://github.com/eellison, https://github.com/oulgen&lt;/p&gt;</description><pubDate>Fri, 09 Feb 2024 11:01:54 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/01e248d6f1263f875463ce27968712a2ee5b20e3</guid></item><item><title>[Inductor max autotune] Multithreaded Precompilation (#119386)</title><link>https://github.com/pytorch/pytorch/commit/5d81ade4849ca8fe1b090d7f65f8dc0f9990938b</link><description>&lt;p&gt;[Inductor max autotune] Multithreaded Precompilation (#119386)&lt;/p&gt;
+&lt;p&gt;When using the Cutlass backend, the compilation&lt;br /&gt;
+of CUDA source files can totally dominate the runtime required for the benchmarking done&lt;br /&gt;
+as part of Autotuning.&lt;/p&gt;
+&lt;p&gt;This change adds a multithreaded precompilation phase, which serves to pre-populate the compilation cache ( both in-memory, and a&lt;br /&gt;
+possible on-disk sccache ).&lt;/p&gt;
+&lt;p&gt;Also it ensures that no unneccessary compilation&lt;br /&gt;
+and benchmarking steps are performed, which was peviously the case.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119386&lt;br /&gt;
+Approved by: https://github.com/aakhundov&lt;/p&gt;</description><pubDate>Fri, 09 Feb 2024 08:11:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5d81ade4849ca8fe1b090d7f65f8dc0f9990938b</guid></item><item><title>[Inductor] Add Int8 data type into Inductor CPP backend vectorized code generation (#119179)</title><link>https://github.com/pytorch/pytorch/commit/a050d146b7eb98e3e3e0bac0e06d351ee1a9c36d</link><description>&lt;p&gt;[Inductor] Add Int8 data type into Inductor CPP backend vectorized code generation (#119179)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;br /&gt;
+Part 1 of fixing https://github.com/pytorch/pytorch/issues/119141 which needs vectorized code generation of per channel quant and int8 data type.&lt;br /&gt;
+In the current implementation for quantization, the vectorized code generation only supports the &lt;code&gt;uint8&lt;/code&gt; data type. In this PR, we introduce support for the &lt;code&gt;int8&lt;/code&gt; data type within the vectorized code generation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TestPlan&lt;/strong&gt;&lt;br /&gt;
+&lt;code&gt;python -u -m pytest -s -v test_cpu_repro.py -k test_decomposed_dequant_relu_quant_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_dequant_quant_lowering_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_dequant_maxpool2d_lowering_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_tile2d_load_decomposed_dequant_add_relu_quant_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_per_tensor_fake_quant_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_non_contiguous_load_buf_quant_int8
 python -u -m pytest -s -v test_cpu_repro.py -k test_tile2d_store_channel_shuffle_cl_quant_output_int8
-python -u -m pytest -s -v test_cpu_repro.py -k test_dequant_relu_quant_dequant_relu_quant_lowering_int8</code></p>
-<p>Co-authored-by: Jiong Gong <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#105;&#111;&#110;&#103;&#46;&#103;&#111;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;">&#106;&#105;&#111;&#110;&#103;&#46;&#103;&#111;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/119179<br />
-Approved by: https://github.com/peterbell10, https://github.com/jgong5, https://github.com/jansel</p>]]></description><pubDate>Thu, 08 Feb 2024 23:33:12 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a050d146b7eb98e3e3e0bac0e06d351ee1a9c36d</guid></item><item><title>[inductor] Add split scan kernel (#117992)</title><link>https://github.com/pytorch/pytorch/commit/88429a8084d4dce8dc201c5c6ff7597568206261</link><description><![CDATA[<p>[inductor] Add split scan kernel (#117992)</p>
-<p>This PR adds a new type of triton kernel in which data is persistent but the<br />
-reduction dimension is split over multiple blocks (up to the entire kernel).<br />
-though this is called a reduction dimension, in actuality we only support scans.<br />
-because of this limitation, i have to be able to block fusions of split scan<br />
-operations with reductions so chose to add a new <code>ir.SplitScan</code> node which<br />
-is identical but allows for differentiation in the scheduler.</p>
-<p>The split scan kernel is also the first to require an additional workspace buffer<br />
-which is used to communicate between cuda blocks. this is slightly tricky as we<br />
-the exact scratch space requirement isn't known until the grid size is calculated.<br />
-here i workaround the issue by setting a minimum rblock size and always allocating<br />
-to the maximum possible grid size for a given input tensor.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117992<br />
-Approved by: https://github.com/jansel<br />
-ghstack dependencies: #117991</p>]]></description><pubDate>Thu, 08 Feb 2024 17:56:00 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/88429a8084d4dce8dc201c5c6ff7597568206261</guid></item><item><title>[inductor] Refactor triton range_tree handling (#117991)</title><link>https://github.com/pytorch/pytorch/commit/01edb8a559ac53ce6c2f986d4c67ab188a2e5115</link><description><![CDATA[<p>[inductor] Refactor triton range_tree handling (#117991)</p>
-<p>Currently the dimension handling in triton kernels has various special cases e.g.<br />
-- handling "r" for non-reduction vs persistent reduction vs non-persistent reduction.<br />
-- handling "x" when <code>no_x_dim</code> is set</p>
-<p>This adds three new properties to the range tree objects which capture the<br />
-same information in a more generic way:<br />
-- <code>is_loop</code>: true for the "r" dimension of a non-persistent reduction<br />
-- <code>tensor_dim</code>: Optional index of the triton tensor dimension<br />
-- <code>grid_dim</code>: Optional index of the triton grid dimension</p>
-<p>The motivation here is I want to add a new split scan kernel type which is:<br />
-- not a persistent reduction, yet has <code>is_loop=False</code> for the "r" dimension<br />
-- Has a <code>grid_dim</code> for the "r" dimension</p>
-<p>These flags now only need to be set once in <code>initialize_range_trees</code>, instead of having<br />
-to infer them throughout the code based on the tree prefix and various other kernel flags.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/117991<br />
-Approved by: https://github.com/lezcano</p>]]></description><pubDate>Thu, 08 Feb 2024 17:56:00 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/01edb8a559ac53ce6c2f986d4c67ab188a2e5115</guid></item><item><title>Disable tests that use bfloat 16 for SM &lt; 80 (#118449)</title><link>https://github.com/pytorch/pytorch/commit/454abb6b996b086e971b665be4972a35bc7f555a</link><description><![CDATA[<p>Disable tests that use bfloat 16 for SM &lt; 80 (#118449)</p>
-<p><code>``</code>torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:<br />
-RuntimeError: Internal Triton PTX codegen error:<br />
-ptxas /tmp/compile-ptx-src-83b319, line 51; error   : Feature '.bf16' requires .target sm_80 or higher<br />
-ptxas /tmp/compile-ptx-src-83b319, line 51; error   : Feature 'cvt with .f32.bf16' requires .target sm_80 or higher<br />
-ptxas /tmp/compile-ptx-src-83b319, line 59; error   : Feature '.bf16' requires .target sm_80 or higher<br />
-ptxas /tmp/compile-ptx-src-83b319, line 59; error   : Feature 'cvt with .f32.bf16' requires .target sm_80 or higher<br />
-ptxas /tmp/compile-ptx-src-83b319, line 65; error   : Feature '.bf16' requires .target sm_80 or higher<br />
-ptxas /tmp/compile-ptx-src-83b319, line 65; error   : Feature 'cvt.bf16.f32' requires .target sm_80 or higher<br />
-ptxas fatal   : Ptx assembly aborted due to errors<br />
-Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
-<p>You can suppress this exception and fall back to eager by setting:<br />
-    import torch._dynamo<br />
-    torch._dynamo.config.suppress_errors = True</p>
-<p>To execute this test, run the following from the base repo dir:<br />
-     python test/inductor/test_torchinductor.py -k test_bfloat16_to_int16_cuda`<br />
-```</p>
-<p>Fixed test failure that uses bfloat 16 on pre SM80 (V100 is where the test failure is seen for this test)</p>
-<p>See also #113384</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/118449<br />
-Approved by: https://github.com/eqy, https://github.com/peterbell10</p>]]></description><pubDate>Thu, 08 Feb 2024 17:27:22 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/454abb6b996b086e971b665be4972a35bc7f555a</guid></item><item><title>[aot_inductor] replace TORCH_CHECK with AOTI_CHECK in the generate cpp code (#119220)</title><link>https://github.com/pytorch/pytorch/commit/9f8ade04ccf9647bf7fe1eba906cfdb73d23e4b6</link><description><![CDATA[<p>[aot_inductor] replace TORCH_CHECK with AOTI_CHECK in the generate cpp code (#119220)</p>
-<p>In some cases where we have TORCH_CHECK in loops, it may cause the host<br />
-compiler to spend hours optimizing the run_impl function. This PR<br />
-mitigated the issue by replacing TORCH_CHECK with a custom AOTI_CHECK,<br />
-where we force the underneath assert function to be noinline.</p>
-<p>If forcing noinline caused any serious perf regression, we could<br />
-either add an option to turn on/off enable noinline. Or, we could<br />
-another an option to just turn AOTI_CHECK into a no-op, similar<br />
-to the <code>assert</code> macro from cassert.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119220<br />
-Approved by: https://github.com/hl475, https://github.com/desertfire</p>]]></description><pubDate>Thu, 08 Feb 2024 13:57:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9f8ade04ccf9647bf7fe1eba906cfdb73d23e4b6</guid></item><item><title>[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)</title><link>https://github.com/pytorch/pytorch/commit/4e93b00b692118b8531f3807ec95eb4c538ea419</link><description><![CDATA[<p>[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)</p>
-<p><code>CompiledKernel.launch_enter_hook</code> and <code>CompiledKernel.launch_exit_hook</code> are hooks that allow external tools to monitor the execution of Triton kernels and read each kernel's metadata. Initially, these hooks have a value of <code>None</code>.</p>
-<p>Triton's kernel launcher passes hooks and kernel metadata by default, while Inductor's launcher doesn't. This PR could unify the parameters passed to both launchers so that tools can get information from both handwritten Triton kernels and Inductor-generated Triton kernels.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119450<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Thu, 08 Feb 2024 12:19:18 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4e93b00b692118b8531f3807ec95eb4c538ea419</guid></item><item><title>[inductor] Support ProxyExecutor argument codegen for sympy.Expr (#119166)</title><link>https://github.com/pytorch/pytorch/commit/3829b55416e115603d21073a8b3710324abae059</link><description>&lt;p&gt;[inductor] Support ProxyExecutor argument codegen for sympy.Expr (#119166)&lt;/p&gt;
+python -u -m pytest -s -v test_cpu_repro.py -k test_dequant_relu_quant_dequant_relu_quant_lowering_int8&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Co-authored-by: Jiong Gong &lt;a href="&amp;#109;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#58;&amp;#106;&amp;#105;&amp;#111;&amp;#110;&amp;#103;&amp;#46;&amp;#103;&amp;#111;&amp;#110;&amp;#103;&amp;#64;&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#108;&amp;#46;&amp;#99;&amp;#111;&amp;#109;"&gt;&amp;#106;&amp;#105;&amp;#111;&amp;#110;&amp;#103;&amp;#46;&amp;#103;&amp;#111;&amp;#110;&amp;#103;&amp;#64;&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#108;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/119179&lt;br /&gt;
+Approved by: https://github.com/peterbell10, https://github.com/jgong5, https://github.com/jansel&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 23:33:12 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a050d146b7eb98e3e3e0bac0e06d351ee1a9c36d</guid></item><item><title>[inductor] Add split scan kernel (#117992)</title><link>https://github.com/pytorch/pytorch/commit/88429a8084d4dce8dc201c5c6ff7597568206261</link><description>&lt;p&gt;[inductor] Add split scan kernel (#117992)&lt;/p&gt;
+&lt;p&gt;This PR adds a new type of triton kernel in which data is persistent but the&lt;br /&gt;
+reduction dimension is split over multiple blocks (up to the entire kernel).&lt;br /&gt;
+though this is called a reduction dimension, in actuality we only support scans.&lt;br /&gt;
+because of this limitation, i have to be able to block fusions of split scan&lt;br /&gt;
+operations with reductions so chose to add a new &lt;code&gt;ir.SplitScan&lt;/code&gt; node which&lt;br /&gt;
+is identical but allows for differentiation in the scheduler.&lt;/p&gt;
+&lt;p&gt;The split scan kernel is also the first to require an additional workspace buffer&lt;br /&gt;
+which is used to communicate between cuda blocks. this is slightly tricky as we&lt;br /&gt;
+the exact scratch space requirement isn't known until the grid size is calculated.&lt;br /&gt;
+here i workaround the issue by setting a minimum rblock size and always allocating&lt;br /&gt;
+to the maximum possible grid size for a given input tensor.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/117992&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #117991&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 17:56:00 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/88429a8084d4dce8dc201c5c6ff7597568206261</guid></item><item><title>[inductor] Refactor triton range_tree handling (#117991)</title><link>https://github.com/pytorch/pytorch/commit/01edb8a559ac53ce6c2f986d4c67ab188a2e5115</link><description>&lt;p&gt;[inductor] Refactor triton range_tree handling (#117991)&lt;/p&gt;
+&lt;p&gt;Currently the dimension handling in triton kernels has various special cases e.g.&lt;br /&gt;
+- handling "r" for non-reduction vs persistent reduction vs non-persistent reduction.&lt;br /&gt;
+- handling "x" when &lt;code&gt;no_x_dim&lt;/code&gt; is set&lt;/p&gt;
+&lt;p&gt;This adds three new properties to the range tree objects which capture the&lt;br /&gt;
+same information in a more generic way:&lt;br /&gt;
+- &lt;code&gt;is_loop&lt;/code&gt;: true for the "r" dimension of a non-persistent reduction&lt;br /&gt;
+- &lt;code&gt;tensor_dim&lt;/code&gt;: Optional index of the triton tensor dimension&lt;br /&gt;
+- &lt;code&gt;grid_dim&lt;/code&gt;: Optional index of the triton grid dimension&lt;/p&gt;
+&lt;p&gt;The motivation here is I want to add a new split scan kernel type which is:&lt;br /&gt;
+- not a persistent reduction, yet has &lt;code&gt;is_loop=False&lt;/code&gt; for the "r" dimension&lt;br /&gt;
+- Has a &lt;code&gt;grid_dim&lt;/code&gt; for the "r" dimension&lt;/p&gt;
+&lt;p&gt;These flags now only need to be set once in &lt;code&gt;initialize_range_trees&lt;/code&gt;, instead of having&lt;br /&gt;
+to infer them throughout the code based on the tree prefix and various other kernel flags.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/117991&lt;br /&gt;
+Approved by: https://github.com/lezcano&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 17:56:00 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/01edb8a559ac53ce6c2f986d4c67ab188a2e5115</guid></item><item><title>Disable tests that use bfloat 16 for SM &lt; 80 (#118449)</title><link>https://github.com/pytorch/pytorch/commit/454abb6b996b086e971b665be4972a35bc7f555a</link><description>&lt;p&gt;Disable tests that use bfloat 16 for SM &amp;lt; 80 (#118449)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;``&lt;/code&gt;torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:&lt;br /&gt;
+RuntimeError: Internal Triton PTX codegen error:&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 51; error   : Feature '.bf16' requires .target sm_80 or higher&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 51; error   : Feature 'cvt with .f32.bf16' requires .target sm_80 or higher&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 59; error   : Feature '.bf16' requires .target sm_80 or higher&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 59; error   : Feature 'cvt with .f32.bf16' requires .target sm_80 or higher&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 65; error   : Feature '.bf16' requires .target sm_80 or higher&lt;br /&gt;
+ptxas /tmp/compile-ptx-src-83b319, line 65; error   : Feature 'cvt.bf16.f32' requires .target sm_80 or higher&lt;br /&gt;
+ptxas fatal   : Ptx assembly aborted due to errors&lt;br /&gt;
+Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information&lt;/p&gt;
+&lt;p&gt;You can suppress this exception and fall back to eager by setting:&lt;br /&gt;
+    import torch._dynamo&lt;br /&gt;
+    torch._dynamo.config.suppress_errors = True&lt;/p&gt;
+&lt;p&gt;To execute this test, run the following from the base repo dir:&lt;br /&gt;
+     python test/inductor/test_torchinductor.py -k test_bfloat16_to_int16_cuda`&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;Fixed test failure that uses bfloat 16 on pre SM80 (V100 is where the test failure is seen for this test)&lt;/p&gt;
+&lt;p&gt;See also #113384&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/118449&lt;br /&gt;
+Approved by: https://github.com/eqy, https://github.com/peterbell10&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 17:27:22 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/454abb6b996b086e971b665be4972a35bc7f555a</guid></item><item><title>[aot_inductor] replace TORCH_CHECK with AOTI_CHECK in the generate cpp code (#119220)</title><link>https://github.com/pytorch/pytorch/commit/9f8ade04ccf9647bf7fe1eba906cfdb73d23e4b6</link><description>&lt;p&gt;[aot_inductor] replace TORCH_CHECK with AOTI_CHECK in the generate cpp code (#119220)&lt;/p&gt;
+&lt;p&gt;In some cases where we have TORCH_CHECK in loops, it may cause the host&lt;br /&gt;
+compiler to spend hours optimizing the run_impl function. This PR&lt;br /&gt;
+mitigated the issue by replacing TORCH_CHECK with a custom AOTI_CHECK,&lt;br /&gt;
+where we force the underneath assert function to be noinline.&lt;/p&gt;
+&lt;p&gt;If forcing noinline caused any serious perf regression, we could&lt;br /&gt;
+either add an option to turn on/off enable noinline. Or, we could&lt;br /&gt;
+another an option to just turn AOTI_CHECK into a no-op, similar&lt;br /&gt;
+to the &lt;code&gt;assert&lt;/code&gt; macro from cassert.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119220&lt;br /&gt;
+Approved by: https://github.com/hl475, https://github.com/desertfire&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 13:57:27 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9f8ade04ccf9647bf7fe1eba906cfdb73d23e4b6</guid></item><item><title>[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)</title><link>https://github.com/pytorch/pytorch/commit/4e93b00b692118b8531f3807ec95eb4c538ea419</link><description>&lt;p&gt;[Inductor] Setting kernel launch and exit callbacks for inductor generated triton kernels (#119450)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;CompiledKernel.launch_enter_hook&lt;/code&gt; and &lt;code&gt;CompiledKernel.launch_exit_hook&lt;/code&gt; are hooks that allow external tools to monitor the execution of Triton kernels and read each kernel's metadata. Initially, these hooks have a value of &lt;code&gt;None&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Triton's kernel launcher passes hooks and kernel metadata by default, while Inductor's launcher doesn't. This PR could unify the parameters passed to both launchers so that tools can get information from both handwritten Triton kernels and Inductor-generated Triton kernels.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119450&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Thu, 08 Feb 2024 12:19:18 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4e93b00b692118b8531f3807ec95eb4c538ea419</guid></item><item><title>[inductor] Support ProxyExecutor argument codegen for sympy.Expr (#119166)</title><link>https://github.com/pytorch/pytorch/commit/3829b55416e115603d21073a8b3710324abae059</link><description>&lt;p&gt;[inductor] Support ProxyExecutor argument codegen for sympy.Expr (#119166)&lt;/p&gt;
 &lt;p&gt;Differential Revision: D53398312&lt;/p&gt;
 &lt;h2&gt;Problem&lt;/h2&gt;
 &lt;p&gt;Currently, if a sympy expression that uses a magic method like &lt;code&gt;Max&lt;/code&gt; is passed as an argument to ProxyExecutor, then C++ compilation will fail. We need to use std::max method instead.&lt;/p&gt;
