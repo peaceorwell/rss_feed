@@ -4,40 +4,45 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[inductor] decompose memory bound mm (#120047)</title><link>https://github.com/pytorch/pytorch/commit/2ba798df606ca1dd931e63aaacc78bfa2a3c04f5</link><description><![CDATA[<p>[inductor] decompose memory bound mm (#120047)</p>
-<p>Summary:<br />
-Decompose memory bound mm/bmm.<br />
-Linear decomposition result:  D53502768<br />
-BMM decomposition result: D53148650<br />
- We should only decompose when<br />
-1)bmm, b is large, m,n,k is relative small<br />
-2)mm/addmm. m is large, n and K is relative small. e.g. mm of input gradient in linear backward should not be decomposed since m is small and n is large.<br />
-Need to conduct more experiments to see if we can find a better strategy for decomposition. I have tried to use a linear regression model (see the bento results) which does not fit well. For short term, we use heuristics to determine when to decompose.</p>
-<p>Test Plan:<br />
-<code>buck2 test mode/dev-nosan //caffe2/test/inductor:decompose_mem_bound_mm</code></p>
-<p>COFFEE APS mc0:<br />
-baseline: aps-lsf-0124-bf16-267ccb7a0d<br />
-decompose: aps-lsf-0124-bf16-4e3824db40</p>
-<p>FIRST AFOC pyper mc1</p>
-<p>Differential Revision: D53602514</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120047<br />
-Approved by: https://github.com/mengluy0125</p>]]></description><pubDate>Thu, 22 Feb 2024 11:29:51 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2ba798df606ca1dd931e63aaacc78bfa2a3c04f5</guid></item><item><title>[inductor] improve kernel metadata logging (#120274)</title><link>https://github.com/pytorch/pytorch/commit/a77226aa4981185281488f81ea9fd8925c02bc91</link><description><![CDATA[<p>[inductor] improve kernel metadata logging (#120274)</p>
-<p>Log a few more fields<br />
-- num_atomic_add: perf of kernels using atomic_add are usually data dependent. Our benchmarking code generate all indices to be 0 which will result in worse perf than reality.<br />
-- kernel_args_num_gb: estimate the amount of read/writes for kernel args. In-place args will be double counted. If we have a good estimation, this should be the lower bound of memory access that the GPU performs. Sometimes GPU will do more memory access since a single buffer may be access multiple times (e.g. for softmax when input tensor is quite large. cache only help a bit here). With this logged, and if we augment the metadata with amount of memory the GPU actually accessed, then it would be nice to dig into kernels that GPU access more memory.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120274<br />
-Approved by: https://github.com/jansel<br />
-ghstack dependencies: #120266</p>]]></description><pubDate>Thu, 22 Feb 2024 10:28:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a77226aa4981185281488f81ea9fd8925c02bc91</guid></item><item><title>[inductor] Colorization improvements for bandwidth profiler (#120343)</title><link>https://github.com/pytorch/pytorch/commit/de600508018ee208dd8f65532d53bd59e14f85aa</link><description><![CDATA[<p>[inductor] Colorization improvements for bandwidth profiler (#120343)</p>
-<p>A couple things:<br />
-* Don't colorize output to the log file<br />
-* Don't repeatedly warn if colorama isn't installed</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D54027075/">D54027075</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120343<br />
-Approved by: https://github.com/Chillee, https://github.com/shunting314</p>]]></description><pubDate>Thu, 22 Feb 2024 07:25:46 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/de600508018ee208dd8f65532d53bd59e14f85aa</guid></item><item><title>[inductor] When generating debug logs don't fail if nvcc not found (#120346)</title><link>https://github.com/pytorch/pytorch/commit/0e4bd25a33a5b4b4d84bd2bb3e6ea8a609eaf897</link><description><![CDATA[<p>[inductor] When generating debug logs don't fail if nvcc not found (#120346)</p>
-<p>If nvcc isn't found subprocess throws a CalledProcessError</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D54028438/">D54028438</a></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120346<br />
-Approved by: https://github.com/Skylion007, https://github.com/shunting314</p>]]></description><pubDate>Thu, 22 Feb 2024 06:25:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0e4bd25a33a5b4b4d84bd2bb3e6ea8a609eaf897</guid></item><item><title>[Inductor] Fix bug around out of order constexprs in inductor (#120287)</title><link>https://github.com/pytorch/pytorch/commit/29b2131c626ee5fcd7d6e5200c05bda75121afa9</link><description>&lt;p&gt;[Inductor] Fix bug around out of order constexprs in inductor (#120287)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Use a dtype property in torch inductor nodes (#119227)</title><link>https://github.com/pytorch/pytorch/commit/182ed1e32cb42890c527c8d1d8f13ff594bb7ab1</link><description><![CDATA[<p>Use a dtype property in torch inductor nodes (#119227)</p>
+<p>I usually forget to do <code>x.get_dtype()</code> and I type <code>x.dtype</code>. Similarly for <code>layout, device, sizes</code>. What do you think about making them properties?</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119227<br />
+Approved by: https://github.com/lezcano, https://github.com/jansel</p>]]></description><pubDate>Fri, 23 Feb 2024 10:40:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/182ed1e32cb42890c527c8d1d8f13ff594bb7ab1</guid></item><item><title>Revert "[inductor] Optimize welford reduction (#120330)"</title><link>https://github.com/pytorch/pytorch/commit/2892d2f31baa8f1852e32beac31fa095cb9c499a</link><description><![CDATA[<p>Revert "[inductor] Optimize welford reduction (#120330)"</p>
+<p>This reverts commit 4c6ba16f825ca7b99133efca95da0b7112add66b.</p>
+<p>Reverted https://github.com/pytorch/pytorch/pull/120330 on behalf of https://github.com/jeffdaily due to broke ROCm CI while ROCm was in unstable status (<a href="https://github.com/pytorch/pytorch/pull/120330#issuecomment-1961623739">comment</a>)</p>]]></description><pubDate>Fri, 23 Feb 2024 08:24:52 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2892d2f31baa8f1852e32beac31fa095cb9c499a</guid></item><item><title>[inductor] decompose memory bound mm (#120047)</title><link>https://github.com/pytorch/pytorch/commit/2ba798df606ca1dd931e63aaacc78bfa2a3c04f5</link><description>&lt;p&gt;[inductor] decompose memory bound mm (#120047)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+Decompose memory bound mm/bmm.&lt;br /&gt;
+Linear decomposition result:  D53502768&lt;br /&gt;
+BMM decomposition result: D53148650&lt;br /&gt;
+ We should only decompose when&lt;br /&gt;
+1)bmm, b is large, m,n,k is relative small&lt;br /&gt;
+2)mm/addmm. m is large, n and K is relative small. e.g. mm of input gradient in linear backward should not be decomposed since m is small and n is large.&lt;br /&gt;
+Need to conduct more experiments to see if we can find a better strategy for decomposition. I have tried to use a linear regression model (see the bento results) which does not fit well. For short term, we use heuristics to determine when to decompose.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+&lt;code&gt;buck2 test mode/dev-nosan //caffe2/test/inductor:decompose_mem_bound_mm&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;COFFEE APS mc0:&lt;br /&gt;
+baseline: aps-lsf-0124-bf16-267ccb7a0d&lt;br /&gt;
+decompose: aps-lsf-0124-bf16-4e3824db40&lt;/p&gt;
+&lt;p&gt;FIRST AFOC pyper mc1&lt;/p&gt;
+&lt;p&gt;Differential Revision: D53602514&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120047&lt;br /&gt;
+Approved by: https://github.com/mengluy0125&lt;/p&gt;</description><pubDate>Thu, 22 Feb 2024 11:29:51 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2ba798df606ca1dd931e63aaacc78bfa2a3c04f5</guid></item><item><title>[inductor] improve kernel metadata logging (#120274)</title><link>https://github.com/pytorch/pytorch/commit/a77226aa4981185281488f81ea9fd8925c02bc91</link><description>&lt;p&gt;[inductor] improve kernel metadata logging (#120274)&lt;/p&gt;
+&lt;p&gt;Log a few more fields&lt;br /&gt;
+- num_atomic_add: perf of kernels using atomic_add are usually data dependent. Our benchmarking code generate all indices to be 0 which will result in worse perf than reality.&lt;br /&gt;
+- kernel_args_num_gb: estimate the amount of read/writes for kernel args. In-place args will be double counted. If we have a good estimation, this should be the lower bound of memory access that the GPU performs. Sometimes GPU will do more memory access since a single buffer may be access multiple times (e.g. for softmax when input tensor is quite large. cache only help a bit here). With this logged, and if we augment the metadata with amount of memory the GPU actually accessed, then it would be nice to dig into kernels that GPU access more memory.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120274&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #120266&lt;/p&gt;</description><pubDate>Thu, 22 Feb 2024 10:28:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a77226aa4981185281488f81ea9fd8925c02bc91</guid></item><item><title>[inductor] Colorization improvements for bandwidth profiler (#120343)</title><link>https://github.com/pytorch/pytorch/commit/de600508018ee208dd8f65532d53bd59e14f85aa</link><description>&lt;p&gt;[inductor] Colorization improvements for bandwidth profiler (#120343)&lt;/p&gt;
+&lt;p&gt;A couple things:&lt;br /&gt;
+* Don't colorize output to the log file&lt;br /&gt;
+* Don't repeatedly warn if colorama isn't installed&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D54027075/"&gt;D54027075&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120343&lt;br /&gt;
+Approved by: https://github.com/Chillee, https://github.com/shunting314&lt;/p&gt;</description><pubDate>Thu, 22 Feb 2024 07:25:46 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/de600508018ee208dd8f65532d53bd59e14f85aa</guid></item><item><title>[inductor] When generating debug logs don't fail if nvcc not found (#120346)</title><link>https://github.com/pytorch/pytorch/commit/0e4bd25a33a5b4b4d84bd2bb3e6ea8a609eaf897</link><description>&lt;p&gt;[inductor] When generating debug logs don't fail if nvcc not found (#120346)&lt;/p&gt;
+&lt;p&gt;If nvcc isn't found subprocess throws a CalledProcessError&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D54028438/"&gt;D54028438&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120346&lt;br /&gt;
+Approved by: https://github.com/Skylion007, https://github.com/shunting314&lt;/p&gt;</description><pubDate>Thu, 22 Feb 2024 06:25:34 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0e4bd25a33a5b4b4d84bd2bb3e6ea8a609eaf897</guid></item><item><title>[Inductor] Fix bug around out of order constexprs in inductor (#120287)</title><link>https://github.com/pytorch/pytorch/commit/29b2131c626ee5fcd7d6e5200c05bda75121afa9</link><description>&lt;p&gt;[Inductor] Fix bug around out of order constexprs in inductor (#120287)&lt;/p&gt;
 &lt;p&gt;Inductor signature/config generation code assumes that all constexprs come as last arguments of the function. This is not always true for user defined kernels.&lt;/p&gt;
 &lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120287&lt;br /&gt;
 Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Wed, 21 Feb 2024 09:39:41 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/29b2131c626ee5fcd7d6e5200c05bda75121afa9</guid></item><item><title>Revert "use two pass reduction for deterministic reduction order (#11… (#120243)</title><link>https://github.com/pytorch/pytorch/commit/be8ba5ef2daf684e7da47c2765c01faeb8784cec</link><description>&lt;p&gt;Revert "use two pass reduction for deterministic reduction order (#11… (#120243)&lt;/p&gt;
