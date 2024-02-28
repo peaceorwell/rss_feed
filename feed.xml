@@ -4,13 +4,35 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[inductor][Gemm] Autotune with matrix_instr_nonkdim for AMDGPU (#120639)</title><link>https://github.com/pytorch/pytorch/commit/78f53a3f731ee67dcffd308519ed48a745640dde</link><description><![CDATA[<p>[inductor][Gemm] Autotune with matrix_instr_nonkdim for AMDGPU (#120639)</p>
-<p>Summary:<br />
-Matrix multiplication with Triton is usually in a tiled way. For a large tile size that single hardware instruction cannot handle, i.e, a 128*128 size matmul, it has to be broken down to a sequence of smaller hardware mma instructions. On AMDGPU, matrix_instr_nonkdim controls the shape of the mma instructions, of which the default value is 32 in Triton. This means by default Triton will decompose a large tiled matmul operation into a sequence of 32x32x8 mma instructions. There are other mma instructions available, such as 16x16x16 which requires matrix_instr_nonkdim=16. This change enables tuning the value for Gemm which seems to improve its performance by 20% - 2x.</p>
-<p>Similar changes has been done to the HSTU ragged attention kernel D53386525.</p>
-<p>Test Plan:</p>
-<p>Before:<br />
-<code>AUTOTUNE mm(1024x1024, 1024x1024)
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[Inductor] Track constant's original_fqn mapping  (#120524)</title><link>https://github.com/pytorch/pytorch/commit/3e8b56d362ace0eaa5007e69b431b7ba3f75be46</link><description><![CDATA[<p>[Inductor] Track constant's original_fqn mapping  (#120524)</p>
+<p>When compiling an deserialized ExportedProgram, constant’s original_fqn is not populated(). Highlighted line is missing, And a latter assertion is breaking due to original_fqn missing.</p>
+<p><code>constants_info_[0].name = "L__self___w_pre";
+    constants_info_[0].dtype = static_cast&lt;int32_t&gt;(cached_torch_dtype_float32);
+    constants_info_[0].offset = 0;
+    constants_info_[0].data_size = 64;
+    constants_info_[0].from_folded = false;
+    constants_info_[0].shape = {4, 4};
+    constants_info_[0].stride = {4, 1};
+    // constants_info_[0].original_fqn = "w_pre";   // this line is missing</code></p>
+<p>Inductor is relying <code>dynamo_flat_name_to_original_fqn</code> to populate the original_fqn field. This field originates from <code>graph_module.meta["dynamo_flat_name_to_original_fqn"]</code>, and is set during dynamo tracing. However, when compiling<br />
+an deserialized ExportedProgram, we don't do dynamo tracing, thus this field is missing.</p>
+<p>As a fix, I maintain AOTI's own mapping for constant tensor's fqn.</p>
+<p>Differential Revision: D54097073</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120524<br />
+Approved by: https://github.com/chenyang78</p>]]></description><pubDate>Wed, 28 Feb 2024 09:36:29 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3e8b56d362ace0eaa5007e69b431b7ba3f75be46</guid></item><item><title>Move user defined triton tests to inductor test folder (#120738)</title><link>https://github.com/pytorch/pytorch/commit/dfe7b9d471903b5c58a9962103db2be40e361f2b</link><description><![CDATA[<p>Move user defined triton tests to inductor test folder (#120738)</p>
+<p>Summary: FBCode CI does not compile torch with CUDA for tests in dynamo folder, instead of adding a special rule, lets move these tests to inductor folder.</p>
+<p>Test Plan:<br />
+<code>buck run mode/opt //caffe2/test/inductor/:triton_kernels</code><br />
+now works instead of skipping tests</p>
+<p>Differential Revision: D54280629</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120738<br />
+Approved by: https://github.com/aakhundov</p>]]></description><pubDate>Wed, 28 Feb 2024 09:03:41 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/dfe7b9d471903b5c58a9962103db2be40e361f2b</guid></item><item><title>[inductor][Gemm] Autotune with matrix_instr_nonkdim for AMDGPU (#120639)</title><link>https://github.com/pytorch/pytorch/commit/78f53a3f731ee67dcffd308519ed48a745640dde</link><description>&lt;p&gt;[inductor][Gemm] Autotune with matrix_instr_nonkdim for AMDGPU (#120639)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+Matrix multiplication with Triton is usually in a tiled way. For a large tile size that single hardware instruction cannot handle, i.e, a 128*128 size matmul, it has to be broken down to a sequence of smaller hardware mma instructions. On AMDGPU, matrix_instr_nonkdim controls the shape of the mma instructions, of which the default value is 32 in Triton. This means by default Triton will decompose a large tiled matmul operation into a sequence of 32x32x8 mma instructions. There are other mma instructions available, such as 16x16x16 which requires matrix_instr_nonkdim=16. This change enables tuning the value for Gemm which seems to improve its performance by 20% - 2x.&lt;/p&gt;
+&lt;p&gt;Similar changes has been done to the HSTU ragged attention kernel D53386525.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;p&gt;Before:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(1024x1024, 1024x1024)
   ExternKernelCaller(extern_kernels.mm) 0.0410 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 0.0487 ms 84.2%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 0.0544 ms 75.4%
@@ -21,9 +43,9 @@ Matrix multiplication with Triton is usually in a tiled way. For a large tile si
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 0.0788 ms 52.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=2 0.1014 ms 40.5%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 0.1069 ms 38.4%
-  SingleProcess AUTOTUNE takes 8.1153 seconds</code></p>
-<p>After:<br />
-<code>AUTOTUNE mm(1024x1024, 1024x1024)
+  SingleProcess AUTOTUNE takes 8.1153 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(1024x1024, 1024x1024)
   ExternKernelCaller(extern_kernels.mm) 0.0417 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.0470 ms 88.7%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.0488 ms 85.4%
@@ -34,9 +56,9 @@ Matrix multiplication with Triton is usually in a tiled way. For a large tile si
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=8 0.0634 ms 65.8%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=2 0.0655 ms 63.7%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.0681 ms 61.2%
-  SingleProcess AUTOTUNE takes 11.4076 seconds</code></p>
-<p>Before:<br />
-<code>AUTOTUNE mm(2048x2048, 2048x2048)
+  SingleProcess AUTOTUNE takes 11.4076 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Before:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(2048x2048, 2048x2048)
   ExternKernelCaller(extern_kernels.mm) 0.2094 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 0.2452 ms 85.4%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 0.2763 ms 75.8%
@@ -47,24 +69,24 @@ Matrix multiplication with Triton is usually in a tiled way. For a large tile si
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 0.4184 ms 50.1%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 0.5097 ms 41.1%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=2 0.5570 ms 37.6%
-  SingleProcess AUTOTUNE takes 3.4052 seconds</code></p>
-<p>After:<br />
-  ```<br />
-AUTOTUNE mm(2048x2048, 2048x2048)<br />
-  ExternKernelCaller(extern_kernels.mm) 0.2117 ms 100.0%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=8 0.2429 ms 87.2%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2485 ms 85.2%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2526 ms 83.8%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2537 ms 83.5%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2554 ms 82.9%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2623 ms 80.7%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2695 ms 78.5%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=8 0.2758 ms 76.8%<br />
-  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=4 0.2792 ms 75.8%<br />
-  SingleProcess AUTOTUNE takes 11.3538 seconds</p>
-<p>```</p>
-<p>Before:<br />
-<code>AUTOTUNE mm(4096x4096, 4096x4096)
+  SingleProcess AUTOTUNE takes 3.4052 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After:&lt;br /&gt;
+  ```&lt;br /&gt;
+AUTOTUNE mm(2048x2048, 2048x2048)&lt;br /&gt;
+  ExternKernelCaller(extern_kernels.mm) 0.2117 ms 100.0%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=8 0.2429 ms 87.2%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2485 ms 85.2%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2526 ms 83.8%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2537 ms 83.5%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 0.2554 ms 82.9%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2623 ms 80.7%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 0.2695 ms 78.5%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=8 0.2758 ms 76.8%&lt;br /&gt;
+  ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=4 0.2792 ms 75.8%&lt;br /&gt;
+  SingleProcess AUTOTUNE takes 11.3538 seconds&lt;/p&gt;
+&lt;p&gt;```&lt;/p&gt;
+&lt;p&gt;Before:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(4096x4096, 4096x4096)
   ExternKernelCaller(extern_kernels.mm) 1.5901 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 1.9380 ms 82.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 1.9943 ms 79.7%
@@ -75,9 +97,9 @@ AUTOTUNE mm(2048x2048, 2048x2048)<br />
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 2.2931 ms 69.3%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 3.7016 ms 43.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=2 4.6021 ms 34.6%
-  SingleProcess AUTOTUNE takes 9.0523 seconds</code></p>
-<p>After:<br />
-<code>AUTOTUNE mm(4096x4096, 4096x4096)
+  SingleProcess AUTOTUNE takes 9.0523 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(4096x4096, 4096x4096)
   ExternKernelCaller(extern_kernels.mm) 1.5862 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 1.6924 ms 93.7%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 1.7616 ms 90.0%
@@ -88,9 +110,9 @@ AUTOTUNE mm(2048x2048, 2048x2048)<br />
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 2.0983 ms 75.6%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 2.1138 ms 75.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 2.1657 ms 73.2%
-  SingleProcess AUTOTUNE takes 8.2225 seconds</code></p>
-<p>Before:<br />
-<code>AUTOTUNE mm(8192x8192, 8192x8192)
+  SingleProcess AUTOTUNE takes 8.2225 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Before:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(8192x8192, 8192x8192)
   ExternKernelCaller(extern_kernels.mm) 12.0134 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 14.8082 ms 81.1%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 15.4242 ms 77.9%
@@ -101,9 +123,9 @@ AUTOTUNE mm(2048x2048, 2048x2048)<br />
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=4 18.2159 ms 66.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=8 29.4726 ms 40.8%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, num_stages=0, num_warps=2 37.9039 ms 31.7%
-  SingleProcess AUTOTUNE takes 11.0074 seconds</code></p>
-<p>After:<br />
-<code>AUTOTUNE mm(8192x8192, 8192x8192)
+  SingleProcess AUTOTUNE takes 11.0074 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After:&lt;br /&gt;
+&lt;code&gt;AUTOTUNE mm(8192x8192, 8192x8192)
   ExternKernelCaller(extern_kernels.mm) 11.9554 ms 100.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 12.9953 ms 92.0%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=8 13.7726 ms 86.8%
@@ -114,13 +136,13 @@ AUTOTUNE mm(2048x2048, 2048x2048)<br />
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=32, num_stages=0, num_warps=4 15.5647 ms 76.8%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 16.0037 ms 74.7%
   ACC_TYPE='tl.float32', ALLOW_TF32=True, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, B_PROLOGUE_CAST_TYPE=None, EVEN_K=True, GROUP_M=8, matrix_instr_nonkdim=16, num_stages=0, num_warps=4 16.7432 ms 71.4%
-  SingleProcess AUTOTUNE takes 14.9839 seconds</code></p>
-<p>Reviewed By: xw285cornell, nmacchioni</p>
-<p>Differential Revision: D54203170</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120639<br />
-Approved by: https://github.com/xw285cornell, https://github.com/jansel</p>]]></description><pubDate>Tue, 27 Feb 2024 10:16:33 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/78f53a3f731ee67dcffd308519ed48a745640dde</guid></item><item><title>[inductor] correctly retrieve the "shared" attribute from a Triton binary (#120666)</title><link>https://github.com/pytorch/pytorch/commit/c29ac05ac0a590dc62b165c8cc1309a3ac8b7f43</link><description><![CDATA[<p>[inductor] correctly retrieve the "shared" attribute from a Triton binary (#120666)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120666<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Tue, 27 Feb 2024 05:10:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c29ac05ac0a590dc62b165c8cc1309a3ac8b7f43</guid></item><item><title>[PT2][Inductor]Add unbind node normalization (#120253)</title><link>https://github.com/pytorch/pytorch/commit/55b590842787850e60e78220556a63ad162874eb</link><description>&lt;p&gt;[PT2][Inductor]Add unbind node normalization (#120253)&lt;/p&gt;
+  SingleProcess AUTOTUNE takes 14.9839 seconds&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Reviewed By: xw285cornell, nmacchioni&lt;/p&gt;
+&lt;p&gt;Differential Revision: D54203170&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120639&lt;br /&gt;
+Approved by: https://github.com/xw285cornell, https://github.com/jansel&lt;/p&gt;</description><pubDate>Tue, 27 Feb 2024 10:16:33 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/78f53a3f731ee67dcffd308519ed48a745640dde</guid></item><item><title>[inductor] correctly retrieve the "shared" attribute from a Triton binary (#120666)</title><link>https://github.com/pytorch/pytorch/commit/c29ac05ac0a590dc62b165c8cc1309a3ac8b7f43</link><description>&lt;p&gt;[inductor] correctly retrieve the "shared" attribute from a Triton binary (#120666)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/120666&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Tue, 27 Feb 2024 05:10:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c29ac05ac0a590dc62b165c8cc1309a3ac8b7f43</guid></item><item><title>[PT2][Inductor]Add unbind node normalization (#120253)</title><link>https://github.com/pytorch/pytorch/commit/55b590842787850e60e78220556a63ad162874eb</link><description>&lt;p&gt;[PT2][Inductor]Add unbind node normalization (#120253)&lt;/p&gt;
 &lt;p&gt;Summary: Normalize unbind nodes for the followup split_cat pattern detection and node removals&lt;/p&gt;
 &lt;p&gt;Test Plan:&lt;br /&gt;
 &lt;code&gt;buck2 test //caffe2/test/inductor:split_cat_fx_passes&lt;/code&gt;&lt;br /&gt;
