@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version="2.0">
+  <channel>
+    <title>GitHub issues Feed</title>
+    <link>https://github.com/username/repo/issues</link>
+    <description>Recent issues from GitHub repo</description>
+    <item>
+      <title>For compiled optimizers guard on grads being `None`</title>
+      <link>https://github.com/pytorch/pytorch/pull/121291</link>
+      <description><![CDATA[<p>For compiled optimizers guard on grads being <code>None</code></p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 20:54:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121291</guid>
+    </item>
+    <item>
+      <title>[aarch64 linux]  torch.compile() crashes on aarch64 linux with nightly torch wheel</title>
+      <link>https://github.com/pytorch/pytorch/issues/121288</link>
+      <description><![CDATA[<p>[aarch64 linux]  torch.compile() crashes on aarch64 linux with nightly torch wheel</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 19:54:47 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121288</guid>
+    </item>
+    <item>
+      <title>[inductor] Update triton pin</title>
+      <link>https://github.com/pytorch/pytorch/pull/121268</link>
+      <description><![CDATA[<p>[inductor] Update triton pin</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 13:25:04 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121268</guid>
+    </item>
+    <item>
+      <title>[inductor] Changes to support newer triton pin</title>
+      <link>https://github.com/pytorch/pytorch/pull/121267</link>
+      <description><![CDATA[<p>[inductor] Changes to support newer triton pin</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 13:25:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121267</guid>
+    </item>
+    <item>
+      <title>Accuracy mismatch with torch.compile(backend="eager") for float16</title>
+      <link>https://github.com/pytorch/pytorch/issues/121238</link>
+      <description><![CDATA[<p>Accuracy mismatch with torch.compile(backend="eager") for float16</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 08:43:13 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121238</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `addmm_fuse_pattern_second` raises error `Number of dimensions of tensors must match`</title>
+      <link>https://github.com/pytorch/pytorch/issues/121231</link>
+      <description><![CDATA[<p>[torch.compile] <code>addmm_fuse_pattern_second</code> raises error <code>Number of dimensions of tensors must match</code></p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 07:01:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121231</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `merge_unbind_stack` returns a tensor with WRONG shape</title>
+      <link>https://github.com/pytorch/pytorch/issues/121228</link>
+      <description><![CDATA[<p>[torch.compile] <code>merge_unbind_stack</code> returns a tensor with WRONG shape</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 06:47:28 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121228</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `merge_stack_tahn_unbind` returns a tensor with wrong values</title>
+      <link>https://github.com/pytorch/pytorch/issues/121227</link>
+      <description><![CDATA[<p>[torch.compile] <code>merge_stack_tahn_unbind</code> returns a tensor with wrong values</p>]]></description>
+      <pubDate>Tue, 05 Mar 2024 06:19:17 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121227</guid>
+    </item>
+    <item>
+      <title>[`torch.compile`] Inductor gets stuck, unbounded RAM usage</title>
+      <link>https://github.com/pytorch/pytorch/issues/121197</link>
+      <description><![CDATA[<p>[<code>torch.compile</code>] Inductor gets stuck, unbounded RAM usage</p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 20:12:11 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121197</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `merge_stack_tahn_unbind` raises list index out of range error</title>
+      <link>https://github.com/pytorch/pytorch/issues/121185</link>
+      <description><![CDATA[<p>[torch.compile] <code>merge_stack_tahn_unbind</code> raises list index out of range error</p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 17:36:16 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121185</guid>
+    </item>
+    <item>
+      <title>[torch.compile] Compiled Assumption Failed for `efficient_conv_bn_eval`</title>
+      <link>https://github.com/pytorch/pytorch/issues/121184</link>
+      <description><![CDATA[<p>[torch.compile] Compiled Assumption Failed for <code>efficient_conv_bn_eval</code></p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 17:33:23 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121184</guid>
+    </item>
+    <item>
+      <title>[torch.compile][freezing] reorder_linear_weight: weight's dtype should be float</title>
+      <link>https://github.com/pytorch/pytorch/issues/121175</link>
+      <description><![CDATA[<p>[torch.compile][freezing] reorder_linear_weight: weight's dtype should be float</p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 15:51:51 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121175</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `fuse_attention` returns inconsistent value for the model</title>
+      <link>https://github.com/pytorch/pytorch/issues/121174</link>
+      <description><![CDATA[<p>[torch.compile] <code>fuse_attention</code> returns inconsistent value for the model</p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 15:46:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121174</guid>
+    </item>
+    <item>
+      <title>Add jacrev support in torch.compile</title>
+      <link>https://github.com/pytorch/pytorch/pull/121146</link>
+      <description><![CDATA[<p>Add jacrev support in torch.compile</p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 11:01:30 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121146</guid>
+    </item>
+    <item>
+      <title>[torch.compile] `randperm_index_add_pattern` doesn't check the shape mismatch between self and source tensor </title>
+      <link>https://github.com/pytorch/pytorch/issues/121135</link>
+      <description><![CDATA[<p>[torch.compile] <code>randperm_index_add_pattern</code> doesn't check the shape mismatch between self and source tensor </p>]]></description>
+      <pubDate>Mon, 04 Mar 2024 07:32:45 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121135</guid>
+    </item>
+    <item>
+      <title>[FSDP][torch._dynamo.compiled_autograd] Final callbacks can only be installed during backward pass</title>
+      <link>https://github.com/pytorch/pytorch/issues/121071</link>
+      <description><![CDATA[<p>[FSDP][torch._dynamo.compiled_autograd] Final callbacks can only be installed during backward pass</p>]]></description>
+      <pubDate>Sat, 02 Mar 2024 04:07:47 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121071</guid>
+    </item>
+    <item>
+      <title>[Inductor] Outer Loop Fusion for CPP Backend</title>
+      <link>https://github.com/pytorch/pytorch/pull/121064</link>
+      <description><![CDATA[<p>[Inductor] Outer Loop Fusion for CPP Backend</p>]]></description>
+      <pubDate>Fri, 01 Mar 2024 18:45:27 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121064</guid>
+    </item>
+    <item>
+      <title>can't compile torchvision RPN with AOTInductor</title>
+      <link>https://github.com/pytorch/pytorch/issues/121036</link>
+      <description><![CDATA[<p>can't compile torchvision RPN with AOTInductor</p>]]></description>
+      <pubDate>Fri, 01 Mar 2024 11:34:56 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121036</guid>
+    </item>
+    <item>
+      <title>[Quant][Inductor] Fix q/dq per channel lowering with 64-bit qparams</title>
+      <link>https://github.com/pytorch/pytorch/pull/120984</link>
+      <description><![CDATA[<p>[Quant][Inductor] Fix q/dq per channel lowering with 64-bit qparams</p>]]></description>
+      <pubDate>Fri, 01 Mar 2024 01:29:22 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120984</guid>
+    </item>
+    <item>
+      <title>Inductor INFO logs are kind of spammy</title>
+      <link>https://github.com/pytorch/pytorch/issues/120774</link>
+      <description><![CDATA[<p>Inductor INFO logs are kind of spammy</p>]]></description>
+      <pubDate>Tue, 27 Feb 2024 20:57:20 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120774</guid>
+    </item>
+    <item>
+      <title>[WIP][inductor] padding</title>
+      <link>https://github.com/pytorch/pytorch/pull/120758</link>
+      <description><![CDATA[<p>[WIP][inductor] padding</p>]]></description>
+      <pubDate>Tue, 27 Feb 2024 17:00:19 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120758</guid>
+    </item>
+    <item>
+      <title>[inductor] Difference between using `mode="reduce-overhead"` and directly recording the CUDAGraph for `mode="default"`</title>
+      <link>https://github.com/pytorch/pytorch/issues/120733</link>
+      <description><![CDATA[<p>[inductor] Difference between using <code>mode="reduce-overhead"</code> and directly recording the CUDAGraph for <code>mode="default"</code></p>]]></description>
+      <pubDate>Tue, 27 Feb 2024 13:25:57 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120733</guid>
+    </item>
+    <item>
+      <title>[compiled autograd] support custom ops backed by c++ autograd::Function</title>
+      <link>https://github.com/pytorch/pytorch/pull/120681</link>
+      <description><![CDATA[<p>[compiled autograd] support custom ops backed by c++ autograd::Function</p>]]></description>
+      <pubDate>Mon, 26 Feb 2024 17:38:46 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120681</guid>
+    </item>
+    <item>
+      <title>Inductor oneDNN Graph integration</title>
+      <link>https://github.com/pytorch/pytorch/pull/120301</link>
+      <description><![CDATA[<p>Inductor oneDNN Graph integration</p>]]></description>
+      <pubDate>Wed, 21 Feb 2024 01:26:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120301</guid>
+    </item>
+    <item>
+      <title>Compilation Failure with torch.nn.functional.rrelu(training=True) in Torch Compile</title>
+      <link>https://github.com/pytorch/pytorch/issues/120292</link>
+      <description><![CDATA[<p>Compilation Failure with torch.nn.functional.rrelu(training=True) in Torch Compile</p>]]></description>
+      <pubDate>Tue, 20 Feb 2024 21:42:21 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120292</guid>
+    </item>
+    <item>
+      <title>Torch compile fx graph is not removing constant propagation</title>
+      <link>https://github.com/pytorch/pytorch/issues/120057</link>
+      <description><![CDATA[<p>Torch compile fx graph is not removing constant propagation</p>]]></description>
+      <pubDate>Thu, 15 Feb 2024 21:20:28 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120057</guid>
+    </item>
+    <item>
+      <title>Inductor pattern-matching seems to be sensitive to the presence/absence of clone nodes</title>
+      <link>https://github.com/pytorch/pytorch/issues/119911</link>
+      <description><![CDATA[<p>Inductor pattern-matching seems to be sensitive to the presence/absence of clone nodes</p>]]></description>
+      <pubDate>Wed, 14 Feb 2024 11:41:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/119911</guid>
+    </item>
+    <item>
+      <title>torch._inductor.triton_heuristics.cached_autotune is not thread safe / suited for multiprocessing via DDP/FSDP</title>
+      <link>https://github.com/pytorch/pytorch/issues/119698</link>
+      <description><![CDATA[<p>torch._inductor.triton_heuristics.cached_autotune is not thread safe / suited for multiprocessing via DDP/FSDP</p>]]></description>
+      <pubDate>Mon, 12 Feb 2024 10:10:14 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/119698</guid>
+    </item>
+    <item>
+      <title>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning</title>
+      <link>https://github.com/pytorch/pytorch/pull/119685</link>
+      <description><![CDATA[<p>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning</p>]]></description>
+      <pubDate>Mon, 12 Feb 2024 07:05:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119685</guid>
+    </item>
+    <item>
+      <title>Increased compile time max GPUs to 512. Switched to int16_t DeviceIndex.</title>
+      <link>https://github.com/pytorch/pytorch/pull/119639</link>
+      <description><![CDATA[<p>Increased compile time max GPUs to 512. Switched to int16_t DeviceIndex.</p>]]></description>
+      <pubDate>Sat, 10 Feb 2024 05:14:42 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119639</guid>
+    </item>
+    <item>
+      <title> [Inductor Cutlass backend] 2 of 2 - Enabling flexible EVT-based pointwise fusions with additional tensor input</title>
+      <link>https://github.com/pytorch/pytorch/pull/119601</link>
+      <description><![CDATA[<p>[Inductor Cutlass backend] 2 of 2 - Enabling flexible EVT-based pointwise fusions with additional tensor input</p>]]></description>
+      <pubDate>Fri, 09 Feb 2024 13:13:11 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119601</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] Disable Cutlass backend, split and add tests</title>
+      <link>https://github.com/pytorch/pytorch/pull/119598</link>
+      <description><![CDATA[<p>[Inductor Cutlass backend] Disable Cutlass backend, split and add tests</p>]]></description>
+      <pubDate>Fri, 09 Feb 2024 12:50:24 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119598</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] Development feature flag</title>
+      <link>https://github.com/pytorch/pytorch/pull/119597</link>
+      <description><![CDATA[<p>[Inductor Cutlass backend] Development feature flag</p>]]></description>
+      <pubDate>Fri, 09 Feb 2024 12:50:12 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119597</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] 1 of 2 - Enabling flexible EVT-based pointwise fusions with additional tensor input</title>
+      <link>https://github.com/pytorch/pytorch/pull/119007</link>
+      <description><![CDATA[<p>[Inductor Cutlass backend] 1 of 2 - Enabling flexible EVT-based pointwise fusions with additional tensor input</p>]]></description>
+      <pubDate>Fri, 02 Feb 2024 06:14:21 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119007</guid>
+    </item>
+    <item>
+      <title>[inductor] Make some improvements to FX graph caching</title>
+      <link>https://github.com/pytorch/pytorch/pull/117888</link>
+      <description><![CDATA[<p>[inductor] Make some improvements to FX graph caching</p>]]></description>
+      <pubDate>Fri, 19 Jan 2024 15:03:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/117888</guid>
+    </item>
+    <item>
+      <title>RFC: Integrating oneDNN Graph Compiler into Inductor C++/OpenMP Backend for Enhanced Graph Fusion and Performance</title>
+      <link>https://github.com/pytorch/pytorch/issues/105582</link>
+      <description><![CDATA[<p>RFC: Integrating oneDNN Graph Compiler into Inductor C++/OpenMP Backend for Enhanced Graph Fusion and Performance</p>]]></description>
+      <pubDate>Wed, 19 Jul 2023 10:53:52 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/105582</guid>
+    </item>
+    <item>
+      <title>[PT2.0][compile] torch._dynamo.config.log_level does not exist</title>
+      <link>https://github.com/pytorch/pytorch/issues/104022</link>
+      <description><![CDATA[<p>[PT2.0][compile] torch._dynamo.config.log_level does not exist</p>]]></description>
+      <pubDate>Wed, 21 Jun 2023 21:39:16 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/104022</guid>
+    </item>
+    <item>
+      <title>TorchInductor CPU Performance Dashboard</title>
+      <link>https://github.com/pytorch/pytorch/issues/93531</link>
+      <description><![CDATA[<p>TorchInductor CPU Performance Dashboard</p>]]></description>
+      <pubDate>Wed, 12 Oct 2022 18:29:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/93531</guid>
+    </item>
+  </channel>
+</rss>
