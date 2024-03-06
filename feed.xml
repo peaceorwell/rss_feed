@@ -4,10 +4,138 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Add Deberta pass (#121206)</title><link>https://github.com/pytorch/pytorch/commit/ae4c85960f43347447dd236bc7f8932751bcca65</link><description><![CDATA[<p>Add Deberta pass (#121206)</p>
-<p>Adding DebertaForQuestionAnswering to inductor benchmark pass, as it did not show up before</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121206<br />
-Approved by: https://github.com/desertfire</p>]]></description><pubDate>Tue, 05 Mar 2024 09:56:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ae4c85960f43347447dd236bc7f8932751bcca65</guid></item><item><title>Add an autotune cache for inductor generated kernels (#120963)</title><link>https://github.com/pytorch/pytorch/commit/6566b3db677a6d3f2f90a3fcd4dd1dd2d9d0bfc4</link><description>&lt;p&gt;Add an autotune cache for inductor generated kernels (#120963)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Revert "[export] Serialize union fields with single entry dict. (#121263)"</title><link>https://github.com/pytorch/pytorch/commit/23fb37fa413d03f715a28b44c295bdf3e851f46a</link><description><![CDATA[<p>Revert "[export] Serialize union fields with single entry dict. (#121263)"</p>
+<p>This reverts commit 7feabe9b73e6ba7724b62ea91df27049defdf378.</p>
+<p>Reverted https://github.com/pytorch/pytorch/pull/121263 on behalf of https://github.com/osalpekar due to A large number of inductor benchmarking jobs failing starting this PR. See for details: https://hud.pytorch.org/pytorch/pytorch/commit/7feabe9b73e6ba7724b62ea91df27049defdf378 (<a href="https://github.com/pytorch/pytorch/pull/121263#issuecomment-1981680049">comment</a>)</p>]]></description><pubDate>Wed, 06 Mar 2024 11:58:55 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/23fb37fa413d03f715a28b44c295bdf3e851f46a</guid></item><item><title>Fuse nodes with sizes (s0*s1*...,) and (s0, s1, s2, ...) (#120077)</title><link>https://github.com/pytorch/pytorch/commit/49d1fd31cf5424899fdbb73654d95bf3478c0bae</link><description><![CDATA[<p>Fuse nodes with sizes (s0<em>s1</em>...,) and (s0, s1, s2, ...) (#120077)</p>
+<p>Description:<br />
+- PR tries to fuse nodes with compatible sizes, for example <code>node1: (s0, s1, s2)</code> and <code>node2: (s0 * s1 * s2)</code>. On <code>main</code> these two nodes can be fused due to different sizes. With this PR we can recompute node2 size, body etc using node1 indexing constraint and thus be able to fuse two nodes.<br />
+- this should influence only cpu device</p>
+<p>Example:<br />
+```python<br />
+from unittest.mock import patch<br />
+import torch<br />
+from torch._inductor.graph import GraphLowering<br />
+from torch._inductor import config</p>
+<h1>Force multple scheduler nodes creation to fuse them</h1>
+<p>config.realize_opcount_threshold = 1</p>
+<p>@torch.compile(fullgraph=True, dynamic=True)<br />
+def fn(x: torch.Tensor, w1: torch.Tensor, w2: torch.Tensor) -&gt; torch.Tensor:<br />
+    o1 = x * w1.view(1, 1, 1, -1)<br />
+    o2 = x * w2.view(1, 1, 1, -1)<br />
+    output = o1 + o2<br />
+    return output</p>
+<p>in_nodes = []<br />
+outputs = []<br />
+run_node = GraphLowering.run_node</p>
+<p>graph_lowering_obj = None</p>
+<p>def run_node_alt(self, n):<br />
+    global graph_lowering_obj</p>
+<pre><code>graph_lowering_obj = self
+in_nodes.append(n)
+output = run_node(self, n)
+outputs.append(output)
+
+return output
+</code></pre>
+<p>x = torch.rand(1, 3, 32, 32)<br />
+w1 = torch.randn(32)<br />
+w2 = torch.randn(32)</p>
+<p>with patch.object(GraphLowering, "run_node", run_node_alt):<br />
+    fn(x, w1, w2)</p>
+<p>print("graph_lowering_obj.buffers:", graph_lowering_obj.buffers)<br />
+print("graph_lowering_obj.scheduler:", graph_lowering_obj.scheduler.nodes)<br />
+```</p>
+<p>Output on <code>main</code>:<br />
+<code>graph_lowering_obj.buffers: [ComputedBuffer(name='buf0', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(arg3_1, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(arg1_1, i3)
+      tmp2 = tmp0 * tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=mul,
+  origins={mul}
+)), ComputedBuffer(name='buf1', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(arg3_1, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(arg4_1, i3)
+      tmp2 = tmp0 * tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=mul_1,
+  origins={mul_1}
+)), ComputedBuffer(name='buf2', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(buf0, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(buf1, i3 + i1 * s0**2 + i2 * s0)
+      tmp2 = tmp0 + tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=add,
+  origins={add}
+))]
+graph_lowering_obj.scheduler: [FusedSchedulerNode(nodes=buf0_buf1), SchedulerNode(name='buf2')]</code><br />
+Output on this PR:<br />
+<code>graph_lowering_obj.buffers: [ComputedBuffer(name='buf0', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(arg3_1, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(arg1_1, i3)
+      tmp2 = tmp0 * tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=mul,
+  origins={mul}
+)), ComputedBuffer(name='buf1', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(arg3_1, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(arg4_1, i3)
+      tmp2 = tmp0 * tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=mul_1,
+  origins={mul_1}
+)), ComputedBuffer(name='buf2', layout=FixedLayout('cpu', torch.float32, size=[1, s1, s0, s0], stride=[s0**2*s1, s0**2, s0, 1]), data=Pointwise(
+  'cpu',
+  torch.float32,
+  def inner_fn(index):
+      _, i1, i2, i3 = index
+      tmp0 = ops.load(buf0, i3 + i1 * s0**2 + i2 * s0)
+      tmp1 = ops.load(buf1, i3 + i1 * s0**2 + i2 * s0)
+      tmp2 = tmp0 + tmp1
+      return tmp2
+  ,
+  ranges=[1, s1, s0, s0],
+  origin_node=add,
+  origins={add}
+))]
+graph_lowering_obj.scheduler: [FusedSchedulerNode(nodes=buf0_buf1_buf2)]</code></p>
+<p>Context:<br />
+While working on https://github.com/pytorch/pytorch/pull/120411, upsampling bicubic decomposition, I saw an extra for-loop in C++ generated code summing up two buffers. Exploring the cause, it happend due to buffer number of ops goes beyond <code>config.realize_opcount_threshold</code>.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120077<br />
+Approved by: https://github.com/jgong5, https://github.com/lezcano, https://github.com/peterbell10</p>]]></description><pubDate>Wed, 06 Mar 2024 04:19:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/49d1fd31cf5424899fdbb73654d95bf3478c0bae</guid></item><item><title>Add Deberta pass (#121206)</title><link>https://github.com/pytorch/pytorch/commit/ae4c85960f43347447dd236bc7f8932751bcca65</link><description>&lt;p&gt;Add Deberta pass (#121206)&lt;/p&gt;
+&lt;p&gt;Adding DebertaForQuestionAnswering to inductor benchmark pass, as it did not show up before&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121206&lt;br /&gt;
+Approved by: https://github.com/desertfire&lt;/p&gt;</description><pubDate>Tue, 05 Mar 2024 09:56:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ae4c85960f43347447dd236bc7f8932751bcca65</guid></item><item><title>Add an autotune cache for inductor generated kernels (#120963)</title><link>https://github.com/pytorch/pytorch/commit/6566b3db677a6d3f2f90a3fcd4dd1dd2d9d0bfc4</link><description>&lt;p&gt;Add an autotune cache for inductor generated kernels (#120963)&lt;/p&gt;
 &lt;p&gt;Summary: Inductor currently has a best config cache for kernels that it generates. This is a local cache done via writing to the file system. This diff takes this local cache to remote by reusing the existing triton caching mechanism built via Memcache internally and Redis externally.&lt;/p&gt;
 &lt;p&gt;Test Plan:&lt;br /&gt;
 tested locally using &lt;code&gt;TORCH_INDUCTOR_AUTOTUNE_REMOTE_CACHE =1&lt;/code&gt;&lt;/p&gt;
