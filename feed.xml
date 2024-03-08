@@ -5,76 +5,35 @@
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
     <item>
-      <title>Revert "[Inductor] Add support for NEON ISA in the Inductor C++ backend (#105590)"</title>
-      <link>https://github.com/pytorch/pytorch/commit/e0c534fe02c5d9dec94504f7881cced2bda99604</link>
-      <description><![CDATA[<p>Revert "[Inductor] Add support for NEON ISA in the Inductor C++ backend (#105590)"</p>
-<p>This reverts commit 156954d6a2a05f3ce8288dd054691102e596e461.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/105590 on behalf of https://github.com/ezyang due to https://github.com/pytorch/pytorch/issues/121288#issuecomment-1981980699 (<a href="https://github.com/pytorch/pytorch/pull/105590#issuecomment-1984745827">comment</a>)</p>]]></description>
-      <pubDate>Thu, 07 Mar 2024 15:06:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e0c534fe02c5d9dec94504f7881cced2bda99604</guid>
-    </item>
-    <item>
-      <title>Add torch.cond support to AOT Inductor (#121120)</title>
-      <link>https://github.com/pytorch/pytorch/commit/3d089de851836da8b4b21495a0e1d79e05c9282c</link>
-      <description><![CDATA[<p>Add torch.cond support to AOT Inductor (#121120)</p>
-<p>Summary: In this PR, <code>torch.cond</code> support and the necessary codegening infrastructure is added to C++ wrapper (AOTInductor and friends).</p>
-<p>Notable additions:</p>
-<ul>
-<li>
-<p>A new mechanism in the Python wrapper codegen to precompile and save the Triton kernels (generated and user-defined) which haven't been covered by the active path through the control flow given the sample inputs. As we can't do the runtime autotuning of the kernels outside the active path, we precompile and save them with the <code>launchers[0]</code> (corresponding to the first config).</p>
-</li>
-<li>
-<p>Codegen infra for <code>torch.cond</code> in the C++ wrapper (ABI- and non-ABI-compatible). The <code>torch.cond</code> codegen has been slightly refactored to avoid duplication across the Python and C++ wrappers.</p>
-</li>
-<li>
-<p>More extensions of the caching sites in the wrapper code to cache per codegened graph (e.g., <code>codegen_int_array_var</code>) + some infra for tracking the current codegened graph in the wrapper (both during codegen-ing in the <code>Scheduler.codegen</code> and in the <code>WrapperCodeGen.generate</code> functions).</p>
-</li>
-<li>
-<p>New unit tests to cover the added AOT Inductor + <code>torch.cond</code> functionality.</p>
-</li>
-</ul>
-<p>Codegen examples from the new unit tests:</p>
-<ul>
-<li><a href="https://gist.github.com/aakhundov/862d5de9aa460f5df399e1387f7b342e"><code>test_cond_simple_abi_compatible_cpu</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/d70b81f95fa8cc768cedef9acacb25bb"><code>test_cond_simple_abi_compatible_cuda</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/c0ae7a8cbb6fa311c838e1b580f9a3f6"><code>test_cond_simple_non_abi_compatible_cpu</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/08b945d4e8a32c97b7f9ff6272f4a223"><code>test_cond_simple_non_abi_compatible_cuda</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/ce664f433c53e010ce4c0d96a6c13711"><code>test_cond_nested_abi_compatible_cuda</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/77afbeb8eaab5c5b930a3f922a7baf12"><code>test_cond_with_parameters_abi_compatible_cuda</code></a></li>
-<li><a href="https://gist.github.com/aakhundov/8cc06105ec8a3fe88be09b3f6e32c690"><code>test_cond_with_multiple_outputs_abi_compatible_cuda</code></a></li>
-</ul>
-<p>Test Plan:</p>
-<p>```<br />
-$ python test/inductor/test_aot_inductor.py -k test_cond<br />
-...</p>
-<hr />
-<p>Ran 42 tests in 170.619s</p>
-<p>OK<br />
-```</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121120<br />
-Approved by: https://github.com/jansel, https://github.com/chenyang78</p>]]></description>
-      <pubDate>Thu, 07 Mar 2024 14:39:57 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3d089de851836da8b4b21495a0e1d79e05c9282c</guid>
-    </item>
-    <item>
-      <title>[Inductor] Use indices for constants in triton_meta (#121427)</title>
-      <link>https://github.com/pytorch/pytorch/commit/18d574a07a0af3057e7122beb2b2b7c3f3041fa1</link>
-      <description><![CDATA[<p>[Inductor] Use indices for constants in triton_meta (#121427)</p>
-<p>@bertmaher pointed out that constants are passed with their indices, not their names. Looking at triton source, this appears to be true https://github.com/openai/triton/blob/392370b3030884ea4179e4b139f890b9a0db0361/python/triton/runtime/jit.py#L381-L385<br />
-I'm guessing both indices and names work here but lets be consistent.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121427<br />
-Approved by: https://github.com/aakhundov</p>]]></description>
-      <pubDate>Thu, 07 Mar 2024 13:59:43 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/18d574a07a0af3057e7122beb2b2b7c3f3041fa1</guid>
-    </item>
-    <item>
-      <title>Fix for Wait kernel lowering in inductor not accepting MultiOutputs from non-collective calls (#121428)</title>
-      <link>https://github.com/pytorch/pytorch/commit/f61192b014647947b52371bb03368b66694f5a34</link>
-      <description><![CDATA[<p>Fix for Wait kernel lowering in inductor not accepting MultiOutputs from non-collective calls (#121428)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121428<br />
-Approved by: https://github.com/yifuwang</p>]]></description>
-      <pubDate>Thu, 07 Mar 2024 13:29:25 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f61192b014647947b52371bb03368b66694f5a34</guid>
+      <title>[AOTDispatch] Return mutated inputs directly when keeping mutations (#120514)</title>
+      <link>https://github.com/pytorch/pytorch/commit/a2a8c1fda044b32691cfe7d8986523a9bf34ac71</link>
+      <description><![CDATA[<p>[AOTDispatch] Return mutated inputs directly when keeping mutations (#120514)</p>
+<p>Fixes #120242</p>
+<p>The example from the issue now results in the graph<br />
+<code>python
+def forward(self, arg0_1, arg1_1):
+    sin = torch.ops.aten.sin.default(arg0_1);  arg0_1 = None
+    copy_ = torch.ops.aten.copy_.default(arg1_1, sin);  arg1_1 = sin = None
+    return (copy_,)</code></p>
+<p>and the corresponding inductor kernel eliminates the intermediate buffer<br />
+completely</p>
+<p><code>python
+def call(args):
+    arg0_1, arg1_1 = args
+    args.clear()
+    assert_size_stride(arg0_1, (5, ), (1, ))
+    assert_size_stride(arg1_1, (5, ), (1, ))
+    with torch.cuda._DeviceGuard(0):
+        torch.cuda.set_device(0)
+        # Source Nodes: [sin], Original ATen: [aten.sin]
+        stream0 = get_raw_stream(0)
+        triton_poi_fused_sin_0.run(arg0_1, arg1_1, 5, grid=grid(5), stream=stream0)
+        del arg0_1
+    return (arg1_1, )</code></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120514<br />
+Approved by: https://github.com/ezyang, https://github.com/oulgen, https://github.com/lezcano</p>]]></description>
+      <pubDate>Fri, 08 Mar 2024 08:33:26 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a2a8c1fda044b32691cfe7d8986523a9bf34ac71</guid>
     </item>
   </channel>
 </rss>
