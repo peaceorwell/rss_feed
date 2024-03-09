@@ -5,35 +5,28 @@
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
     <item>
-      <title>[AOTDispatch] Return mutated inputs directly when keeping mutations (#120514)</title>
-      <link>https://github.com/pytorch/pytorch/commit/a2a8c1fda044b32691cfe7d8986523a9bf34ac71</link>
-      <description><![CDATA[<p>[AOTDispatch] Return mutated inputs directly when keeping mutations (#120514)</p>
-<p>Fixes #120242</p>
-<p>The example from the issue now results in the graph<br />
-<code>python
-def forward(self, arg0_1, arg1_1):
-    sin = torch.ops.aten.sin.default(arg0_1);  arg0_1 = None
-    copy_ = torch.ops.aten.copy_.default(arg1_1, sin);  arg1_1 = sin = None
-    return (copy_,)</code></p>
-<p>and the corresponding inductor kernel eliminates the intermediate buffer<br />
-completely</p>
-<p><code>python
-def call(args):
-    arg0_1, arg1_1 = args
-    args.clear()
-    assert_size_stride(arg0_1, (5, ), (1, ))
-    assert_size_stride(arg1_1, (5, ), (1, ))
-    with torch.cuda._DeviceGuard(0):
-        torch.cuda.set_device(0)
-        # Source Nodes: [sin], Original ATen: [aten.sin]
-        stream0 = get_raw_stream(0)
-        triton_poi_fused_sin_0.run(arg0_1, arg1_1, 5, grid=grid(5), stream=stream0)
-        del arg0_1
-    return (arg1_1, )</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/120514<br />
-Approved by: https://github.com/ezyang, https://github.com/oulgen, https://github.com/lezcano</p>]]></description>
-      <pubDate>Fri, 08 Mar 2024 08:33:26 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a2a8c1fda044b32691cfe7d8986523a9bf34ac71</guid>
+      <title>[inductor] Changes to support newer triton pin (#121267)</title>
+      <link>https://github.com/pytorch/pytorch/commit/168a04e7527b685c0bd454b1bef3053de84de689</link>
+      <description><![CDATA[<p>[inductor] Changes to support newer triton pin (#121267)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121267<br />
+Approved by: https://github.com/lezcano<br />
+ghstack dependencies: #121438</p>]]></description>
+      <pubDate>Sat, 09 Mar 2024 10:17:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/168a04e7527b685c0bd454b1bef3053de84de689</guid>
+    </item>
+    <item>
+      <title>[inductor] Refactor common triton imports into one function (#121438)</title>
+      <link>https://github.com/pytorch/pytorch/commit/459c5bca5814e249ad35e0130294afdb624509a8</link>
+      <description><![CDATA[<p>[inductor] Refactor common triton imports into one function (#121438)</p>
+<p>This means when codegen depends on a particular import we only need to<br />
+add it in one place and it's applied to all triton kernels.</p>
+<p>This also changes codegen slightly so instead of generating<br />
+<code>@pointwise</code> we now generate <code>@triton_heuristics.pointwise</code> just so<br />
+the imports are the same for all kernel types.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121438<br />
+Approved by: https://github.com/lezcano</p>]]></description>
+      <pubDate>Sat, 09 Mar 2024 10:17:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/459c5bca5814e249ad35e0130294afdb624509a8</guid>
     </item>
   </channel>
 </rss>
