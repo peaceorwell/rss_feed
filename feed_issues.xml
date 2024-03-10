@@ -13,93 +13,176 @@
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121566</guid>
     </item>
     <item>
-      <title>[inductor] Update triton pin</title>
-      <link>https://github.com/pytorch/pytorch/pull/121268</link>
+      <title>Enable FX graph cache for even more inductor tests</title>
+      <link>https://github.com/pytorch/pytorch/pull/121540</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #121268<br />
-* #121568<br />
-* #121556</p>]]></description>
-      <pubDate>Tue, 05 Mar 2024 13:25:04 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121268</guid>
-    </item>
-    <item>
-      <title>Inductor oneDNN Graph integration</title>
-      <link>https://github.com/pytorch/pytorch/pull/120301</link>
-      <description><![CDATA[<h2>Inductor-CPU integration with oneDNN Graph (base PR)</h2>
-<p>Uses Inductor pattern-matcher to offload some compute to oneDNN Graph library, which has fusions for compute-intensive ops such as MHA &amp; MLP. This is the first PR that adds oneDNN Graph support, so that subsequent PRs can add more pattern replacements that use oneDNN Graph. This PR only adds a replacement for one pattern (GPT2 MHA/SDPA pattern, which is different for batch size 1 &amp; batch size &gt; 1). Currently, functionality is limited to inference &amp; only Linux is supported.</p>
-<h4>Details</h4>
-<p>In Inductor joint graph passes, if <code>config.onednn_graph</code> is enabled, or the env variable <code>TORCHINDUCTOR_ONEDNN_GRAPH=1</code> is used on a machine that supports some advanced ISAs, then if some specific patterns are matched, the corresponding ops are handled by oneDNN Graph. However, if oneDNN Graph is unable to match a pattern, then it's handled by the same ops that'd have handled it sans oneDNN Graph.</p>
-<p>As opposed to other oneDNN kernels (created with oneDNN primitives API) &amp; oneMKL kernels, these kernels are compiled at Inductor compilation-time (in case of shape-mismatch at runtime, compilation for those static input shapes will occur again).</p>
-<p>BF16 dtype requires a machine to support at least <code>AVX512_BF16</code> ISA. <code>AMX</code> ISA is also used, if available.<br />
-While FP32 dtype support may also work on Xeon SP generation 1 (SkyLake SP), which does not support <code>AVX512_VNNI</code> ISA, the lowest machine configuration for which this functionality will be enabled in this PR is Xeon SP generation 2 (Cascade Lake), but may be changed in a subsequent PR to include Skylake SP platform support as well. The reason to not support Skylake SP at this point is that some consumer-grade CPUs also support the same AVX512 ISAs as SkyLake SP, but this implementation has not been verified on consumer-grade CPUs.</p>
-<h4>Summary of other changes</h4>
-<ul>
-<li>Builds the Graph Compiler backend of oneDNN Graph, which is included in <code>libdnnl.a</code></li>
-<li>Adds extensible support for more patterns to be handled with oneDNN Graph in subsequent PRs</li>
-<li>Adds an API to check if oneDNN Graph was built.</li>
-<li>Serialization of SDPA patterns can now be done for some corner-cases, such as only inference.</li>
-<li>Serialized attention patterns  can also have <code>getitem</code> in them, which should be replaced by <code>operator.getitem</code>.</li>
-<li>Currently, oneDNN Graph is not used if dynamic shapes are provided at compile time.</li>
-<li>In oneDNN v3.3.x, the GPT2 MHA pattern needs an attention mask, so in order to match cases of attention mask not being present, an attention mask of all zeros is being created in this implementation. The performance is still better compared to the default implementation, which means it'd be even better with oneDNN v3.5, which would make attention mask optional for GPT2 MHA pattern.</li>
-</ul>
-<h3>Performance data</h3>
-<p>This PR accelerates inference of <code>hf_GPT2</code> by offloading its MHA computation to oneDNN Graph. Other models did not suffer any regression/breakage.</p>
-<p>These performance datapoints were collected for a single TorchBench run (TorchBench may have run the workload multiple times) of each configuration, and were not cherry-picked, so it's possible that performance may be even better with this feature enabled -</p>
-<p>|MODEL |BATCH SIZE | DTYPE | BEFORE: Speedup over eager-mode with the default Inductor implementation | AFTER: Speedup over eager mode with the default Inductor implementation| Perf boost = (AFTER - BEFORE)/BEFORE * 100|<br />
-|--------------------------|-------------|---------|-----------------------------|--------------------------|------------|<br />
-|hf_GPT2| 1 | FP32 | 1.522x | 1.784x| 17.21%|<br />
-|hf_GPT2| 1 | BF16 (AMP) | 1.795x | 2.602x| 44.91%|<br />
-|hf_GPT2| 2 | FP32 |  1.313x |1.629x | 24.06%|<br />
-|hf_GPT2|2| BF16 (AMP) | 1.556x | 2.107x | 35.41%|<br />
-|hf_GPT2_large| 1 | FP32 | 1.380x |1.510x | 9.4%|<br />
-|hf_GPT2_large| 1 | BF16 (AMP) | 1.208x | 1.653x | 36.83%|<br />
-|hf_GPT2_large| 2 | FP32 | 1.188x | 1.508x | 26.93%|<br />
-|hf_GPT2_large|2| BF16 (AMP) | 0.991x | 1.771x | 78.70%|</p>
-<p>Config: 48 physical cores of one socket of Intel Xeon Platinum 8468H (Xeon SP 4th gen a.k.a. Sapphire Rapids) . Only one logical core of a physical core was used. Intel OpenMP &amp; tcmalloc were preloaded.</p>
-<p>Example of running the workload:<br />
-<code>TORCHINDUCTOR_ONEDNN_GRAPH=1 OMP_NUM_THREADS=48 MKL_NUM_THREADS=48 numactl --membind=0 -C 0-47 python benchmarks/dynamo/torchbench.py --performance --inference --inductor --float32 -dcpu --only hf_GPT2 --freezing --batch-size 2</code></p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @ashokei @jingxu10 @gujinghui @PenghuiCheng @jianyuh @min-jean-cho @yanbing-j @Guobing-Chen @Xia-Weiwen @voznesenskym @penguinwu @EikanWang @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 21 Feb 2024 01:26:48 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120301</guid>
-    </item>
-    <item>
-      <title>[inductor][perf] Replace inefficient use of set.</title>
-      <link>https://github.com/pytorch/pytorch/pull/119746</link>
-      <description><![CDATA[<p>It makes no sense to create a set in <code>O(N)</code> time and memory (including the case when the very first occurrence would match) to perform an amortized <code>O(1)</code> lookup with high constant factor instead of doing a simple scan in <code>O(N)</code> time and <code>O(1)</code> memory and lower constant factor.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
-      <pubDate>Mon, 12 Feb 2024 19:22:06 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119746</guid>
-    </item>
-    <item>
-      <title>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning</title>
-      <link>https://github.com/pytorch/pytorch/pull/119685</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #119685</p>
+* <strong>-&gt;</strong> #121540<br />
+* #121521<br />
+* #121520</p>
+<p>Summary: Get even more FX graph cache coverage by enabling caching for another batch of inductor unit tests (<code>torch._inductor.test_case.TestCase</code> enables the caching and isolates the caching tmp subdir)</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 12 Feb 2024 07:05:00 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119685</guid>
+      <pubDate>Fri, 08 Mar 2024 12:55:46 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121540</guid>
     </item>
     <item>
-      <title>Check for releasing GIL at compiletime</title>
-      <link>https://github.com/pytorch/pytorch/pull/116695</link>
-      <description><![CDATA[<p>Introduce <code>conditional_gil_scoped_release</code> and use it in <code>wrap_pybind_function*</code> to avoid a runtime branch making the code cleaner and faster.</p>
-<p>@albanD This is the GIL change extracted from #112607 as discussed.</p>
-<p>Also fixes a potential use of a moved-from object introduced in #116560:<br />
-- <code>f</code> is captured by value in a lambda that may be used called times<br />
-- After <code>std::move(f)</code> the lambda is not safe to call anymore</p>
-<p>CC @cyyever for that change</p>]]></description>
-      <pubDate>Wed, 03 Jan 2024 04:21:58 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116695</guid>
+      <title>Enable FX graph cache for a bunch of inductor tests</title>
+      <link>https://github.com/pytorch/pytorch/pull/121521</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121540<br />
+* <strong>-&gt;</strong> #121521<br />
+* #121520</p>
+<p>Summary: Get more FX graph cache coverage by enabling for these unit tests (<code>torch._inductor.test_case.TestCase</code> enables the caching and isolates the caching tmp subdir)</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Fri, 08 Mar 2024 10:47:12 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121521</guid>
     </item>
     <item>
-      <title>dont treat size==1,stride==0 from inductor as diverging strides from eager w.r.t dynamic shapes</title>
-      <link>https://github.com/pytorch/pytorch/pull/116435</link>
-      <description><![CDATA[<p>Fixes https://github.com/pytorch/pytorch/issues/116433.</p>
-<p>Putting this out as a tentative fix, but more discussion is in the github issue.</p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #116435</p>]]></description>
-      <pubDate>Tue, 26 Dec 2023 14:16:53 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116435</guid>
+      <title>torch.compile fails with .view(dtype)</title>
+      <link>https://github.com/pytorch/pytorch/issues/120998</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p><code>torch.compile</code> fails when there's a dtype view call from float to int:</p>
+<p>Here's a minimal code to reproduce it:<br />
+``` Python<br />
+import torch<br />
+@torch.compile()<br />
+def call(data):<br />
+    return data.view(torch.uint8) + 1</p>
+<p>data = torch.randint(0, 2**4, [4096, 4096], device='cuda', dtype=torch.uint8)<br />
+out = call(data) #OK <br />
+out = call(data.view(torch.float16)) #Error <br />
+<code></code> Python<br />
+BackendCompilerFailed: backend='inductor' raised:<br />
+LoweringException: NotImplementedError: bitcast torch.float16 to different bitwidth type torch.uint8 is not supported yet.<br />
+```</p>
+<p>Wrapping the view call inside another function with <code>torch.jit.ignore</code> doesn't work either. </p>
+<p>Is there by any chance a way to avoid this without converting types back and forth?<br />
+Thanks a lot in advance!</p>
+<h3>Versions</h3>
+<p>```<br />
+Versions of relevant libraries:<br />
+PyTorch version: 2.1.2+cu121<br />
+Is debug build: False<br />
+CUDA used to build PyTorch: 12.1<br />
+ROCM used to build PyTorch: N/A</p>
+<p>Nvidia driver version: 535.129.03<br />
+cuDNN version: Could not collect<br />
+HIP runtime version: N/A<br />
+MIOpen runtime version: N/A<br />
+Is XNNPACK available: True</p>
+<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
+Clang version: Could not collect<br />
+CMake version: Could not collect<br />
+Libc version: glibc-2.35</p>
+<p>Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] (64-bit runtime)<br />
+Python platform: Linux-5.15.0-89-generic-x86_64-with-glibc2.35<br />
+Is CUDA available: True<br />
+CUDA runtime version: 12.2.140<br />
+CUDA_MODULE_LOADING set to: LAZY</p>
+<p>[pip3] numpy==1.26.4<br />
+[pip3] onnxruntime==1.17.1<br />
+[pip3] open-clip-torch==2.24.0<br />
+[pip3] pytorch-triton==2.2.0+e28a256d71<br />
+[pip3] torch==2.1.2<br />
+[pip3] torchaudio==2.2.0.dev20231221+cu121<br />
+[pip3] torchvision==0.16.2<br />
+[pip3] triton==2.1.0<br />
+[conda] Could not collect<br />
+```</p>
+<p>cc @jerryzh168 @jianyuh @raghuramank100 @jamesr66a @vkuzo @jgong5 @Xia-Weiwen @leslie-fang-intel @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Fri, 01 Mar 2024 06:56:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120998</guid>
+    </item>
+    <item>
+      <title>Add warning when trying to use nccl version while not compiled with nccl</title>
+      <link>https://github.com/pytorch/pytorch/pull/116989</link>
+      <description><![CDATA[<p>Trying to get nccl version on windows return an exception:</p>
+<p><code>AttributeError: module 'torch._C' has no attribute '_nccl_version'</code></p>
+<p>Here is error:<br />
+<code>Traceback (most recent call last):
+  File "./test/smoke_test/smoke_test.py", line 317, in &lt;module&gt;
+    main()
+  File "./test/smoke_test/smoke_test.py", line 313, in main
+    smoke_test_cuda(options.package, options.runtime_error_check)
+  File "./test/smoke_test/smoke_test.py", line 166, in smoke_test_cuda
+    print(f"torch nccl version: {torch.cuda.nccl.version()}" )
+  File "C:\Jenkins\Miniconda3\envs\conda-env-7450624690\lib\site-packages\torch\cuda\nccl.py", line 35, in version
+    ver = torch._C._nccl_version()
+AttributeError: module 'torch._C' has no attribute '_nccl_version'</code></p>
+<p>Test:<br />
+```</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import torch<br />
+print(f"torch nccl version: {torch.cuda.nccl.version()}" )<br />
+C:\Jenkins\Miniconda3\envs\conda-env-7453139523\lib\site-packages\torch\cuda\nccl.py:36: UserWarning: PyTorch is not compiled with NCCL support<br />
+  warnings.warn("PyTorch is not compiled with NCCL support")<br />
+torch nccl version: (-1, -1, -1)<br />
+```</p>
+</blockquote>
+</blockquote>
+</blockquote>]]></description>
+      <pubDate>Mon, 08 Jan 2024 12:49:10 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116989</guid>
+    </item>
+    <item>
+      <title>Dynamic shapes support for inductor foreach codegen</title>
+      <link>https://github.com/pytorch/pytorch/issues/107005</link>
+      <description><![CDATA[<h3>🚀 The feature, motivation and pitch</h3>
+<p>Currently foreach op compilation doesn't support dynamic shapes. </p>
+<p>See the restriction here: https://github.com/pytorch/pytorch/blob/4df84c3b4d93ea53c9ca169f32a0dc4619bee797/torch/_inductor/lowering.py#L419</p>
+<p>Since this feature was originally intended for optimizers, dynamic shapes aren't strictly necessary, but in order for this codegen to be used elsewhere in the stack (think input concatenation, more generalized horizontal fusion) dynamic shapes support is necessary. </p>
+<h3>Alternatives</h3>
+<p><em>No response</em></p>
+<h3>Additional context</h3>
+<p>A good place to get started is here: https://github.com/pytorch/pytorch/blob/4df84c3b4d93ea53c9ca169f32a0dc4619bee797/torch/_inductor/codegen/triton_foreach.py#L142</p>
+<p>This file is what handles codegen for the foreach operators. At a high level additional runtime args and a more sophisticated kernel launch grid calculation will be needed to take into account runtime sizes vs static sizes. Contact @mlazos for more details</p>
+<p>cc @ezyang @msaroufim @wconstab @bdhirsh @anijain2305 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @ngimel @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov</p>]]></description>
+      <pubDate>Thu, 10 Aug 2023 18:05:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/107005</guid>
+    </item>
+    <item>
+      <title>[inductor] Updated upsample_bicubic2d decomposition</title>
+      <link>https://github.com/pytorch/pytorch/pull/104248</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #104248<br />
+* #104182</p>
+<ul>
+<li>fixed dispatch for upsample_bicubic2d_vec and use inductor lowering</li>
+<li>added support for uint8</li>
+<li>updated tests</li>
+</ul>
+<p>Performance benchmarks results</p>
+<p>```<br />
+[-------------------------- Interpolate bicubic, AA=false, cpu -------------------------]<br />
+                                                                   |  Eager   |  Compiled<br />
+1 threads: ------------------------------------------------------------------------------<br />
+- main/nightly:<br />
+      Input (3, 345, 456), torch.uint8, torch.contiguous_format    |   647.2  |   2828.6<br />
+      Input (3, 345, 456), torch.float32, torch.contiguous_format  |  2163.4  |   2076.7<br />
+      Input (3, 345, 456), torch.uint8, torch.channels_last        |   263.5  |   3284.6<br />
+      Input (3, 345, 456), torch.float32, torch.channels_last      |  3585.1  |   2400.3<br />
+- PR:<br />
+      Input (3, 345, 456), torch.uint8, torch.contiguous_format    |   634.5  |   3579.6   &lt;--- worse than in main<br />
+      Input (3, 345, 456), torch.float32, torch.contiguous_format  |  2143.6  |   2237.8   &lt;--- worse than in main<br />
+      Input (3, 345, 456), torch.uint8, torch.channels_last        |   261.2  |   2883.2 <br />
+      Input (3, 345, 456), torch.float32, torch.channels_last      |  3544.3  |   1814.4</p>
+<p>Times are in microseconds (us).</p>
+<p>[------------------------ Interpolate bicubic, AA=false, cuda -------------------------]<br />
+                                                                   |  Eager  |  Compiled<br />
+1 threads: -----------------------------------------------------------------------------<br />
+- main/nightly:<br />
+      Input (3, 345, 456), torch.float32, torch.contiguous_format  |   17.2  |   352.0<br />
+      Input (3, 345, 456), torch.float32, torch.channels_last      |   17.5  |   357.4<br />
+- PR:<br />
+      Input (3, 345, 456), torch.float32, torch.contiguous_format  |   14.3  |    43.2<br />
+      Input (3, 345, 456), torch.float32, torch.channels_last      |   14.4  |    40.1</p>
+<p>Times are in microseconds (us).<br />
+```</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang @Xia-Weiwen @ngimel</p>]]></description>
+      <pubDate>Tue, 27 Jun 2023 03:26:57 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/104248</guid>
     </item>
   </channel>
 </rss>
