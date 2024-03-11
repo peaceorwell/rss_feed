@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version="2.0">
+  <channel>
+    <title>GitHub Commits Feed</title>
+    <link>https://github.com/username/repo/commits</link>
+    <description>Recent commits from GitHub repo</description>
+    <item>
+      <title>Update torchbench commit pin, add sam_fast benchmark (#121420)</title>
+      <link>https://github.com/pytorch/pytorch/commit/ae22bdaefe2a0d1cc8d997d87ba5d88b2d8eafd1</link>
+      <description><![CDATA[<p>Update torchbench commit pin, add sam_fast benchmark (#121420)</p>
+<p>After this, the sam_fast benchmark can now be run in the pytorch repo:<br />
+<code>SEGMENT_ANYTHING_FAST_USE_FLASH_4=0 benchmarks/dynamo/torchbench.py --inference --amp --performance --backend=inductor --explain --only sam_fast</code></p>
+<p>sam_fast is designed for inference only, with cuda and amp on. The code adds these restrictions to the benchmark.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121420<br />
+Approved by: https://github.com/oulgen, https://github.com/msaroufim</p>]]></description>
+      <pubDate>Mon, 11 Mar 2024 11:48:53 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ae22bdaefe2a0d1cc8d997d87ba5d88b2d8eafd1</guid>
+    </item>
+    <item>
+      <title>Upgrade submodule onednn to v3.3.5 (#120767)</title>
+      <link>https://github.com/pytorch/pytorch/commit/d1510e01faceb7de9095caff75401955ab323310</link>
+      <description><![CDATA[<p>Upgrade submodule onednn to v3.3.5 (#120767)</p>
+<p>This upgrade contains the fixes to the known issues brought by oneDNN v3.3.2, including issues https://github.com/pytorch/pytorch/issues/115346, https://github.com/pytorch/pytorch/issues/120211 and https://github.com/pytorch/pytorch/issues/120406 and those listed in PR #112700.</p>
+<p>Issue https://github.com/pytorch/pytorch/issues/115346 (perf regression) was fixed by oneDNN v3.3.4. No new regression was found with v3.3.5. The detailed results of v3.3.4 are given below and compared with v3.1.1 (the oneDNN version in PyTorch before it was updated to v3.3.2).<br />
+1. A performance regression with 5.8% perf drop from <code>pytorch_stargan-train</code> (see https://github.com/pytorch/benchmark/issues/2076#issuecomment-1847545843)<br />
+Validation results with this patch: Latency increased by 0.60%<br />
+<code>Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)
+oneDNN v3.1.1
+metrics-1484287.json
+{
+    "name": "cpu",
+    "environ": {
+        "pytorch_git_version": "6c8c5ad5eaf47a62fafbb4a2747198cbffbf1ff0"
+    },
+    "metrics": {
+        "latency": 418.851717
+    }
+}
+oneDNN v3.3.4
+{
+    "name": "cpu",
+    "environ": {
+        "pytorch_git_version": "6c8c5ad5eaf47a62fafbb4a2747198cbffbf1ff0"
+    },
+    "metrics": {
+        "latency": 421.381313
+    }
+}</code></p>
+<ol>
+<li>Performance regression of FP32 rexnet_100 with Inductor, dynamic shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issue-2030859592)<br />
+Validation results with this patch: Latency reduced by 3.23%<br />
+```<br />
+Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)<br />
+oneDNN v3.1.1<br />
+(inductor speedup over eager mode) 2.876x<br />
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
+cpu,rexnet_100,128,2.875904,113.314765,18.455283,0.990437,1302.636134,1315.212902,351,1,0,0</li>
+</ol>
+<p>oneDNN v3.3.4<br />
+(inductor speedup over eager mode) 3.003x<br />
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
+cpu,rexnet_100,128,3.003012,109.653012,91.547260,0.990048,1302.532506,1315.625370,351,1,0,0<br />
+```</p>
+<ol>
+<li>Performance regression of AMP hf_T5_generate and tinynet_a with Inductor, static shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issuecomment-1856029962)<br />
+Validation results with this patch: Latency reduced by 0.85%<br />
+```<br />
+Tested on an AWS spr metal instance<br />
+oneDNN v3.1.1<br />
+(inductor speedup over eager mode) 1.120x<br />
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
+cpu,hf_T5_generate,1,1.120018,1197.807729,205.905466,0.442803,125.179904,282.698957,10550,48,8,4</li>
+</ol>
+<p>oneDNN v3.3.4<br />
+(inductor speedup over eager mode) 1.134x<br />
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
+cpu,hf_T5_generate,1,1.133594,1187.701514,205.855527,0.422012,128.405094,304.268493,10550,48,8,4<br />
+```</p>
+<p>The following issues about functionality are fixed by this upgrade. Test cases are also added for these issues.<br />
+- https://github.com/pytorch/pytorch/issues/120211<br />
+- https://github.com/pytorch/pytorch/issues/120406<br />
+- https://github.com/pytorch/pytorch/issues/120547</p>
+<hr />
+<p>Below are detailed data of torchbench CPU userbenchmark test and Inductor FP32/AMP inference tests. No regression of perf or functionality was found.<br />
+I.  <em>torchbench CPU userbenchmark test</em><br />
+Suite | Speedup<br />
+-- | --<br />
+eager_throughtput_bf16_infer | 1.001848<br />
+eager_throughtput_fp32_infer | 1.000257<br />
+eager_throughtput_fx_int8 | 1.003069<br />
+jit_llga_throughtput_amp_bf16 | 1.000682<br />
+jit_llga_throughtput_fp32 | 1.000313<br />
+eager_throughtput_bf16_train | 0.998222<br />
+eager_throughtput_fp32_train | 1.003384</p>
+<p>II. <em>Inductor FP32/AMP inference tests</em><br />
+i.  FP32 static default<br />
+suite | name | thread | batch size | Ratio Speedup(New/old)<br />
+-- | -- | -- | -- | --<br />
+torchbench | timm_efficientnet | multiple | 64 | 1.09<br />
+timm_models | tinynet_a | multiple | 128 | 1.14</p>
+<p>ii.  FP32 dynamic default</p>
+<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
+-- | -- | -- | -- | --<br />
+torchbench | alexnet | multiple | 128 | 1.08<br />
+torchbench | basic_gnn_edgecnn | multiple | 1 | 0.98<br />
+torchbench | timm_efficientnet | multiple | 64 | 1.08</p>
+<p>iii. AMP static default</p>
+<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
+-- | -- | -- | -- | --<br />
+torchbench | hf_distil_whisper | multiple | 1 | 1.18<br />
+torchbench | timm_efficientnet | multiple | 64 | 1.32<br />
+huggingface | BartForConditionalGeneration | multiple | 2 | 1.19<br />
+timm_models | eca_halonext26ts | multiple | 128 | 1.13<br />
+timm_models | nfnet_l0 | multiple | 128 | 1.13<br />
+timm_models | rexnet_100 | multiple | 128 | 1.45<br />
+timm_models | spnasnet_100 | multiple | 128 | 1.15<br />
+timm_models | tf_efficientnet_b0 | multiple | 128 | 1.22<br />
+timm_models | tinynet_a | multiple | 128 | 1.49<br />
+torchbench | hf_Bert_large | single | 1 | 1.16<br />
+huggingface | XLNetLMHeadModel | single | 1 | 1.07</p>
+<p>iv.  AMP dynamic default</p>
+<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
+-- | -- | -- | -- | --<br />
+torchbench | timm_efficientnet | multiple | 64 | 1.32<br />
+huggingface | PLBartForConditionalGeneration | multiple | 4 | 1.14<br />
+timm_models | nfnet_l0 | multiple | 128 | 1.15<br />
+timm_models | rexnet_100 | multiple | 128 | 1.45<br />
+timm_models | tinynet_a | multiple | 128 | 1.34<br />
+huggingface | XLNetLMHeadModel | single | 1 | 1.09</p>
+<hr />
+<p>Co-authored-by: Nikita Shulga <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;">&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/120767<br />
+Approved by: https://github.com/chuanqi129, https://github.com/jgong5, https://github.com/atalman</p>]]></description>
+      <pubDate>Mon, 11 Mar 2024 04:56:59 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d1510e01faceb7de9095caff75401955ab323310</guid>
+    </item>
+  </channel>
+</rss>
