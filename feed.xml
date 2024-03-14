@@ -4,27 +4,72 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <item>
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Handle transitive replacements in Triton kernel mutation analysis (#121867)</title><link>https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</link><description><![CDATA[<p>Handle transitive replacements in Triton kernel mutation analysis (#121867)</p>
+<p>Summary: Previously, we didn't handle transitive replacements in MLIR walk-based function info mining in the Triton kernel mutation analysis pass. As a result, for the TTIR below:</p>
+<p><code>tt.func private @cumsum__fp32S1_16S__1cconstexpr_1__2cconstexpr_False_(%arg0: tensor&lt;1x16xf32&gt; loc("...":296:0)) -&gt; tensor&lt;1x16xf32&gt; attributes {noinline = false} {
+    %0 = "tt.scan"(%arg0) &lt;{axis = 1 : i32, reverse = false}&gt; ({
+    ^bb0(%arg1: f32 loc(unknown), %arg2: f32 loc(unknown)):
+      %1 = tt.call @_sum_combine__fp32_fp32__(%arg1, %arg2) : (f32, f32) -&gt; f32 loc(#loc16)
+      tt.scan.return %1 : f32 loc(#loc16)
+    }) : (tensor&lt;1x16xf32&gt;) -&gt; tensor&lt;1x16xf32&gt; loc(#loc16)
+    tt.return %0 : tensor&lt;1x16xf32&gt; loc(#loc18)
+  } loc(#loc15)</code></p>
+<p>the mined function dict looked like this:</p>
+<p><code>{Intermediate(idx=25): [Op(name='tt.call',
+                           fn_call_name='_sum_combine__fp32_fp32__',
+                           args=[Intermediate(idx=26),
+                                 Intermediate(idx=26)])],
+ Intermediate(idx=27): [Op(name='tt.scan.return',
+                           fn_call_name=None,
+                           args=[Intermediate(idx=25)])],
+ Intermediate(idx=-4): [Op(name='tt.return',
+                           fn_call_name=None,
+                           args=[Intermediate(idx=27)])]}</code></p>
+<p>whereas it should look like this (not the <code>Param(idx=0)</code> arguments of the <code>tt.call</code>):</p>
+<p><code>{Intermediate(idx=25): [Op(name='tt.call',
+                           fn_call_name='_sum_combine__fp32_fp32__',
+                           args=[Param(idx=0),
+                                 Param(idx=0)])],
+ Intermediate(idx=27): [Op(name='tt.scan.return',
+                           fn_call_name=None,
+                           args=[Intermediate(idx=25)])],
+ Intermediate(idx=-4): [Op(name='tt.return',
+                           fn_call_name=None,
+                           args=[Intermediate(idx=27)])]}</code></p>
+<p>This is fixed in the PR.</p>
+<p>Test Plan:</p>
+<p>```<br />
+$ python test/inductor/test_triton_kernels.py -k test_cumsum<br />
+.</p>
+<hr />
+<p>Ran 1 test in 1.771s</p>
+<p>OK<br />
+```<br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/121867<br />
+Approved by: https://github.com/oulgen</p>]]></description><pubDate>Wed, 13 Mar 2024 20:06:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</guid></item><item><title>Enable FX graph cache for a batch of inductor tests (#121696)</title><link>https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</link><description><![CDATA[<p>Enable FX graph cache for a batch of inductor tests (#121696)</p>
+<p>Summary: Get more FX graph cache coverage by enabling it for these unit tests</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121696<br />
+Approved by: https://github.com/eellison</p>]]></description><pubDate>Wed, 13 Mar 2024 19:39:59 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</guid></item><item>
       <title>Update torchbench commit pin, add sam_fast benchmark (#121420)</title>
       <link>https://github.com/pytorch/pytorch/commit/ae22bdaefe2a0d1cc8d997d87ba5d88b2d8eafd1</link>
-      <description><![CDATA[<p>Update torchbench commit pin, add sam_fast benchmark (#121420)</p>
-<p>After this, the sam_fast benchmark can now be run in the pytorch repo:<br />
-<code>SEGMENT_ANYTHING_FAST_USE_FLASH_4=0 benchmarks/dynamo/torchbench.py --inference --amp --performance --backend=inductor --explain --only sam_fast</code></p>
-<p>sam_fast is designed for inference only, with cuda and amp on. The code adds these restrictions to the benchmark.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121420<br />
-Approved by: https://github.com/oulgen, https://github.com/msaroufim</p>]]></description>
+      <description>&lt;p&gt;Update torchbench commit pin, add sam_fast benchmark (#121420)&lt;/p&gt;
+&lt;p&gt;After this, the sam_fast benchmark can now be run in the pytorch repo:&lt;br /&gt;
+&lt;code&gt;SEGMENT_ANYTHING_FAST_USE_FLASH_4=0 benchmarks/dynamo/torchbench.py --inference --amp --performance --backend=inductor --explain --only sam_fast&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;sam_fast is designed for inference only, with cuda and amp on. The code adds these restrictions to the benchmark.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121420&lt;br /&gt;
+Approved by: https://github.com/oulgen, https://github.com/msaroufim&lt;/p&gt;</description>
       <pubDate>Mon, 11 Mar 2024 11:48:53 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ae22bdaefe2a0d1cc8d997d87ba5d88b2d8eafd1</guid>
     </item>
     <item>
       <title>Upgrade submodule onednn to v3.3.5 (#120767)</title>
       <link>https://github.com/pytorch/pytorch/commit/d1510e01faceb7de9095caff75401955ab323310</link>
-      <description><![CDATA[<p>Upgrade submodule onednn to v3.3.5 (#120767)</p>
-<p>This upgrade contains the fixes to the known issues brought by oneDNN v3.3.2, including issues https://github.com/pytorch/pytorch/issues/115346, https://github.com/pytorch/pytorch/issues/120211 and https://github.com/pytorch/pytorch/issues/120406 and those listed in PR #112700.</p>
-<p>Issue https://github.com/pytorch/pytorch/issues/115346 (perf regression) was fixed by oneDNN v3.3.4. No new regression was found with v3.3.5. The detailed results of v3.3.4 are given below and compared with v3.1.1 (the oneDNN version in PyTorch before it was updated to v3.3.2).<br />
-1. A performance regression with 5.8% perf drop from <code>pytorch_stargan-train</code> (see https://github.com/pytorch/benchmark/issues/2076#issuecomment-1847545843)<br />
-Validation results with this patch: Latency increased by 0.60%<br />
-<code>Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)
+      <description>&lt;p&gt;Upgrade submodule onednn to v3.3.5 (#120767)&lt;/p&gt;
+&lt;p&gt;This upgrade contains the fixes to the known issues brought by oneDNN v3.3.2, including issues https://github.com/pytorch/pytorch/issues/115346, https://github.com/pytorch/pytorch/issues/120211 and https://github.com/pytorch/pytorch/issues/120406 and those listed in PR #112700.&lt;/p&gt;
+&lt;p&gt;Issue https://github.com/pytorch/pytorch/issues/115346 (perf regression) was fixed by oneDNN v3.3.4. No new regression was found with v3.3.5. The detailed results of v3.3.4 are given below and compared with v3.1.1 (the oneDNN version in PyTorch before it was updated to v3.3.2).&lt;br /&gt;
+1. A performance regression with 5.8% perf drop from &lt;code&gt;pytorch_stargan-train&lt;/code&gt; (see https://github.com/pytorch/benchmark/issues/2076#issuecomment-1847545843)&lt;br /&gt;
+Validation results with this patch: Latency increased by 0.60%&lt;br /&gt;
+&lt;code&gt;Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)
 oneDNN v3.1.1
 metrics-1484287.json
 {
@@ -45,92 +90,92 @@ oneDNN v3.3.4
     "metrics": {
         "latency": 421.381313
     }
-}</code></p>
-<ol>
-<li>Performance regression of FP32 rexnet_100 with Inductor, dynamic shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issue-2030859592)<br />
-Validation results with this patch: Latency reduced by 3.23%<br />
-```<br />
-Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)<br />
-oneDNN v3.1.1<br />
-(inductor speedup over eager mode) 2.876x<br />
-dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
-cpu,rexnet_100,128,2.875904,113.314765,18.455283,0.990437,1302.636134,1315.212902,351,1,0,0</li>
-</ol>
-<p>oneDNN v3.3.4<br />
-(inductor speedup over eager mode) 3.003x<br />
-dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
-cpu,rexnet_100,128,3.003012,109.653012,91.547260,0.990048,1302.532506,1315.625370,351,1,0,0<br />
-```</p>
-<ol>
-<li>Performance regression of AMP hf_T5_generate and tinynet_a with Inductor, static shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issuecomment-1856029962)<br />
-Validation results with this patch: Latency reduced by 0.85%<br />
-```<br />
-Tested on an AWS spr metal instance<br />
-oneDNN v3.1.1<br />
-(inductor speedup over eager mode) 1.120x<br />
-dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
-cpu,hf_T5_generate,1,1.120018,1197.807729,205.905466,0.442803,125.179904,282.698957,10550,48,8,4</li>
-</ol>
-<p>oneDNN v3.3.4<br />
-(inductor speedup over eager mode) 1.134x<br />
-dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks<br />
-cpu,hf_T5_generate,1,1.133594,1187.701514,205.855527,0.422012,128.405094,304.268493,10550,48,8,4<br />
-```</p>
-<p>The following issues about functionality are fixed by this upgrade. Test cases are also added for these issues.<br />
-- https://github.com/pytorch/pytorch/issues/120211<br />
-- https://github.com/pytorch/pytorch/issues/120406<br />
-- https://github.com/pytorch/pytorch/issues/120547</p>
-<hr />
-<p>Below are detailed data of torchbench CPU userbenchmark test and Inductor FP32/AMP inference tests. No regression of perf or functionality was found.<br />
-I.  <em>torchbench CPU userbenchmark test</em><br />
-Suite | Speedup<br />
--- | --<br />
-eager_throughtput_bf16_infer | 1.001848<br />
-eager_throughtput_fp32_infer | 1.000257<br />
-eager_throughtput_fx_int8 | 1.003069<br />
-jit_llga_throughtput_amp_bf16 | 1.000682<br />
-jit_llga_throughtput_fp32 | 1.000313<br />
-eager_throughtput_bf16_train | 0.998222<br />
-eager_throughtput_fp32_train | 1.003384</p>
-<p>II. <em>Inductor FP32/AMP inference tests</em><br />
-i.  FP32 static default<br />
-suite | name | thread | batch size | Ratio Speedup(New/old)<br />
--- | -- | -- | -- | --<br />
-torchbench | timm_efficientnet | multiple | 64 | 1.09<br />
-timm_models | tinynet_a | multiple | 128 | 1.14</p>
-<p>ii.  FP32 dynamic default</p>
-<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
--- | -- | -- | -- | --<br />
-torchbench | alexnet | multiple | 128 | 1.08<br />
-torchbench | basic_gnn_edgecnn | multiple | 1 | 0.98<br />
-torchbench | timm_efficientnet | multiple | 64 | 1.08</p>
-<p>iii. AMP static default</p>
-<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
--- | -- | -- | -- | --<br />
-torchbench | hf_distil_whisper | multiple | 1 | 1.18<br />
-torchbench | timm_efficientnet | multiple | 64 | 1.32<br />
-huggingface | BartForConditionalGeneration | multiple | 2 | 1.19<br />
-timm_models | eca_halonext26ts | multiple | 128 | 1.13<br />
-timm_models | nfnet_l0 | multiple | 128 | 1.13<br />
-timm_models | rexnet_100 | multiple | 128 | 1.45<br />
-timm_models | spnasnet_100 | multiple | 128 | 1.15<br />
-timm_models | tf_efficientnet_b0 | multiple | 128 | 1.22<br />
-timm_models | tinynet_a | multiple | 128 | 1.49<br />
-torchbench | hf_Bert_large | single | 1 | 1.16<br />
-huggingface | XLNetLMHeadModel | single | 1 | 1.07</p>
-<p>iv.  AMP dynamic default</p>
-<p>suite | name | thread | batch size | Ratio Speedup(New/old)<br />
--- | -- | -- | -- | --<br />
-torchbench | timm_efficientnet | multiple | 64 | 1.32<br />
-huggingface | PLBartForConditionalGeneration | multiple | 4 | 1.14<br />
-timm_models | nfnet_l0 | multiple | 128 | 1.15<br />
-timm_models | rexnet_100 | multiple | 128 | 1.45<br />
-timm_models | tinynet_a | multiple | 128 | 1.34<br />
-huggingface | XLNetLMHeadModel | single | 1 | 1.09</p>
-<hr />
-<p>Co-authored-by: Nikita Shulga <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;">&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/120767<br />
-Approved by: https://github.com/chuanqi129, https://github.com/jgong5, https://github.com/atalman</p>]]></description>
+}&lt;/code&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Performance regression of FP32 rexnet_100 with Inductor, dynamic shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issue-2030859592)&lt;br /&gt;
+Validation results with this patch: Latency reduced by 3.23%&lt;br /&gt;
+```&lt;br /&gt;
+Tested on an Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz instance (IceLake)&lt;br /&gt;
+oneDNN v3.1.1&lt;br /&gt;
+(inductor speedup over eager mode) 2.876x&lt;br /&gt;
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks&lt;br /&gt;
+cpu,rexnet_100,128,2.875904,113.314765,18.455283,0.990437,1302.636134,1315.212902,351,1,0,0&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;oneDNN v3.3.4&lt;br /&gt;
+(inductor speedup over eager mode) 3.003x&lt;br /&gt;
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks&lt;br /&gt;
+cpu,rexnet_100,128,3.003012,109.653012,91.547260,0.990048,1302.532506,1315.625370,351,1,0,0&lt;br /&gt;
+```&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Performance regression of AMP hf_T5_generate and tinynet_a with Inductor, static shape, multi-threads (see https://github.com/pytorch/pytorch/issues/115346#issuecomment-1856029962)&lt;br /&gt;
+Validation results with this patch: Latency reduced by 0.85%&lt;br /&gt;
+```&lt;br /&gt;
+Tested on an AWS spr metal instance&lt;br /&gt;
+oneDNN v3.1.1&lt;br /&gt;
+(inductor speedup over eager mode) 1.120x&lt;br /&gt;
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks&lt;br /&gt;
+cpu,hf_T5_generate,1,1.120018,1197.807729,205.905466,0.442803,125.179904,282.698957,10550,48,8,4&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;oneDNN v3.3.4&lt;br /&gt;
+(inductor speedup over eager mode) 1.134x&lt;br /&gt;
+dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks&lt;br /&gt;
+cpu,hf_T5_generate,1,1.133594,1187.701514,205.855527,0.422012,128.405094,304.268493,10550,48,8,4&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;The following issues about functionality are fixed by this upgrade. Test cases are also added for these issues.&lt;br /&gt;
+- https://github.com/pytorch/pytorch/issues/120211&lt;br /&gt;
+- https://github.com/pytorch/pytorch/issues/120406&lt;br /&gt;
+- https://github.com/pytorch/pytorch/issues/120547&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Below are detailed data of torchbench CPU userbenchmark test and Inductor FP32/AMP inference tests. No regression of perf or functionality was found.&lt;br /&gt;
+I.  &lt;em&gt;torchbench CPU userbenchmark test&lt;/em&gt;&lt;br /&gt;
+Suite | Speedup&lt;br /&gt;
+-- | --&lt;br /&gt;
+eager_throughtput_bf16_infer | 1.001848&lt;br /&gt;
+eager_throughtput_fp32_infer | 1.000257&lt;br /&gt;
+eager_throughtput_fx_int8 | 1.003069&lt;br /&gt;
+jit_llga_throughtput_amp_bf16 | 1.000682&lt;br /&gt;
+jit_llga_throughtput_fp32 | 1.000313&lt;br /&gt;
+eager_throughtput_bf16_train | 0.998222&lt;br /&gt;
+eager_throughtput_fp32_train | 1.003384&lt;/p&gt;
+&lt;p&gt;II. &lt;em&gt;Inductor FP32/AMP inference tests&lt;/em&gt;&lt;br /&gt;
+i.  FP32 static default&lt;br /&gt;
+suite | name | thread | batch size | Ratio Speedup(New/old)&lt;br /&gt;
+-- | -- | -- | -- | --&lt;br /&gt;
+torchbench | timm_efficientnet | multiple | 64 | 1.09&lt;br /&gt;
+timm_models | tinynet_a | multiple | 128 | 1.14&lt;/p&gt;
+&lt;p&gt;ii.  FP32 dynamic default&lt;/p&gt;
+&lt;p&gt;suite | name | thread | batch size | Ratio Speedup(New/old)&lt;br /&gt;
+-- | -- | -- | -- | --&lt;br /&gt;
+torchbench | alexnet | multiple | 128 | 1.08&lt;br /&gt;
+torchbench | basic_gnn_edgecnn | multiple | 1 | 0.98&lt;br /&gt;
+torchbench | timm_efficientnet | multiple | 64 | 1.08&lt;/p&gt;
+&lt;p&gt;iii. AMP static default&lt;/p&gt;
+&lt;p&gt;suite | name | thread | batch size | Ratio Speedup(New/old)&lt;br /&gt;
+-- | -- | -- | -- | --&lt;br /&gt;
+torchbench | hf_distil_whisper | multiple | 1 | 1.18&lt;br /&gt;
+torchbench | timm_efficientnet | multiple | 64 | 1.32&lt;br /&gt;
+huggingface | BartForConditionalGeneration | multiple | 2 | 1.19&lt;br /&gt;
+timm_models | eca_halonext26ts | multiple | 128 | 1.13&lt;br /&gt;
+timm_models | nfnet_l0 | multiple | 128 | 1.13&lt;br /&gt;
+timm_models | rexnet_100 | multiple | 128 | 1.45&lt;br /&gt;
+timm_models | spnasnet_100 | multiple | 128 | 1.15&lt;br /&gt;
+timm_models | tf_efficientnet_b0 | multiple | 128 | 1.22&lt;br /&gt;
+timm_models | tinynet_a | multiple | 128 | 1.49&lt;br /&gt;
+torchbench | hf_Bert_large | single | 1 | 1.16&lt;br /&gt;
+huggingface | XLNetLMHeadModel | single | 1 | 1.07&lt;/p&gt;
+&lt;p&gt;iv.  AMP dynamic default&lt;/p&gt;
+&lt;p&gt;suite | name | thread | batch size | Ratio Speedup(New/old)&lt;br /&gt;
+-- | -- | -- | -- | --&lt;br /&gt;
+torchbench | timm_efficientnet | multiple | 64 | 1.32&lt;br /&gt;
+huggingface | PLBartForConditionalGeneration | multiple | 4 | 1.14&lt;br /&gt;
+timm_models | nfnet_l0 | multiple | 128 | 1.15&lt;br /&gt;
+timm_models | rexnet_100 | multiple | 128 | 1.45&lt;br /&gt;
+timm_models | tinynet_a | multiple | 128 | 1.34&lt;br /&gt;
+huggingface | XLNetLMHeadModel | single | 1 | 1.09&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Co-authored-by: Nikita Shulga &lt;a href="&amp;#109;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#58;&amp;#50;&amp;#52;&amp;#53;&amp;#51;&amp;#53;&amp;#50;&amp;#52;&amp;#43;&amp;#109;&amp;#97;&amp;#108;&amp;#102;&amp;#101;&amp;#116;&amp;#64;&amp;#117;&amp;#115;&amp;#101;&amp;#114;&amp;#115;&amp;#46;&amp;#110;&amp;#111;&amp;#114;&amp;#101;&amp;#112;&amp;#108;&amp;#121;&amp;#46;&amp;#103;&amp;#105;&amp;#116;&amp;#104;&amp;#117;&amp;#98;&amp;#46;&amp;#99;&amp;#111;&amp;#109;"&gt;&amp;#50;&amp;#52;&amp;#53;&amp;#51;&amp;#53;&amp;#50;&amp;#52;&amp;#43;&amp;#109;&amp;#97;&amp;#108;&amp;#102;&amp;#101;&amp;#116;&amp;#64;&amp;#117;&amp;#115;&amp;#101;&amp;#114;&amp;#115;&amp;#46;&amp;#110;&amp;#111;&amp;#114;&amp;#101;&amp;#112;&amp;#108;&amp;#121;&amp;#46;&amp;#103;&amp;#105;&amp;#116;&amp;#104;&amp;#117;&amp;#98;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/120767&lt;br /&gt;
+Approved by: https://github.com/chuanqi129, https://github.com/jgong5, https://github.com/atalman&lt;/p&gt;</description>
       <pubDate>Mon, 11 Mar 2024 04:56:59 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d1510e01faceb7de9095caff75401955ab323310</guid>
     </item>
