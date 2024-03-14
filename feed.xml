@@ -4,18 +4,43 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Handle transitive replacements in Triton kernel mutation analysis (#121867)</title><link>https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</link><description><![CDATA[<p>Handle transitive replacements in Triton kernel mutation analysis (#121867)</p>
-<p>Summary: Previously, we didn't handle transitive replacements in MLIR walk-based function info mining in the Triton kernel mutation analysis pass. As a result, for the TTIR below:</p>
-<p><code>tt.func private @cumsum__fp32S1_16S__1cconstexpr_1__2cconstexpr_False_(%arg0: tensor&lt;1x16xf32&gt; loc("...":296:0)) -&gt; tensor&lt;1x16xf32&gt; attributes {noinline = false} {
-    %0 = "tt.scan"(%arg0) &lt;{axis = 1 : i32, reverse = false}&gt; ({
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[AOTInductor] Include build cmds at the end of wrapper file (#121872)</title><link>https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</link><description><![CDATA[<p>[AOTInductor] Include build cmds at the end of wrapper file (#121872)</p>
+<p>Summary:<br />
+For easier debugging, include build commands at the end of codegen wrapper.</p>
+<p>{F1468438991}</p>
+<p>Test Plan: CI</p>
+<p>Differential Revision: D54882164</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121872<br />
+Approved by: https://github.com/chenyang78, https://github.com/desertfire</p>]]></description><pubDate>Thu, 14 Mar 2024 10:41:17 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</guid></item><item><title>[sigmoid] Use deserializer from oss. (#121839)</title><link>https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</link><description><![CDATA[<p>[sigmoid] Use deserializer from oss. (#121839)</p>
+<p>Summary:<br />
+Old path:<br />
+thrift -&gt; thrift deserializer -&gt; graph module.<br />
+new path:<br />
+thrift -&gt; python dataclass -&gt; oss deserializer -&gt; graph_module</p>
+<p>Test Plan:<br />
+CI<br />
+buck2 test mode/dev-nosan caffe2/test/inductor/fb:test_aot_inductor_pt2_inference</p>
+<p>Reviewed By: SherlockNoMad</p>
+<p>Differential Revision: D54855251</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121839<br />
+Approved by: https://github.com/angelayi</p>]]></description><pubDate>Thu, 14 Mar 2024 10:38:58 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</guid></item><item><title>[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)</title><link>https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</link><description><![CDATA[<p>[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)</p>
+<p>Summary: when computing the diagonal size, we need to use correct symbolic min/max function.</p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D54884899">D54884899</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/121881<br />
+Approved by: https://github.com/aakhundov</p>]]></description><pubDate>Thu, 14 Mar 2024 10:36:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</guid></item><item><title>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)</title><link>https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</link><description><![CDATA[<p>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119685<br />
+Approved by: https://github.com/cpuhrsch, https://github.com/kadeng</p>]]></description><pubDate>Thu, 14 Mar 2024 05:25:23 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</guid></item><item><title>Handle transitive replacements in Triton kernel mutation analysis (#121867)</title><link>https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</link><description>&lt;p&gt;Handle transitive replacements in Triton kernel mutation analysis (#121867)&lt;/p&gt;
+&lt;p&gt;Summary: Previously, we didn't handle transitive replacements in MLIR walk-based function info mining in the Triton kernel mutation analysis pass. As a result, for the TTIR below:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tt.func private @cumsum__fp32S1_16S__1cconstexpr_1__2cconstexpr_False_(%arg0: tensor&amp;lt;1x16xf32&amp;gt; loc("...":296:0)) -&amp;gt; tensor&amp;lt;1x16xf32&amp;gt; attributes {noinline = false} {
+    %0 = "tt.scan"(%arg0) &amp;lt;{axis = 1 : i32, reverse = false}&amp;gt; ({
     ^bb0(%arg1: f32 loc(unknown), %arg2: f32 loc(unknown)):
-      %1 = tt.call @_sum_combine__fp32_fp32__(%arg1, %arg2) : (f32, f32) -&gt; f32 loc(#loc16)
+      %1 = tt.call @_sum_combine__fp32_fp32__(%arg1, %arg2) : (f32, f32) -&amp;gt; f32 loc(#loc16)
       tt.scan.return %1 : f32 loc(#loc16)
-    }) : (tensor&lt;1x16xf32&gt;) -&gt; tensor&lt;1x16xf32&gt; loc(#loc16)
-    tt.return %0 : tensor&lt;1x16xf32&gt; loc(#loc18)
-  } loc(#loc15)</code></p>
-<p>the mined function dict looked like this:</p>
-<p><code>{Intermediate(idx=25): [Op(name='tt.call',
+    }) : (tensor&amp;lt;1x16xf32&amp;gt;) -&amp;gt; tensor&amp;lt;1x16xf32&amp;gt; loc(#loc16)
+    tt.return %0 : tensor&amp;lt;1x16xf32&amp;gt; loc(#loc18)
+  } loc(#loc15)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;the mined function dict looked like this:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;{Intermediate(idx=25): [Op(name='tt.call',
                            fn_call_name='_sum_combine__fp32_fp32__',
                            args=[Intermediate(idx=26),
                                  Intermediate(idx=26)])],
@@ -24,9 +49,9 @@
                            args=[Intermediate(idx=25)])],
  Intermediate(idx=-4): [Op(name='tt.return',
                            fn_call_name=None,
-                           args=[Intermediate(idx=27)])]}</code></p>
-<p>whereas it should look like this (not the <code>Param(idx=0)</code> arguments of the <code>tt.call</code>):</p>
-<p><code>{Intermediate(idx=25): [Op(name='tt.call',
+                           args=[Intermediate(idx=27)])]}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;whereas it should look like this (not the &lt;code&gt;Param(idx=0)&lt;/code&gt; arguments of the &lt;code&gt;tt.call&lt;/code&gt;):&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;{Intermediate(idx=25): [Op(name='tt.call',
                            fn_call_name='_sum_combine__fp32_fp32__',
                            args=[Param(idx=0),
                                  Param(idx=0)])],
@@ -35,21 +60,21 @@
                            args=[Intermediate(idx=25)])],
  Intermediate(idx=-4): [Op(name='tt.return',
                            fn_call_name=None,
-                           args=[Intermediate(idx=27)])]}</code></p>
-<p>This is fixed in the PR.</p>
-<p>Test Plan:</p>
-<p>```<br />
-$ python test/inductor/test_triton_kernels.py -k test_cumsum<br />
-.</p>
-<hr />
-<p>Ran 1 test in 1.771s</p>
-<p>OK<br />
-```<br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/121867<br />
-Approved by: https://github.com/oulgen</p>]]></description><pubDate>Wed, 13 Mar 2024 20:06:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</guid></item><item><title>Enable FX graph cache for a batch of inductor tests (#121696)</title><link>https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</link><description><![CDATA[<p>Enable FX graph cache for a batch of inductor tests (#121696)</p>
-<p>Summary: Get more FX graph cache coverage by enabling it for these unit tests</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121696<br />
-Approved by: https://github.com/eellison</p>]]></description><pubDate>Wed, 13 Mar 2024 19:39:59 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</guid></item><item>
+                           args=[Intermediate(idx=27)])]}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;This is fixed in the PR.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+$ python test/inductor/test_triton_kernels.py -k test_cumsum&lt;br /&gt;
+.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Ran 1 test in 1.771s&lt;/p&gt;
+&lt;p&gt;OK&lt;br /&gt;
+```&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/121867&lt;br /&gt;
+Approved by: https://github.com/oulgen&lt;/p&gt;</description><pubDate>Wed, 13 Mar 2024 20:06:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</guid></item><item><title>Enable FX graph cache for a batch of inductor tests (#121696)</title><link>https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</link><description>&lt;p&gt;Enable FX graph cache for a batch of inductor tests (#121696)&lt;/p&gt;
+&lt;p&gt;Summary: Get more FX graph cache coverage by enabling it for these unit tests&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121696&lt;br /&gt;
+Approved by: https://github.com/eellison&lt;/p&gt;</description><pubDate>Wed, 13 Mar 2024 19:39:59 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4cd503c1f3efdb80204e288237fce13025a18350</guid></item><item>
       <title>Update torchbench commit pin, add sam_fast benchmark (#121420)</title>
       <link>https://github.com/pytorch/pytorch/commit/ae22bdaefe2a0d1cc8d997d87ba5d88b2d8eafd1</link>
       <description>&lt;p&gt;Update torchbench commit pin, add sam_fast benchmark (#121420)&lt;/p&gt;
