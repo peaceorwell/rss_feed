@@ -4,32 +4,40 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[AOTInductor] Include build cmds at the end of wrapper file (#121872)</title><link>https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</link><description><![CDATA[<p>[AOTInductor] Include build cmds at the end of wrapper file (#121872)</p>
-<p>Summary:<br />
-For easier debugging, include build commands at the end of codegen wrapper.</p>
-<p>{F1468438991}</p>
-<p>Test Plan: CI</p>
-<p>Differential Revision: D54882164</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121872<br />
-Approved by: https://github.com/chenyang78, https://github.com/desertfire</p>]]></description><pubDate>Thu, 14 Mar 2024 10:41:17 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</guid></item><item><title>[sigmoid] Use deserializer from oss. (#121839)</title><link>https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</link><description><![CDATA[<p>[sigmoid] Use deserializer from oss. (#121839)</p>
-<p>Summary:<br />
-Old path:<br />
-thrift -&gt; thrift deserializer -&gt; graph module.<br />
-new path:<br />
-thrift -&gt; python dataclass -&gt; oss deserializer -&gt; graph_module</p>
-<p>Test Plan:<br />
-CI<br />
-buck2 test mode/dev-nosan caffe2/test/inductor/fb:test_aot_inductor_pt2_inference</p>
-<p>Reviewed By: SherlockNoMad</p>
-<p>Differential Revision: D54855251</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121839<br />
-Approved by: https://github.com/angelayi</p>]]></description><pubDate>Thu, 14 Mar 2024 10:38:58 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</guid></item><item><title>[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)</title><link>https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</link><description><![CDATA[<p>[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)</p>
-<p>Summary: when computing the diagonal size, we need to use correct symbolic min/max function.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D54884899">D54884899</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/121881<br />
-Approved by: https://github.com/aakhundov</p>]]></description><pubDate>Thu, 14 Mar 2024 10:36:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</guid></item><item><title>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)</title><link>https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</link><description><![CDATA[<p>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119685<br />
-Approved by: https://github.com/cpuhrsch, https://github.com/kadeng</p>]]></description><pubDate>Thu, 14 Mar 2024 05:25:23 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</guid></item><item><title>Handle transitive replacements in Triton kernel mutation analysis (#121867)</title><link>https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</link><description>&lt;p&gt;Handle transitive replacements in Triton kernel mutation analysis (#121867)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Enable FX graph caching in another batch of inductor tests (#121697)</title><link>https://github.com/pytorch/pytorch/commit/535bc71d037d44167270d99577b71b8d97db1d8f</link><description><![CDATA[<p>Enable FX graph caching in another batch of inductor tests (#121697)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121697<br />
+Approved by: https://github.com/eellison</p>]]></description><pubDate>Fri, 15 Mar 2024 11:38:51 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/535bc71d037d44167270d99577b71b8d97db1d8f</guid></item><item><title>Fall back to eager mode when viewing with differing bitwidths (#120998) (#121786)</title><link>https://github.com/pytorch/pytorch/commit/3ee319c49ca5478a27aad00bf5d30946a5b784d2</link><description><![CDATA[<p>Fall back to eager mode when viewing with differing bitwidths (#120998) (#121786)</p>
+<p>The inductor lowering code for viewing a tensor as a type with a different bitwidth currently doesn't generate valid triton code. This change looks for a source and destination dtype and, if different sizes, falls back to the eager mode aten implementation.  Prior to this change, this condition would throw an exception.</p>
+<p>Fixes #120998.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121786<br />
+Approved by: https://github.com/peterbell10, https://github.com/bertmaher</p>]]></description><pubDate>Fri, 15 Mar 2024 11:33:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3ee319c49ca5478a27aad00bf5d30946a5b784d2</guid></item><item><title>Disable inductor (default) and inductor (dynamic) by default in the perf run launcher (#121914)</title><link>https://github.com/pytorch/pytorch/commit/3c3d7455a3ef81fb90fb18199d7e0db316dbf159</link><description><![CDATA[<p>Disable inductor (default) and inductor (dynamic) by default in the perf run launcher (#121914)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121914<br />
+Approved by: https://github.com/desertfire</p>]]></description><pubDate>Fri, 15 Mar 2024 08:46:24 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/3c3d7455a3ef81fb90fb18199d7e0db316dbf159</guid></item><item><title>[AOTInductor] Include build cmds at the end of wrapper file (#121872)</title><link>https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</link><description>&lt;p&gt;[AOTInductor] Include build cmds at the end of wrapper file (#121872)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+For easier debugging, include build commands at the end of codegen wrapper.&lt;/p&gt;
+&lt;p&gt;{F1468438991}&lt;/p&gt;
+&lt;p&gt;Test Plan: CI&lt;/p&gt;
+&lt;p&gt;Differential Revision: D54882164&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121872&lt;br /&gt;
+Approved by: https://github.com/chenyang78, https://github.com/desertfire&lt;/p&gt;</description><pubDate>Thu, 14 Mar 2024 10:41:17 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0636c11811e15d1919cdd6cf20cb2d2bed2ee1da</guid></item><item><title>[sigmoid] Use deserializer from oss. (#121839)</title><link>https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</link><description>&lt;p&gt;[sigmoid] Use deserializer from oss. (#121839)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;br /&gt;
+Old path:&lt;br /&gt;
+thrift -&amp;gt; thrift deserializer -&amp;gt; graph module.&lt;br /&gt;
+new path:&lt;br /&gt;
+thrift -&amp;gt; python dataclass -&amp;gt; oss deserializer -&amp;gt; graph_module&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+CI&lt;br /&gt;
+buck2 test mode/dev-nosan caffe2/test/inductor/fb:test_aot_inductor_pt2_inference&lt;/p&gt;
+&lt;p&gt;Reviewed By: SherlockNoMad&lt;/p&gt;
+&lt;p&gt;Differential Revision: D54855251&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121839&lt;br /&gt;
+Approved by: https://github.com/angelayi&lt;/p&gt;</description><pubDate>Thu, 14 Mar 2024 10:38:58 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c40929219749f3c11be2220497f2a371cbe82ef7</guid></item><item><title>[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)</title><link>https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</link><description>&lt;p&gt;[Inductor] Fix a dynamic shape problem when lowering diagonal (#121881)&lt;/p&gt;
+&lt;p&gt;Summary: when computing the diagonal size, we need to use correct symbolic min/max function.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D54884899"&gt;D54884899&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/121881&lt;br /&gt;
+Approved by: https://github.com/aakhundov&lt;/p&gt;</description><pubDate>Thu, 14 Mar 2024 10:36:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/499136a4dd518775374bcdc8e2f2dc391cf43498</guid></item><item><title>Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)</title><link>https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</link><description>&lt;p&gt;Add CUTLASS kernel as choice for _int_mm() Inductor autotuning (#119685)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119685&lt;br /&gt;
+Approved by: https://github.com/cpuhrsch, https://github.com/kadeng&lt;/p&gt;</description><pubDate>Thu, 14 Mar 2024 05:25:23 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1251f0fa31aca84f6bbd4c32f1b9bfdf33774642</guid></item><item><title>Handle transitive replacements in Triton kernel mutation analysis (#121867)</title><link>https://github.com/pytorch/pytorch/commit/3eb322ff293169c19a3e7381039562e2b08f32be</link><description>&lt;p&gt;Handle transitive replacements in Triton kernel mutation analysis (#121867)&lt;/p&gt;
 &lt;p&gt;Summary: Previously, we didn't handle transitive replacements in MLIR walk-based function info mining in the Triton kernel mutation analysis pass. As a result, for the TTIR below:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;tt.func private @cumsum__fp32S1_16S__1cconstexpr_1__2cconstexpr_False_(%arg0: tensor&amp;lt;1x16xf32&amp;gt; loc("...":296:0)) -&amp;gt; tensor&amp;lt;1x16xf32&amp;gt; attributes {noinline = false} {
     %0 = "tt.scan"(%arg0) &amp;lt;{axis = 1 : i32, reverse = false}&amp;gt; ({
