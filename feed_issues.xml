@@ -5,239 +5,29 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>Enable fx graph cache in torch_test.py when using PYTORCH_TEST_WITH_INDUCTOR=1</title>
-      <link>https://github.com/pytorch/pytorch/pull/122010</link>
+      <title>[aot_inductor][easy] enable test_triton_kernel_multi_output_arg</title>
+      <link>https://github.com/pytorch/pytorch/pull/122052</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122010</p>]]></description>
-      <pubDate>Fri, 15 Mar 2024 16:19:19 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122010</guid>
+* <strong>-&gt;</strong> #122052</p>
+<p>looks like we already support aoti_torch_cuda_sort in C shim.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sun, 17 Mar 2024 01:46:10 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122052</guid>
     </item>
     <item>
-      <title>[inductor] Enable FX graph caching on another round of inductor tests</title>
-      <link>https://github.com/pytorch/pytorch/pull/121994</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #121994</p>
-<p>Summary: Enabling caching for these tests was blocked by https://github.com/pytorch/pytorch/pull/121686</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 15 Mar 2024 13:38:41 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121994</guid>
-    </item>
-    <item>
-      <title>[inductor][cpu]llama_v2_7b_16h AMP dynamic shape single thread performance test will be killed </title>
-      <link>https://github.com/pytorch/pytorch/issues/121887</link>
+      <title>[RFC] Use CUDA graphs by default on torch.compile</title>
+      <link>https://github.com/pytorch/pytorch/issues/121968</link>
       <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>https://github.com/pytorch/pytorch/commit/3d089de851836da8b4b21495a0e1d79e05c9282c<br />
-/workspace/pytorch# bash inductor_single_run.sh single inference performance torchbench llama_v2_7b_16h amp first dynamic<br />
-Testing with dynamic shapes.<br />
-Testing with freezing on.<br />
-single-thread testing....<br />
-/opt/conda/lib/python3.8/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.<br />
-  _torch_pytree._register_pytree_node(<br />
-loading model: 0it [00:40, ?it/s]<br />
-cpu  eval  llama_v2_7b_16h<br />
-skipping cudagraphs due to skipping cudagraphs due to cpu device. Found from :<br />
-   File "benchmarks/dynamo/torchbench.py", line 354, in forward_pass<br />
-    return mod(<em>inputs)<br />
-  File "/workspace/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
-    return forward_call(</em>args, <strong>kwargs)<br />
-  File "/opt/conda/lib/python3.8/site-packages/transformers/models/llama/modeling_llama.py", line 1174, in forward<br />
-    outputs = self.model(<br />
-  File "/workspace/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
-    return forward_call(*args, </strong>kwargs)<br />
-  File "/opt/conda/lib/python3.8/site-packages/transformers/models/llama/modeling_llama.py", line 1011, in forward<br />
-    inputs_embeds = self.embed_tokens(input_ids)</p>
-<p>running benchmark:  78%|██████████████████████████████████████████████             | 39/50 [08:13&lt;02:21, 12.89s/it]inductor_single_run.sh: line 64: 142610 Killed                  numactl -C 0-0 --membind=0 python benchmarks/dynamo/${SUITE}.py --${SCENARIO} --${DT} -dcpu -n50 --no-skip --dashboard --batch-size 1 --threads 1 --only "${MODEL}" ${Channels_extra} ${Shape_extra} ${Mode_extra} ${Flag_extra} --timeout 9000 --backend=${BACKEND} --output=/tmp/inductor_single_test_st.csv</p>
-<p>https://github.com/pytorch/pytorch/commit/26740f853e10e34a7e8d2b72b950875796350418<br />
-/workspace/pytorch# bash inductor_single_run.sh single inference performance torchbench llama_v2_7b_16h amp first dynamic<br />
-Testing with dynamic shapes.<br />
-Testing with freezing on.<br />
-single-thread testing....<br />
-/opt/conda/lib/python3.8/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.<br />
-  _torch_pytree._register_pytree_node(<br />
-loading model: 0it [00:40, ?it/s]<br />
-cpu  eval  llama_v2_7b_16h<br />
-skipping cudagraphs due to skipping cudagraphs due to cpu device. Found from :<br />
-   File "benchmarks/dynamo/torchbench.py", line 354, in forward_pass<br />
-    return mod(<em>inputs)<br />
-  File "/workspace/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
-    return forward_call(</em>args, <strong>kwargs)<br />
-  File "/opt/conda/lib/python3.8/site-packages/transformers/models/llama/modeling_llama.py", line 1174, in forward<br />
-    outputs = self.model(<br />
-  File "/workspace/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
-    return forward_call(*args, </strong>kwargs)<br />
-  File "/opt/conda/lib/python3.8/site-packages/transformers/models/llama/modeling_llama.py", line 1011, in forward<br />
-    inputs_embeds = self.embed_tokens(input_ids)</p>
-<p>running benchmark: 100%|███████████████████████████████████████████████████████████| 50/50 [09:52&lt;00:00, 11.85s/it]<br />
-1.529x<br />
-dev,name,batch_size,speedup,abs_latency,compilation_latency,compression_ratio,eager_peak_mem,dynamo_peak_mem,calls_captured,unique_graphs,graph_breaks,unique_graph_breaks,autograd_captures,autograd_compiles<br />
-cpu,llama_v2_7b_16h,1,1.529177,4678.804700,4.166590,0.871345,4347.434189,4989.334733,959,1,0,0,0,0</p>
+<p>I keep seeing comparisons between JAX / TF / Keras vs <code>torch.compile</code> where they benchmark the "default XLA settings vs. the default <code>torch.compile</code>" to find that XLA frontends are x3-x4 faster than <code>torch.compile</code>.<br />
+The last one I found is the newly posted Keras 3 benchmarks<br />
+https://keras.io/getting_started/benchmarks/ <br />
+but I have seen these skewed comparisons over and over again.</p>
+<p>The only thing stopping us from compiling with CUDA graphs on is that these sometimes have a higher mem footprint. Would it be reasonable to turn these on by default so that people get speed by default, and then catch a potential OOM and re-raise it indicating that using CUDA-graphs off to potentialy mitigate the OOM?</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @jansel @albanD @eellison @Chillee </p>
 <h3>Versions</h3>
-<p></table><p>SW info</p><table border="1" class="dataframe table"><br />
-<br />
-<thead>
-    <tr style="text-align: right;">
-      <th>name</th>
-      <th>target_branch</th>
-      <th>target_commit</th>
-      <th>refer_branch</th>
-      <th>refer_commit</th>
-    </tr>
-  </thead></p>
-<tbody>
-    <tr>
-      <td>torchbench</td>
-      <td>main</td>
-      <td>1ef0a39e</td>
-      <td>main</td>
-      <td>ff42d907</td>
-    </tr>
-    <tr>
-      <td>torch</td>
-      <td>main</td>
-      <td>41286f1505ffb214d386d72e4b72ebd680a4a475</td>
-      <td>main</td>
-      <td>581fe26792849a80f04feaa7f8bdec69b7f41dd8</td>
-    </tr>
-    <tr>
-      <td>torchvision</td>
-      <td>main</td>
-      <td>0.18.0a0+2c127da</td>
-      <td>main</td>
-      <td>0.18.0a0+2c127da</td>
-    </tr>
-    <tr>
-      <td>torchtext</td>
-      <td>main</td>
-      <td>0.16.0a0+b0ebddc</td>
-      <td>main</td>
-      <td>0.16.0a0+b0ebddc</td>
-    </tr>
-    <tr>
-      <td>torchaudio</td>
-      <td>main</td>
-      <td>2.2.0a0+87aeb55</td>
-      <td>main</td>
-      <td>2.2.0a0+87aeb55</td>
-    </tr>
-    <tr>
-      <td>torchdata</td>
-      <td>main</td>
-      <td>0.7.1a0+0790338</td>
-      <td>main</td>
-      <td>0.7.1a0+0790338</td>
-    </tr>
-    <tr>
-      <td>dynamo_benchmarks</td>
-      <td>main</td>
-      <td>nightly</td>
-      <td>main</td>
-      <td>nightly</td>
-    </tr>
-  </tbody>
-
-</table>
-<p>Repro:<br />
-<a href="https://github.com/chuanqi129/inductor-tools/blob/main/scripts/modelbench/inductor_single_run.sh">inductor_single_run.sh</a><br />
-bash inductor_single_run.sh single inference performance torchbench llama_v2_7b_16h amp first dynamic<br />
-<a href="https://github.com/pytorch/pytorch/files/14597204/torchbench-llama_v2_7b_16h-inference-amp-dynamic-default-single-performance-crash_guilty_commit.log">torchbench-llama_v2_7b_16h-inference-amp-dynamic-default-single-performance-crash_guilty_commit.log</a><br />
-Suspected guilty commit: https://github.com/pytorch/pytorch/commit/3d089de851836da8b4b21495a0e1d79e05c9282c<br />
-cc @WeizhuoZhang-intel @chuanqi129</p>]]></description>
-      <pubDate>Wed, 13 Mar 2024 21:57:50 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121887</guid>
-    </item>
-    <item>
-      <title>[Inductor] [ReImplement] Outer Loop Fusion for CPP Backend</title>
-      <link>https://github.com/pytorch/pytorch/pull/121625</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #121625</p>
-<p><strong>Summary</strong><br />
-Re-implement of https://github.com/pytorch/pytorch/pull/121064</p>
-<p><strong>Test Plan</strong><br />
-<code>python -u -m pytest -s -v test_cpu_repro.py -k test_outer_loop_fusion</code></p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 10 Mar 2024 23:44:28 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121625</guid>
-    </item>
-    <item>
-      <title>Inductor: fix Conv output stride for dynamic shapes</title>
-      <link>https://github.com/pytorch/pytorch/pull/121400</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #121400</p>
-<p>Fixes https://github.com/pytorch/pytorch/issues/120873.<br />
-Fixes the output stride of Conv in the case of dynamic shapes. The previous logic in inductor assumed that the output stride of Conv is always channels last while it is actually contiguous if <code>dynamic_shapes and is_contiguous_storage_and_layout(x)</code>.</p>
-<h3>Static shape</h3>
-<p>In static shape cases, since weight is prepacked (<code>weight_t.is_mkldnn()</code> will be <code>true</code>), we'll always force output to be channels last in the Conv kernel, thus it's fine to have the assumption in Inductor that the output stride of Conv is always channels last.<br />
-https://github.com/pytorch/pytorch/blob/96ed37ac13366cc9a7e6645b8955061d0a14f80b/aten/src/ATen/native/mkldnn/Conv.cpp#L357-L358</p>
-<h3>Dynamic shape</h3>
-<p>In dynamic shape cases, we won't do weight prepack for Conv, in this case, the Conv kernel decides the output layout based on the input and weight layout.<br />
-https://github.com/pytorch/pytorch/blob/96ed37ac13366cc9a7e6645b8955061d0a14f80b/torch/_inductor/fx_passes/mkldnn_fusion.py#L1024-L1025</p>
-<p>For input with <code>channels = 1</code>, like tensor of size <code>(s0, 1, 28, 28)</code> and stride <code>(784, 784, 28, 1)</code>, in Inductor, with <code>req_stride_order</code> in channels last order, the <code>require_stride_order</code> on <code>x</code> of such size and stride won't change the stride of the tensor since stride for dimensions of size 1 is ignored<br />
-https://github.com/pytorch/pytorch/blob/96ed37ac13366cc9a7e6645b8955061d0a14f80b/torch/_inductor/ir.py#L5451</p>
-<p>While in Conv kernel, such tensor is consider it as <strong>contiguous</strong> tensor instead of channels last tensor thus the output of the Conv kernel will be in contiguous format.<br />
-https://github.com/pytorch/pytorch/blob/96ed37ac13366cc9a7e6645b8955061d0a14f80b/aten/src/ATen/native/ConvUtils.h#L396-L404</p>
-<p>To align the behavior of the Conv kernel, we set the output_stride in such case to be contiguous instead of channels last.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 07 Mar 2024 01:42:30 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121400</guid>
-    </item>
-    <item>
-      <title>[WIP] Add registration API for torch.compile-eager</title>
-      <link>https://github.com/pytorch/pytorch/pull/121387</link>
-      <description><![CDATA[<p>This PR is a follow-up of RFC https://github.com/pytorch/pytorch/issues/115545.</p>
-<p>In this PR, we are trying to provide a registration mode to implement a single aten operation on the top of <code>torch.compile</code> and then register to aten. </p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #120595<br />
-* #116449<br />
-* #116368<br />
-* #121727<br />
-* <strong>-&gt;</strong> #121387<br />
-* #121296</p>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 06 Mar 2024 22:35:58 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121387</guid>
-    </item>
-    <item>
-      <title>Increased compile time max GPUs to 512. Switched to int16_t DeviceIndex.</title>
-      <link>https://github.com/pytorch/pytorch/pull/119639</link>
-      <description><![CDATA[<p>Fixes #115331.</p>
-<p>This PR increases the number of valid GPU devices to 512 (from 64) in order to future-proof PyTorch for providers that offer <a href="https://www.tensorwave.com/">single nodes with a large device count</a>. Until now, <code>DeviceIndex</code> was an <code>int8_t</code>, thus multiple changes were necessary:</p>
-<ul>
-<li><code>DeviceIndex</code> changed to <code>int16_t</code>. Updated consumers that assume it to be an <code>int8_t</code>.</li>
-<li>Updated bounds checking for <code>torch.device()</code> in the Python frontend. Right now, we allow funny things like <code>torch.device('cpu', 200).index == -56</code>, which is undefined behavior. I inserted some checks to only allow values between 0 and <code>c10::Device::MAX_NUM_DEVICES - 1</code>.</li>
-<li>Updated the <code>ArgumentInfo</code> struct as it hardcodes the device index as 8 bit field [^1]. Might be a breaking change, not sure if users rely on this.</li>
-<li>Introduced <code>c10::Device::MAX_NUM_DEVICES</code> as a replacement for the old <code>C10_COMPILE_TIME_MAX_GPUS</code></li>
-</ul>
-<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225</p>
-<p>[^1]: This field was unsigned, so I guess this has also been undef behavior the whole time? Our default device index is -1, so this always wrapped around to 255 when written to the <code>ArgumentInfo</code> struct. When I switched the <code>DeviceIndex</code> to <code>int16_t</code>, it actually stayed 255 after unpacking from <code>ArgumentInfo</code> again, as the <code>DeviceIndex</code> was now wide enough that it didn't wrap back to -1.</p>]]></description>
-      <pubDate>Sat, 10 Feb 2024 05:14:42 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119639</guid>
-    </item>
-    <item>
-      <title>[WIP] Add a cache mechanism to accelerate torch.compile-for-eager</title>
-      <link>https://github.com/pytorch/pytorch/pull/116368</link>
-      <description><![CDATA[<p>This PR is a follow-up of RFC https://github.com/pytorch/pytorch/issues/115545.</p>
-<p>In this PR, we are trying to provide a cache mechanism to accelerate torch.compile-for-eager. </p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #120595<br />
-* #116449<br />
-* <strong>-&gt;</strong> #116368<br />
-* #121727<br />
-* #121387<br />
-* #121296</p>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
-      <pubDate>Sun, 24 Dec 2023 03:21:18 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116368</guid>
-    </item>
-    <item>
-      <title>[inductor] Move loop ordering after fusion</title>
-      <link>https://github.com/pytorch/pytorch/pull/100331</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #108755<br />
-* <strong>-&gt;</strong> #100331<br />
-* #108193</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang @soumith @anijain2305 @Xia-Weiwen</p>]]></description>
-      <pubDate>Sat, 29 Apr 2023 19:48:12 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/100331</guid>
+<p>master</p>]]></description>
+      <pubDate>Fri, 15 Mar 2024 05:32:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121968</guid>
     </item>
   </channel>
 </rss>
