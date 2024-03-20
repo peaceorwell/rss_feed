@@ -4,9 +4,25 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"</title><link>https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</link><description><![CDATA[<p>Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"</p>
-<p>This reverts commit 5e2687391229cee6e4dc0214f9208b4ecbe058c1.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122147 on behalf of https://github.com/jeanschmidt due to Reverting to see if trunk error in inductor are related (<a href="https://github.com/pytorch/pytorch/pull/122147#issuecomment-2007513000">comment</a>)</p>]]></description><pubDate>Tue, 19 Mar 2024 07:37:24 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</guid></item><item><title>[inductor] disable linear weight prepacking pass on double (#121478)</title><link>https://github.com/pytorch/pytorch/commit/6d9588a12b5834f29bd8970936749a9725e7f609</link><description>&lt;p&gt;[inductor] disable linear weight prepacking pass on double (#121478)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Skip nonzero unbacked SymInt memo in inference mode (#122147)</title><link>https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</link><description><![CDATA[<p>Skip nonzero unbacked SymInt memo in inference mode (#122147)</p>
+<p>Summary: In <code>torch.inference_mode()</code>, fake tensors don't have <code>_version</code>s. This breaks unbacked SymInt memoization in <code>torch.nonzero</code> tracing. Here we disable the latter in inference mode.</p>
+<p>Fixes https://github.com/pytorch/pytorch/issues/122127</p>
+<p>Test Plan:</p>
+<p>```<br />
+$ python test/inductor/test_unbacked_symints.py -k test_nonzero_in_inference_mode<br />
+...</p>
+<hr />
+<p>Ran 2 tests in 14.060s</p>
+<p>OK<br />
+```</p>
+<p>Reviewers:</p>
+<p>Subscribers:</p>
+<p>Tasks:</p>
+<p>Tags:</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122147<br />
+Approved by: https://github.com/ezyang</p>]]></description><pubDate>Wed, 20 Mar 2024 06:44:55 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</guid></item><item><title>Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"</title><link>https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</link><description>&lt;p&gt;Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 5e2687391229cee6e4dc0214f9208b4ecbe058c1.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122147 on behalf of https://github.com/jeanschmidt due to Reverting to see if trunk error in inductor are related (&lt;a href="https://github.com/pytorch/pytorch/pull/122147#issuecomment-2007513000"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Tue, 19 Mar 2024 07:37:24 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</guid></item><item><title>[inductor] disable linear weight prepacking pass on double (#121478)</title><link>https://github.com/pytorch/pytorch/commit/6d9588a12b5834f29bd8970936749a9725e7f609</link><description>&lt;p&gt;[inductor] disable linear weight prepacking pass on double (#121478)&lt;/p&gt;
 &lt;p&gt;Fix #121175&lt;/p&gt;
 &lt;p&gt;Co-authored-by: Jiong Gong &lt;a href="&amp;#109;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#58;&amp;#106;&amp;#105;&amp;#111;&amp;#110;&amp;#103;&amp;#46;&amp;#103;&amp;#111;&amp;#110;&amp;#103;&amp;#64;&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#108;&amp;#46;&amp;#99;&amp;#111;&amp;#109;"&gt;&amp;#106;&amp;#105;&amp;#111;&amp;#110;&amp;#103;&amp;#46;&amp;#103;&amp;#111;&amp;#110;&amp;#103;&amp;#64;&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#108;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;&lt;br /&gt;
 Pull Request resolved: https://github.com/pytorch/pytorch/pull/121478&lt;br /&gt;
