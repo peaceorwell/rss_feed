@@ -4,23 +4,71 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Skip nonzero unbacked SymInt memo in inference mode (#122147)</title><link>https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</link><description><![CDATA[<p>Skip nonzero unbacked SymInt memo in inference mode (#122147)</p>
-<p>Summary: In <code>torch.inference_mode()</code>, fake tensors don't have <code>_version</code>s. This breaks unbacked SymInt memoization in <code>torch.nonzero</code> tracing. Here we disable the latter in inference mode.</p>
-<p>Fixes https://github.com/pytorch/pytorch/issues/122127</p>
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Precompile triton templates (#121998)</title><link>https://github.com/pytorch/pytorch/commit/b8df2f0ca530ebe01fa079c891c170a1f4b22823</link><description><![CDATA[<p>Precompile triton templates (#121998)</p>
+<p>Before this PR we were not precompiling triton templates in parallel. Compilation would occur during benchmarking.</p>
+<p>Triton benchmarking templates were emitted as :</p>
+<p><code>@triton.jit
+def triton_mm(arg_A, arg_B, out_ptr0):</code></p>
+<p>In order to precompile we need to give the full kernel specification, as we do when we emit the template in the final output code generation.</p>
+<p><code>@triton_heuristics.template(
+    num_stages=3,
+    num_warps=8,
+    triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: '*fp32'}, 'device': 0, 'device_type': 'cuda', 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2), equal_to_1=(), ids_of_folded_args=(), divisible_by_8=())]},
+    inductor_meta={'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'backend_hash': 'cdeecfeccd31ad7810f96b5752194b1c2406d0a81e39a6ca09c8ee150baae183'},
+)
+@triton.jit
+def triton_mm(arg_A, arg_B, out_ptr0):</code></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121998<br />
+Approved by: https://github.com/jansel<br />
+ghstack dependencies: #121996, #120275, #121997</p>]]></description><pubDate>Thu, 21 Mar 2024 09:04:53 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b8df2f0ca530ebe01fa079c891c170a1f4b22823</guid></item><item><title>Introduce XPU implementation for PyTorch ATen operators (#120891)</title><link>https://github.com/pytorch/pytorch/commit/148a8de6397be6e4b4ca1508b03b82d117bfb03c</link><description><![CDATA[<p>Introduce XPU implementation for PyTorch ATen operators (#120891)</p>
+<p>As a follow-up to #114835 and #119682, we add limited ATen operators implementation for XPU. With this PR, the blocking issue for oneDNN operations and Inductor XPU backend will be resolved as the two components depend on these operations to support its basic features, respectively.</p>
+<p>The added ATen operators include:</p>
+<ul>
+<li><code>copy_</code>, <code>_to_copy</code>, <code>_copy_from_and_resize</code>, , <code>clone</code></li>
+<li><code>view</code>, <code>view_as_real</code>, <code>view_as_complex</code>,</li>
+<li><code>as_strided</code>, <code>_reshape_alias</code>, <code>resize_</code>, <code>resize_as_</code>,</li>
+<li><code>add</code>/<code>add_</code>, <code>sub</code>/<code>sub_</code>, <code>mul</code>/<code>mul_</code>, <code>div</code>/<code>div_</code>, <code>abs</code>,</li>
+<li><code>empty</code>, <code>empty_strided</code>,</li>
+<li><code>fill_</code>, <code>zeros_</code>.</li>
+</ul>
+<p>Co-authored-by: Wang, Eikan <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#105;&#107;&#97;&#110;&#46;&#119;&#97;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;">&#101;&#105;&#107;&#97;&#110;&#46;&#119;&#97;&#110;&#103;&#64;&#105;&#110;&#116;&#101;&#108;&#46;&#99;&#111;&#109;</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/120891<br />
+Approved by: https://github.com/EikanWang, https://github.com/jgong5, https://github.com/gujinghui, https://github.com/atalman</p>]]></description><pubDate>Thu, 21 Mar 2024 07:42:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/148a8de6397be6e4b4ca1508b03b82d117bfb03c</guid></item><item><title>[BE] Enable torch inductor tests running on MacOS (#122360)</title><link>https://github.com/pytorch/pytorch/commit/f9996ed7643820d9b2191c5bfb8cf28962d41664</link><description><![CDATA[<p>[BE] Enable torch inductor tests running on MacOS (#122360)</p>
+<p>Original idea was limit the testing to just x86 Macs, but right now it will be skipped on all Apple Silicon ones, as all of them have Metal capable GPU</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122360<br />
+Approved by: https://github.com/jansel</p>]]></description><pubDate>Thu, 21 Mar 2024 06:47:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f9996ed7643820d9b2191c5bfb8cf28962d41664</guid></item><item><title>[inductor] Support non-Tensor predicate in torch.cond (#122378)</title><link>https://github.com/pytorch/pytorch/commit/456b112dca17a7d221f1d9c1a83e7b94cf915cbb</link><description><![CDATA[<p>[inductor] Support non-Tensor predicate in torch.cond (#122378)</p>
+<p>Summary: Previously, we only supported torch.Tensor boolean scalar predicate in <code>torch.cond</code> in Inductor. This PR adds support for SymBool and Python bool predicate, to match the <code>torch.cond</code> <a href="https://pytorch.org/docs/stable/generated/torch.cond.html">sematics</a> in Dynamo / Export.</p>
 <p>Test Plan:</p>
 <p>```<br />
-$ python test/inductor/test_unbacked_symints.py -k test_nonzero_in_inference_mode<br />
+$ python test/inductor/test_control_flow.py<br />
 ...</p>
 <hr />
-<p>Ran 2 tests in 14.060s</p>
-<p>OK<br />
+<p>Ran 34 tests in 56.980s</p>
+<p>OK</p>
+<p>$ python test/inductor/test_aot_inductor.py -k test_cond<br />
+...</p>
+<hr />
+<p>Ran 54 tests in 460.093s</p>
+<p>OK (skipped=4)<br />
 ```</p>
-<p>Reviewers:</p>
-<p>Subscribers:</p>
-<p>Tasks:</p>
-<p>Tags:</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122147<br />
-Approved by: https://github.com/ezyang</p>]]></description><pubDate>Wed, 20 Mar 2024 06:44:55 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</guid></item><item><title>Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"</title><link>https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</link><description>&lt;p&gt;Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"&lt;/p&gt;
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122378<br />
+Approved by: https://github.com/jansel, https://github.com/chenyang78</p>]]></description><pubDate>Thu, 21 Mar 2024 06:35:01 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/456b112dca17a7d221f1d9c1a83e7b94cf915cbb</guid></item><item><title>Skip nonzero unbacked SymInt memo in inference mode (#122147)</title><link>https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</link><description>&lt;p&gt;Skip nonzero unbacked SymInt memo in inference mode (#122147)&lt;/p&gt;
+&lt;p&gt;Summary: In &lt;code&gt;torch.inference_mode()&lt;/code&gt;, fake tensors don't have &lt;code&gt;_version&lt;/code&gt;s. This breaks unbacked SymInt memoization in &lt;code&gt;torch.nonzero&lt;/code&gt; tracing. Here we disable the latter in inference mode.&lt;/p&gt;
+&lt;p&gt;Fixes https://github.com/pytorch/pytorch/issues/122127&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+$ python test/inductor/test_unbacked_symints.py -k test_nonzero_in_inference_mode&lt;br /&gt;
+...&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Ran 2 tests in 14.060s&lt;/p&gt;
+&lt;p&gt;OK&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;Reviewers:&lt;/p&gt;
+&lt;p&gt;Subscribers:&lt;/p&gt;
+&lt;p&gt;Tasks:&lt;/p&gt;
+&lt;p&gt;Tags:&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122147&lt;br /&gt;
+Approved by: https://github.com/ezyang&lt;/p&gt;</description><pubDate>Wed, 20 Mar 2024 06:44:55 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2e02e1efad957b86dbcc5b64748e03acfb8d330c</guid></item><item><title>Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"</title><link>https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</link><description>&lt;p&gt;Revert "Skip nonzero unbacked SymInt memo in inference mode (#122147)"&lt;/p&gt;
 &lt;p&gt;This reverts commit 5e2687391229cee6e4dc0214f9208b4ecbe058c1.&lt;/p&gt;
 &lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122147 on behalf of https://github.com/jeanschmidt due to Reverting to see if trunk error in inductor are related (&lt;a href="https://github.com/pytorch/pytorch/pull/122147#issuecomment-2007513000"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Tue, 19 Mar 2024 07:37:24 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7673cb534ade295ffd0b8ebfa9f0528b82945f7d</guid></item><item><title>[inductor] disable linear weight prepacking pass on double (#121478)</title><link>https://github.com/pytorch/pytorch/commit/6d9588a12b5834f29bd8970936749a9725e7f609</link><description>&lt;p&gt;[inductor] disable linear weight prepacking pass on double (#121478)&lt;/p&gt;
 &lt;p&gt;Fix #121175&lt;/p&gt;
