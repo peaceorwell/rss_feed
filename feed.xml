@@ -4,131 +4,136 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[aoti] Add handling of ir.Constants in promote_constants (#122419)</title><link>https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</link><description><![CDATA[<p>[aoti] Add handling of ir.Constants in promote_constants (#122419)</p>
-<p>This issue popped up when enabling predispatch IR on the benchmarks (https://github.com/pytorch/pytorch/pull/122225)</p>
-<p>On the following model:<br />
-```<br />
-class M(torch.nn.Module):<br />
-    def <strong>init</strong>(self, device):<br />
-        super().<strong>init</strong>()<br />
-        self.device = device</p>
-<pre><code>def forward(self, x):
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[EZ][BE] Add missing `acosh` op to vec256_float_neon.h (#122513)</title><link>https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</link><description><![CDATA[<p>[EZ][BE] Add missing <code>acosh</code> op to vec256_float_neon.h (#122513)</p>
+<p>As base class has it<br />
+https://github.com/pytorch/pytorch/blob/ed15370aabf951eec2ba0140de5ff71634868791/aten/src/ATen/cpu/vec/vec_base.h#L367-L369</p>
+<p>Discovered while attempting to enabling Inductor vectorization on ARM platform</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122513<br />
+Approved by: https://github.com/Skylion007</p>]]></description><pubDate>Sat, 23 Mar 2024 06:18:02 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</guid></item><item><title>[aoti] Add handling of ir.Constants in promote_constants (#122419)</title><link>https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</link><description>&lt;p&gt;[aoti] Add handling of ir.Constants in promote_constants (#122419)&lt;/p&gt;
+&lt;p&gt;This issue popped up when enabling predispatch IR on the benchmarks (https://github.com/pytorch/pytorch/pull/122225)&lt;/p&gt;
+&lt;p&gt;On the following model:&lt;br /&gt;
+```&lt;br /&gt;
+class M(torch.nn.Module):&lt;br /&gt;
+    def &lt;strong&gt;init&lt;/strong&gt;(self, device):&lt;br /&gt;
+        super().&lt;strong&gt;init&lt;/strong&gt;()&lt;br /&gt;
+        self.device = device&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def forward(self, x):
     t = torch.tensor(x.size(-1), device=self.device, dtype=torch.float)
     t = torch.sqrt(t * 3)
     return x * t
-</code></pre>
-<p>```</p>
-<p>We get the following error:<br />
-```<br />
-======================================================================<br />
-ERROR: test_constant_abi_compatible_cuda (<strong>main</strong>.AOTInductorTestABICompatibleCuda)</p>
-<hr />
-<p>Traceback (most recent call last):<br />
-  File "/data/users/angelayi/pytorch/torch/testing/_internal/common_utils.py", line 2741, in wrapper<br />
-    method(<em>args, </em><em>kwargs)<br />
-  File "/data/users/angelayi/pytorch/test/inductor/test_torchinductor.py", line 9232, in new_test<br />
-    return value(self)<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(</em>args, <strong>kwds)<br />
-  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor.py", line 922, in test_constant<br />
-    self.check_model(M(self.device), (torch.randn(5, 5, device=self.device),))<br />
-  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor.py", line 91, in check_model<br />
-    actual = AOTIRunnerUtil.run(<br />
-  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor_utils.py", line 102, in run<br />
-    so_path = AOTIRunnerUtil.compile(<br />
-  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor_utils.py", line 40, in compile<br />
-    so_path = torch._inductor.aot_compile_ep(<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/<strong>init</strong>.py", line 150, in aot_compile_ep<br />
-    return compile_fx_aot(<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1005, in compile_fx_aot<br />
-    compiled_lib_path = compile_fx(<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(*args, </strong>kwds)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1111, in compile_fx<br />
-    return compile_fx(<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(<em>args, </em><em>kwds)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1145, in compile_fx<br />
-    return compile_fx(<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(</em>args, <strong>kwds)<br />
-  File "/data/users/angelayi/pytorch/torch/<em>inductor/compile_fx.py", line 1336, in compile_fx<br />
-    return inference_compiler(unlifted_gm, example_inputs</em>)<br />
-  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper<br />
-    r = func(*args, </strong>kwargs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1266, in fw_compiler_base<br />
-    return inner_compile(<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(<em>args, </em><em>kwds)<br />
-  File "/data/users/angelayi/pytorch/torch/_dynamo/repro/after_aot.py", line 83, in debug_wrapper<br />
-    inner_compiled_fn = compiler_fn(gm, example_inputs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/debug.py", line 304, in inner<br />
-    return fn(</em>args, <strong>kwargs)<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(*args, </strong>kwds)<br />
-  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner<br />
-    return func(<em>args, </em><em>kwds)<br />
-  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper<br />
-    r = func(</em>args, <strong>kwargs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 447, in compile_fx_inner<br />
-    compiled_graph = fx_codegen_and_compile(<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 707, in fx_codegen_and_compile<br />
-    graph.run(<em>example_inputs)<br />
-  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper<br />
-    r = func(</em>args, </strong>kwargs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 612, in run<br />
-    return super().run(<em>args)<br />
-  File "/data/users/angelayi/pytorch/torch/fx/interpreter.py", line 145, in run<br />
-    self.env[node] = self.run_node(node)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 957, in run_node<br />
-    result = super().run_node(n)<br />
-  File "/data/users/angelayi/pytorch/torch/fx/interpreter.py", line 202, in run_node<br />
-    return getattr(self, n.op)(n.target, args, kwargs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 819, in call_function<br />
-    raise LoweringException(e, target, args, kwargs).with_traceback(<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 816, in call_function<br />
-    out = lowerings<a href="*args, **kwargs">target</a><br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 298, in wrapped<br />
-    out = decomp_fn(</em>args, **kwargs)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 5340, in mul<br />
-    return make_pointwise(fn)(a, b)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 409, in inner<br />
-    inputs = promote_constants(inputs, override_return_dtype)<br />
-  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 373, in promote_constants<br />
-    ex = next(x for x in inputs if isinstance(x, (TensorBox, ExpandView)))<br />
-torch._inductor.exc.LoweringException: StopIteration:<br />
-  target: aten.mul.Tensor<br />
-  args[0]: Constant(value=5.0, dtype=torch.float32, device=device(type='cuda', index=0))<br />
-  args[1]: 3<br />
-```</p>
-<p>So I added an additional casing in <code>promote_constants</code> to handle the ir.Constants and now it works! Although please let me know if this is the wrong approach. Here's a paste of the full run with the inductor logs: P1198927007</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122419<br />
-Approved by: https://github.com/eellison, https://github.com/desertfire, https://github.com/chenyang78</p>]]></description><pubDate>Fri, 22 Mar 2024 10:39:36 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</guid></item><item><title>[inductor] device guard for max autotune benchmark (#122479)</title><link>https://github.com/pytorch/pytorch/commit/a3d4eaf2531a9aae974ed2eab157a3b3594e7e7b</link><description><![CDATA[<p>[inductor] device guard for max autotune benchmark (#122479)</p>
-<p>Internal users reported that they get failure for max-autotune if tensors are not on device 0. It turns out that we may use tensors on device say 6 and run kernel on them at device 0.</p>
-<p>This PR enforces that we do benchmarking for max-autotune on the correct device.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122479<br />
-Approved by: https://github.com/xintwfb, https://github.com/Chillee</p>]]></description><pubDate>Fri, 22 Mar 2024 09:27:53 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a3d4eaf2531a9aae974ed2eab157a3b3594e7e7b</guid></item><item><title>[aot_inductor] added runtime checks for input/output tensors in debug compile mode (#122047)</title><link>https://github.com/pytorch/pytorch/commit/86082f1fdc336ca89f9b6f8888fba9e87f3a4c06</link><description><![CDATA[<p>[aot_inductor] added runtime checks for input/output tensors in debug compile mode (#122047)</p>
-<p>This PR added runtime checks to guard the dtypes and shapes of input/output tensors.<br />
-Currently, we enable these only for debug compilation<br />
-(i.e. aot_inductor.debug_compile is True) in abi_compatible mode.</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D54993148">D54993148</a><br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/122047<br />
-Approved by: https://github.com/desertfire</p>]]></description><pubDate>Fri, 22 Mar 2024 08:40:33 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/86082f1fdc336ca89f9b6f8888fba9e87f3a4c06</guid></item><item><title>Revert "[Quant] [PT2] Add SiLU  into X86InductorQuantizer Conv2d Unary Annotation (#122267)"</title><link>https://github.com/pytorch/pytorch/commit/60bc29aa0b22dcc06c5778589a9d2b5c4b9fc965</link><description><![CDATA[<p>Revert "[Quant] [PT2] Add SiLU  into X86InductorQuantizer Conv2d Unary Annotation (#122267)"</p>
-<p>This reverts commit 2c6eeb26d3f61fba352ad51fd8653120937a20f3.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122267 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (<a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491">comment</a>)</p>]]></description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/60bc29aa0b22dcc06c5778589a9d2b5c4b9fc965</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op SiLU (#122268)"</title><link>https://github.com/pytorch/pytorch/commit/b30b396d057f3462fbf2a1b46b8f480947dcb6d0</link><description><![CDATA[<p>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op SiLU (#122268)"</p>
-<p>This reverts commit 99f0fec7d0873d627e8c7f2dec65818d725424b0.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122268 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (<a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491">comment</a>)</p>]]></description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b30b396d057f3462fbf2a1b46b8f480947dcb6d0</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardSwish with int8-mix-bf16 (#122373)"</title><link>https://github.com/pytorch/pytorch/commit/777ac511cc98a7edf916e61d0770afac4e37fccc</link><description><![CDATA[<p>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardSwish with int8-mix-bf16 (#122373)"</p>
-<p>This reverts commit 783fd89ff1cf401e484c20d14b16823abf20d87d.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122373 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (<a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491">comment</a>)</p>]]></description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/777ac511cc98a7edf916e61d0770afac4e37fccc</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)"</title><link>https://github.com/pytorch/pytorch/commit/dbedc6bb7cf4cfaab5df85aff2e4dbaf049e6746</link><description><![CDATA[<p>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)"</p>
-<p>This reverts commit 23a6d74f9352e0afb37750fee300d077c4ba9393.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122374 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (<a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491">comment</a>)</p>]]></description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/dbedc6bb7cf4cfaab5df85aff2e4dbaf049e6746</guid></item><item><title>[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)</title><link>https://github.com/pytorch/pytorch/commit/23a6d74f9352e0afb37750fee300d077c4ba9393</link><description><![CDATA[<p>[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)</p>
-<p><strong>Summary</strong><br />
-Enable the fusion pattern of <code>QConv2d -&gt; hardtanh</code> lowering for int8-mixed-bf16 case.</p>
-<p><strong>Test Plan</strong><br />
-<code>python -m pytest test_mkldnn_pattern_matcher.py -k test_qconv2d_hardtanh_int8_mixed_bf16_cpu</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122374<br />
-Approved by: https://github.com/leslie-fang-intel, https://github.com/jgong5<br />
-ghstack dependencies: #122266, #122267, #122268, #122373</p>]]></description><pubDate>Fri, 22 Mar 2024 05:13:14 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/23a6d74f9352e0afb37750fee300d077c4ba9393</guid></item><item><title>Precompile triton templates (#121998)</title><link>https://github.com/pytorch/pytorch/commit/b8df2f0ca530ebe01fa079c891c170a1f4b22823</link><description>&lt;p&gt;Precompile triton templates (#121998)&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;```&lt;/p&gt;
+&lt;p&gt;We get the following error:&lt;br /&gt;
+```&lt;br /&gt;
+======================================================================&lt;br /&gt;
+ERROR: test_constant_abi_compatible_cuda (&lt;strong&gt;main&lt;/strong&gt;.AOTInductorTestABICompatibleCuda)&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Traceback (most recent call last):&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/testing/_internal/common_utils.py", line 2741, in wrapper&lt;br /&gt;
+    method(&lt;em&gt;args, &lt;/em&gt;&lt;em&gt;kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/test/inductor/test_torchinductor.py", line 9232, in new_test&lt;br /&gt;
+    return value(self)&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(&lt;/em&gt;args, &lt;strong&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor.py", line 922, in test_constant&lt;br /&gt;
+    self.check_model(M(self.device), (torch.randn(5, 5, device=self.device),))&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor.py", line 91, in check_model&lt;br /&gt;
+    actual = AOTIRunnerUtil.run(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor_utils.py", line 102, in run&lt;br /&gt;
+    so_path = AOTIRunnerUtil.compile(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/test/inductor/test_aot_inductor_utils.py", line 40, in compile&lt;br /&gt;
+    so_path = torch._inductor.aot_compile_ep(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/&lt;strong&gt;init&lt;/strong&gt;.py", line 150, in aot_compile_ep&lt;br /&gt;
+    return compile_fx_aot(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1005, in compile_fx_aot&lt;br /&gt;
+    compiled_lib_path = compile_fx(&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(*args, &lt;/strong&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1111, in compile_fx&lt;br /&gt;
+    return compile_fx(&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(&lt;em&gt;args, &lt;/em&gt;&lt;em&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1145, in compile_fx&lt;br /&gt;
+    return compile_fx(&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(&lt;/em&gt;args, &lt;strong&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/&lt;em&gt;inductor/compile_fx.py", line 1336, in compile_fx&lt;br /&gt;
+    return inference_compiler(unlifted_gm, example_inputs&lt;/em&gt;)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper&lt;br /&gt;
+    r = func(*args, &lt;/strong&gt;kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 1266, in fw_compiler_base&lt;br /&gt;
+    return inner_compile(&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(&lt;em&gt;args, &lt;/em&gt;&lt;em&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_dynamo/repro/after_aot.py", line 83, in debug_wrapper&lt;br /&gt;
+    inner_compiled_fn = compiler_fn(gm, example_inputs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/debug.py", line 304, in inner&lt;br /&gt;
+    return fn(&lt;/em&gt;args, &lt;strong&gt;kwargs)&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(*args, &lt;/strong&gt;kwds)&lt;br /&gt;
+  File "/home/angelayi/.conda/envs/pytorch10/lib/python3.10/contextlib.py", line 79, in inner&lt;br /&gt;
+    return func(&lt;em&gt;args, &lt;/em&gt;&lt;em&gt;kwds)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper&lt;br /&gt;
+    r = func(&lt;/em&gt;args, &lt;strong&gt;kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 447, in compile_fx_inner&lt;br /&gt;
+    compiled_graph = fx_codegen_and_compile(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/compile_fx.py", line 707, in fx_codegen_and_compile&lt;br /&gt;
+    graph.run(&lt;em&gt;example_inputs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_dynamo/utils.py", line 265, in time_wrapper&lt;br /&gt;
+    r = func(&lt;/em&gt;args, &lt;/strong&gt;kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 612, in run&lt;br /&gt;
+    return super().run(&lt;em&gt;args)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/fx/interpreter.py", line 145, in run&lt;br /&gt;
+    self.env[node] = self.run_node(node)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 957, in run_node&lt;br /&gt;
+    result = super().run_node(n)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/fx/interpreter.py", line 202, in run_node&lt;br /&gt;
+    return getattr(self, n.op)(n.target, args, kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 819, in call_function&lt;br /&gt;
+    raise LoweringException(e, target, args, kwargs).with_traceback(&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/graph.py", line 816, in call_function&lt;br /&gt;
+    out = lowerings&lt;a href="*args, **kwargs"&gt;target&lt;/a&gt;&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 298, in wrapped&lt;br /&gt;
+    out = decomp_fn(&lt;/em&gt;args, **kwargs)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 5340, in mul&lt;br /&gt;
+    return make_pointwise(fn)(a, b)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 409, in inner&lt;br /&gt;
+    inputs = promote_constants(inputs, override_return_dtype)&lt;br /&gt;
+  File "/data/users/angelayi/pytorch/torch/_inductor/lowering.py", line 373, in promote_constants&lt;br /&gt;
+    ex = next(x for x in inputs if isinstance(x, (TensorBox, ExpandView)))&lt;br /&gt;
+torch._inductor.exc.LoweringException: StopIteration:&lt;br /&gt;
+  target: aten.mul.Tensor&lt;br /&gt;
+  args[0]: Constant(value=5.0, dtype=torch.float32, device=device(type='cuda', index=0))&lt;br /&gt;
+  args[1]: 3&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;So I added an additional casing in &lt;code&gt;promote_constants&lt;/code&gt; to handle the ir.Constants and now it works! Although please let me know if this is the wrong approach. Here's a paste of the full run with the inductor logs: P1198927007&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122419&lt;br /&gt;
+Approved by: https://github.com/eellison, https://github.com/desertfire, https://github.com/chenyang78&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 10:39:36 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</guid></item><item><title>[inductor] device guard for max autotune benchmark (#122479)</title><link>https://github.com/pytorch/pytorch/commit/a3d4eaf2531a9aae974ed2eab157a3b3594e7e7b</link><description>&lt;p&gt;[inductor] device guard for max autotune benchmark (#122479)&lt;/p&gt;
+&lt;p&gt;Internal users reported that they get failure for max-autotune if tensors are not on device 0. It turns out that we may use tensors on device say 6 and run kernel on them at device 0.&lt;/p&gt;
+&lt;p&gt;This PR enforces that we do benchmarking for max-autotune on the correct device.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122479&lt;br /&gt;
+Approved by: https://github.com/xintwfb, https://github.com/Chillee&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 09:27:53 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a3d4eaf2531a9aae974ed2eab157a3b3594e7e7b</guid></item><item><title>[aot_inductor] added runtime checks for input/output tensors in debug compile mode (#122047)</title><link>https://github.com/pytorch/pytorch/commit/86082f1fdc336ca89f9b6f8888fba9e87f3a4c06</link><description>&lt;p&gt;[aot_inductor] added runtime checks for input/output tensors in debug compile mode (#122047)&lt;/p&gt;
+&lt;p&gt;This PR added runtime checks to guard the dtypes and shapes of input/output tensors.&lt;br /&gt;
+Currently, we enable these only for debug compilation&lt;br /&gt;
+(i.e. aot_inductor.debug_compile is True) in abi_compatible mode.&lt;/p&gt;
+&lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D54993148"&gt;D54993148&lt;/a&gt;&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/122047&lt;br /&gt;
+Approved by: https://github.com/desertfire&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 08:40:33 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/86082f1fdc336ca89f9b6f8888fba9e87f3a4c06</guid></item><item><title>Revert "[Quant] [PT2] Add SiLU  into X86InductorQuantizer Conv2d Unary Annotation (#122267)"</title><link>https://github.com/pytorch/pytorch/commit/60bc29aa0b22dcc06c5778589a9d2b5c4b9fc965</link><description>&lt;p&gt;Revert "[Quant] [PT2] Add SiLU  into X86InductorQuantizer Conv2d Unary Annotation (#122267)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 2c6eeb26d3f61fba352ad51fd8653120937a20f3.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122267 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (&lt;a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/60bc29aa0b22dcc06c5778589a9d2b5c4b9fc965</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op SiLU (#122268)"</title><link>https://github.com/pytorch/pytorch/commit/b30b396d057f3462fbf2a1b46b8f480947dcb6d0</link><description>&lt;p&gt;Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op SiLU (#122268)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 99f0fec7d0873d627e8c7f2dec65818d725424b0.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122268 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (&lt;a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b30b396d057f3462fbf2a1b46b8f480947dcb6d0</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardSwish with int8-mix-bf16 (#122373)"</title><link>https://github.com/pytorch/pytorch/commit/777ac511cc98a7edf916e61d0770afac4e37fccc</link><description>&lt;p&gt;Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardSwish with int8-mix-bf16 (#122373)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 783fd89ff1cf401e484c20d14b16823abf20d87d.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122373 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (&lt;a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/777ac511cc98a7edf916e61d0770afac4e37fccc</guid></item><item><title>Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)"</title><link>https://github.com/pytorch/pytorch/commit/dbedc6bb7cf4cfaab5df85aff2e4dbaf049e6746</link><description>&lt;p&gt;Revert "[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 23a6d74f9352e0afb37750fee300d077c4ba9393.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122374 on behalf of https://github.com/jeanschmidt due to Not sure if this PR caused breakages in main rocm jobs, I'll remerge if reverting does not fix it (&lt;a href="https://github.com/pytorch/pytorch/pull/122267#issuecomment-2015294491"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 07:04:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/dbedc6bb7cf4cfaab5df85aff2e4dbaf049e6746</guid></item><item><title>[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)</title><link>https://github.com/pytorch/pytorch/commit/23a6d74f9352e0afb37750fee300d077c4ba9393</link><description>&lt;p&gt;[Quant] [Inductor] Enable the Inductor Lowering of QConv2d post op HardTanh with int8-mix-bf16 (#122374)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;br /&gt;
+Enable the fusion pattern of &lt;code&gt;QConv2d -&amp;gt; hardtanh&lt;/code&gt; lowering for int8-mixed-bf16 case.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test Plan&lt;/strong&gt;&lt;br /&gt;
+&lt;code&gt;python -m pytest test_mkldnn_pattern_matcher.py -k test_qconv2d_hardtanh_int8_mixed_bf16_cpu&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122374&lt;br /&gt;
+Approved by: https://github.com/leslie-fang-intel, https://github.com/jgong5&lt;br /&gt;
+ghstack dependencies: #122266, #122267, #122268, #122373&lt;/p&gt;</description><pubDate>Fri, 22 Mar 2024 05:13:14 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/23a6d74f9352e0afb37750fee300d077c4ba9393</guid></item><item><title>Precompile triton templates (#121998)</title><link>https://github.com/pytorch/pytorch/commit/b8df2f0ca530ebe01fa079c891c170a1f4b22823</link><description>&lt;p&gt;Precompile triton templates (#121998)&lt;/p&gt;
 &lt;p&gt;Before this PR we were not precompiling triton templates in parallel. Compilation would occur during benchmarking.&lt;/p&gt;
 &lt;p&gt;Triton benchmarking templates were emitted as :&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;@triton.jit
