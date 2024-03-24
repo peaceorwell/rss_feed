@@ -5,99 +5,51 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>[Inductor] Support custom op in cpp wrapper codegen</title>
-      <link>https://github.com/pytorch/pytorch/pull/122554</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122554</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @chauhang</p>]]></description>
-      <pubDate>Sat, 23 Mar 2024 08:21:51 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122554</guid>
+      <title>[CPPInductor] Fix another out-of-bounds access</title>
+      <link>https://github.com/pytorch/pytorch/pull/122580</link>
+      <description><![CDATA[<p>Not sure what was the idea behind <code>{self.tiling_factor}*sizeof(float)/sizeof({DTYPE_TO_CPP[dtype]})</code> size calculation (perhaps copy-n-paste error during the refactor made by https://github.com/pytorch/pytorch/pull/97626  ) , but <code>Vectorized::store(ptr, tiling_factor)</code> needs at least <code>tiling_factor</code> elements, not <code>tiling_factor/2</code> (which would be the case with the original calculation if data type is 64-bit value such as int64)<br />
+Discovered while trying to enable arch64 vectorized inductor. <br />
+Minimal reproducer (reproducible on ARMv8 or any  x86_64 machine that does not support AVX512):<br />
+```python<br />
+import torch<br />
+def do_ds(x, y):<br />
+    return torch.diagonal_scatter(x, y)</p>
+<p>x=torch.ones(10, 10, dtype=torch.int64)<br />
+y=torch.tensor([ 1,  2, -8,  8,  5,  5, -7, -8,  7,  0])<br />
+dsc = torch.compile(do_ds)<br />
+assert torch.allclose(torch.diagonal_scatter(x, y), dsc(x, y))<br />
+```</p>]]></description>
+      <pubDate>Sun, 24 Mar 2024 10:42:13 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122580</guid>
     </item>
     <item>
-      <title>AOT Compiled SAM Model produces different result than Eager Model</title>
-      <link>https://github.com/pytorch/pytorch/issues/122553</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>An AOT-compiled SAM Model produces a different result than the Eager Version. </p>
-<p>The change needed to make both models produce the same result is <a href="https://github.com/facebookresearch/segment-anything/blob/main/segment_anything/modeling/sam.py#L167">avoiding</a> standard-normalizing the image input:<br />
-<code>x = (x - self.pixel_mean) / self.pixel_std</code><br />
-I could not reproduce this error in a stand-alone example containing a module whose forward pass only does such normalization. </p>
-<p>I can provide a reproducible repo that permits AOT compiling SAM, but to understand AOT Compiled models better, I wonder whether I can also infer which precise kernels were called by the compiled model and the eager model by introspection? Or would there be another way to gain more information on why the models reproduce different results?  </p>
-<h3>Versions</h3>
-<p>Collecting environment information...<br />
-PyTorch version: 2.2.0+cu121<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 12.1<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.22.1<br />
-Libc version: glibc-2.35</p>
-<p>Python version: 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] (64-bit runtime)<br />
-Python platform: Linux-5.15.0-91-generic-x86_64-with-glibc2.35<br />
-Is CUDA available: True<br />
-CUDA runtime version: 11.8.89<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA RTX A5000<br />
-Nvidia driver version: 535.146.02<br />
-cuDNN version: Could not collect<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Architecture:                       x86_64<br />
-CPU op-mode(s):                     32-bit, 64-bit<br />
-Address sizes:                      46 bits physical, 48 bits virtual<br />
-Byte Order:                         Little Endian<br />
-CPU(s):                             40<br />
-On-line CPU(s) list:                0-39<br />
-Vendor ID:                          GenuineIntel<br />
-Model name:                         Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz<br />
-CPU family:                         6<br />
-Model:                              85<br />
-Thread(s) per core:                 2<br />
-Core(s) per socket:                 10<br />
-Socket(s):                          2<br />
-Stepping:                           4<br />
-CPU max MHz:                        3000.0000<br />
-CPU min MHz:                        800.0000<br />
-BogoMIPS:                           4400.00<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti intel_ppin ssbd mba ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke md_clear flush_l1d arch_capabilities<br />
-Virtualization:                     VT-x<br />
-L1d cache:                          640 KiB (20 instances)<br />
-L1i cache:                          640 KiB (20 instances)<br />
-L2 cache:                           20 MiB (20 instances)<br />
-L3 cache:                           27.5 MiB (2 instances)<br />
-NUMA node(s):                       2<br />
-NUMA node0 CPU(s):                  0-9,20-29<br />
-NUMA node1 CPU(s):                  10-19,30-39<br />
-Vulnerability Gather data sampling: Mitigation; Microcode<br />
-Vulnerability Itlb multihit:        KVM: Mitigation: VMX disabled<br />
-Vulnerability L1tf:                 Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable<br />
-Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT vulnerable<br />
-Vulnerability Meltdown:             Mitigation; PTI<br />
-Vulnerability Mmio stale data:      Mitigation; Clear CPU buffers; SMT vulnerable<br />
-Vulnerability Retbleed:             Mitigation; IBRS<br />
-Vulnerability Spec rstack overflow: Not affected<br />
-Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
-Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; IBRS, IBPB conditional, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected<br />
-Vulnerability Srbds:                Not affected<br />
-Vulnerability Tsx async abort:      Mitigation; Clear CPU buffers; SMT vulnerable</p>
-<p>Versions of relevant libraries:<br />
-[pip3] flake8==7.0.0<br />
-[pip3] mypy==1.9.0<br />
-[pip3] mypy-extensions==1.0.0<br />
-[pip3] numpy==1.24.1<br />
-[pip3] torch==2.2.0<br />
-[pip3] torchaudio==2.1.0+cu118<br />
-[pip3] torchdata==0.7.1<br />
-[pip3] torchtext==0.17.0<br />
-[pip3] torchvision==0.17.0<br />
-[pip3] triton==2.2.0<br />
-[conda] Could not collect</p>]]></description>
-      <pubDate>Sat, 23 Mar 2024 03:19:23 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122553</guid>
+      <title>Recompiles and cache_size_limit from detectron2 CycleBatchNormList</title>
+      <link>https://github.com/pytorch/pytorch/issues/122578</link>
+      <description><![CDATA[<p>Running<br />
+<code>./benchmarks/dynamo/torchbench.py --inference --performance --only detectron2_fcos_r_50_fpn --stats --dynamic-shapes</code><br />
+I am seeing<br />
+<code>py
+WARNING:torch._dynamo.convert_frame:torch._dynamo hit config.cache_size_limit (8)
+   function: 'forward' (/home/jansel/conda/envs/pytorch/lib/python3.11/site-packages/detectron2/layers/batch_norm.py:318)
+   last reason: L['self']._pos == 0</code></p>
+<p>The root cause is this class (slightly minified by hand):<br />
+```py<br />
+class CycleBatchNormList(nn.ModuleList):<br />
+    def <strong>init</strong>(self, length: int, bn_class=nn.BatchNorm2d, <strong>kwargs):<br />
+        super().<strong>init</strong>([bn_class(</strong>kwargs, affine=False) for k in range(length)])<br />
+        self._pos = 0</p>
+<pre><code>def forward(self, x):
+    ret = self[self._pos](x)
+    self._pos = (self._pos + 1) % len(self)
+    return ret
+</code></pre>
+<p>```</p>
+<p>TorchDynamo is correctly detecting the mutation of <code>self._pos</code> and mapping the class to <code>UnspecializedNNModuleVariable</code>, however the <code>self[self._pos]</code> is causing issues because it results in different weights being used each iteration.</p>
+<p>This is a particularly tricky case to handle, since it is hard to prove that all values of <code>self._pos</code> will result in the same graph.  We also do not support indirect guards, so it is not possible to have a guard on <code>self[self._pos].blah</code>.</p>
+<p>As a concrete action item, I think we should detect this type of pattern and graph break on it.  This would be a lot better than recompiling and hitting the cache limit, since it would allow us to optimize other parts of the model.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
+      <pubDate>Sun, 24 Mar 2024 08:45:27 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122578</guid>
     </item>
     <item>
       <title>[inductor] Fix bug with freezing + split_cat passes</title>
@@ -110,1287 +62,257 @@ Vulnerability Tsx async abort:      Mitigation; Clear CPU buffers; SMT vulnerabl
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122544</guid>
     </item>
     <item>
-      <title>[Inductor] Run pattern matcher over the original graph</title>
-      <link>https://github.com/pytorch/pytorch/pull/122519</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122331<br />
-* #122258<br />
-* #122257<br />
-* #122256<br />
-* #122255<br />
-* #121565<br />
-* <strong>-&gt;</strong> #122519</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 22 Mar 2024 13:00:08 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122519</guid>
-    </item>
-    <item>
-      <title>Higher peak memory with torch.compile</title>
-      <link>https://github.com/pytorch/pytorch/issues/122512</link>
+      <title>[torch.compile] `conv_add` optimization will omit the `alpha` argument</title>
+      <link>https://github.com/pytorch/pytorch/issues/122382</link>
       <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>If I fuse the backward with compiled forward+loss, there's a higher peak memory than if I separate the backward from compiled forward+loss. It looks like the logits aren't being cleared.</p>
-<p>Fused forward+loss+backward:<br />
-```<br />
-@torch.compile<br />
-def fused_forward_and_loss_and_backward(input_ids, labels):<br />
-    logits = model.forward(input_ids)<br />
-    loss = F.cross_entropy(logits.view(-1, logits.shape[-1]).float(), labels.view(-1))<br />
-    # del logits # doesn't change peak memory<br />
-    loss.backward()<br />
-    return loss<br />
-...</p>
-<h1>usage:</h1>
-<p>loss = fused_forward_and_loss_and_backward(batch_input_ids, gas_labels)<br />
-print("peak memory usage", torch.cuda.max_memory_allocated())<br />
-<code>Results:</code><br />
-peak memory usage 22139266048 (first step)<br />
-peak memory usage 23943063552 (second step)<br />
-peak memory usage 23943063552 (third step)<br />
-```</p>
-<p>Fused forward+loss, separated backward:</p>
-<p>```<br />
-@torch.compile<br />
-def fused_forward_and_loss(input_ids, labels):<br />
-    logits = model.forward(input_ids)<br />
-    loss = F.cross_entropy(logits.view(-1, logits.shape[-1]).float(), labels.view(-1))<br />
-    # loss.backward() # no backward here!<br />
-    return loss<br />
-...</p>
-<h1>usage:</h1>
-<p>loss = fused_forward_and_loss(batch_input_ids, gas_labels)<br />
-loss.backward()<br />
-print("peak memory usage", torch.cuda.max_memory_allocated())<br />
-```</p>
-<p>Results:<br />
-<code>peak memory usage 19991782400
-peak memory usage 21795579392
-peak memory usage 21795579392</code></p>
-<p>Memory traces:<br />
-https://drive.google.com/file/d/18UywAfWmBDNJMzbCy44KVUy6qCug3cxX/view?usp=sharing<br />
-https://drive.google.com/file/d/1A0Cu9fAbJS1dbzBJvRmm-0U1ygsmtT9W/view?usp=sharing</p>
-<h3>Error logs</h3>
-<p><em>No response</em></p>
-<h3>Minified repro</h3>
-<p><em>No response</em></p>
-<h3>Versions</h3>
-<p>Collecting environment information...<br />
-PyTorch version: 2.2.0<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 12.2<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 22.04.4 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.28.3<br />
-Libc version: glibc-2.35</p>
-<p>Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] (64-bit runtime)<br />
-Python platform: Linux-5.19.17-coreweave-x86_64-with-glibc2.35<br />
-Is CUDA available: True<br />
-CUDA runtime version: 12.2.140<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA A40<br />
-Nvidia driver version: 535.161.07<br />
-cuDNN version: Probably one of the following:<br />
-/usr/lib/x86_64-linux-gnu/libcudnn.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.9.6<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Architecture:                    x86_64<br />
-CPU op-mode(s):                  32-bit, 64-bit<br />
-Address sizes:                   48 bits physical, 48 bits virtual<br />
-Byte Order:                      Little Endian<br />
-CPU(s):                          96<br />
-On-line CPU(s) list:             0-95<br />
-Vendor ID:                       AuthenticAMD<br />
-Model name:                      AMD EPYC 7413 24-Core Processor<br />
-CPU family:                      25<br />
-Model:                           1<br />
-Thread(s) per core:              2<br />
-Core(s) per socket:              24<br />
-Socket(s):                       2<br />
-Stepping:                        1<br />
-Frequency boost:                 enabled<br />
-CPU max MHz:                     3630.8101<br />
-CPU min MHz:                     1500.0000<br />
-BogoMIPS:                        5299.98<br />
-Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 invpcid_single hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin brs arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm<br />
-Virtualization:                  AMD-V<br />
-L1d cache:                       1.5 MiB (48 instances)<br />
-L1i cache:                       1.5 MiB (48 instances)<br />
-L2 cache:                        24 MiB (48 instances)<br />
-L3 cache:                        256 MiB (8 instances)<br />
-NUMA node(s):                    2<br />
-NUMA node0 CPU(s):               0-23,48-71<br />
-NUMA node1 CPU(s):               24-47,72-95<br />
-Vulnerability Itlb multihit:     Not affected<br />
-Vulnerability L1tf:              Not affected<br />
-Vulnerability Mds:               Not affected<br />
-Vulnerability Meltdown:          Not affected<br />
-Vulnerability Mmio stale data:   Not affected<br />
-Vulnerability Retbleed:          Not affected<br />
-Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl<br />
-Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP always-on, RSB filling, PBRSB-eIBRS Not affected<br />
-Vulnerability Srbds:             Not affected<br />
-Vulnerability Tsx async abort:   Not affected</p>
-<p>Versions of relevant libraries:<br />
-[pip3] numpy==1.26.4<br />
-[pip3] torch==2.2.0<br />
-[pip3] torchaudio==2.2.0<br />
-[pip3] torchvision==0.17.0<br />
-[pip3] triton==2.2.0<br />
-[conda] Could not collect</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Fri, 22 Mar 2024 10:41:05 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122512</guid>
-    </item>
-    <item>
-      <title>[inductor] Fix issue with randint + symbolic shapes</title>
-      <link>https://github.com/pytorch/pytorch/pull/122428</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122428</p>
-<p>Fixes #122405</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 21 Mar 2024 11:20:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122428</guid>
-    </item>
-    <item>
-      <title>Use graph.find_nodes in inductor</title>
-      <link>https://github.com/pytorch/pytorch/pull/122256</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122331<br />
-* #122258<br />
-* #122257<br />
-* <strong>-&gt;</strong> #122256<br />
-* #122255<br />
-* #121565<br />
-* #122519</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 19 Mar 2024 17:27:14 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122256</guid>
-    </item>
-    <item>
-      <title>Use graph.find_nodes in inductor/fx_passes</title>
-      <link>https://github.com/pytorch/pytorch/pull/122255</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122331<br />
-* #122258<br />
-* #122257<br />
-* #122256<br />
-* <strong>-&gt;</strong> #122255<br />
-* #121565<br />
-* #122519</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 19 Mar 2024 17:27:08 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122255</guid>
-    </item>
-    <item>
-      <title>Bug in `torch.compile` with standard type checking tools beartype</title>
-      <link>https://github.com/pytorch/pytorch/issues/122093</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>Reproduction script: </p>
-<p>```<br />
-import torch <br />
-from torch import nn<br />
-from beartype import beartype <br />
-from jaxtyping import Float</p>
-<p>class Net(nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super(Net, self).<strong>init</strong>()<br />
-        self.conv1 = nn.Conv2d(1, 20, 5)<br />
-        self.conv2 = nn.Conv2d(20, 20, 5)</p>
-<pre><code>def forward(self, x):
-    x = nn.functional.relu(self.conv1(x))
-    return nn.functional.relu(self.conv2(x))
-</code></pre>
-<p>class BearNet(nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super(Net, self).<strong>init</strong>()<br />
-        self.conv1 = nn.Conv2d(1, 20, 5)<br />
-        self.conv2 = nn.Conv2d(20, 20, 5)</p>
-<pre><code>@beartype
-def forward(self, x):
-    x = nn.functional.relu(self.conv1(x))
-    return nn.functional.relu(self.conv2(x))
-</code></pre>
-<p>if <strong>name</strong> == "<strong>main</strong>":<br />
-    net = Net()<br />
-    x = torch.randn(1, 1, 28, 28)<br />
-    y = net(x)<br />
-    print(y)</p>
-<pre><code>model = torch.compile(net)
-y = model(x)
-print(y)
+<p>The <code>conv_add</code> optimization overlooks the <code>alpha</code> parameter. In the model provided, the <code>torch.compile</code> method assumes <code>alpha=1</code> by default, whereas the actual value of <code>alpha</code> is 0.85. This discrepancy leads to a variation in the output compared to a straightforward execution.</p>
+<p>```py<br />
+import torch</p>
+<p>torch.manual_seed(420)</p>
+<p>class Model(torch.nn.Module):</p>
+<pre><code>def __init__(self):
+    super().__init__()
+    self.conv = torch.nn.Conv2d(3, 2, 1, stride=1, padding=1)
+    self.other_tensor = torch.randn(2, 1, 1)
 
-net = BearNet()
-x = torch.randn(1, 1, 28, 28)
-y = net(x)
-print('with beartype: ', y)
-
-model = torch.compile(net)
-y = model(x)
-print('with beartype: ', y)
+def forward(self, x1):
+    v1 = self.conv(x1)
+    v2 = torch.add(v1, self.other_tensor, alpha=0.875)
+    return v2
 </code></pre>
-<p>```</p>
-<p>First this throws an error that asks for installing something (Mac OS 14):</p>
-<p><code>OpenMP support not found. Please try one of the following solutions:
-(1) Set the `CXX` environment variable to a compiler other than Apple clang++/g++ that has builtin OpenMP support;
-(2) install OpenMP via conda: `conda install llvm-openmp`;
-(3) install libomp via brew: `brew install libomp`;
-(4) manually setup OpenMP and set the `OMP_PREFIX` environment variable to point to a path with `include/omp.h` under it.</code></p>
-<p>After installing libomp: <code>brew install libomp</code>, this works. </p>
-<p>However, then this next reproduction script breaks: </p>
-<p>```<br />
-import torch <br />
-from torch import nn<br />
-from beartype import beartype <br />
-from jaxtyping import Float<br />
-from torch import Tensor</p>
-<p>class Net(nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super(Net, self).<strong>init</strong>()<br />
-        self.conv1 = nn.Conv2d(1, 20, 5)<br />
-        self.conv2 = nn.Conv2d(20, 20, 5)</p>
-<pre><code>def forward(self, x):
-    x = nn.functional.relu(self.conv1(x))
-    return nn.functional.relu(self.conv2(x))
-</code></pre>
-<p>class BearNet(nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super(BearNet, self).<strong>init</strong>()<br />
-        self.conv1 = nn.Conv2d(1, 20, 5)<br />
-        self.conv2 = nn.Conv2d(20, 20, 5)</p>
-<pre><code>@beartype
-def forward(self, x):
-    x = nn.functional.relu(self.conv1(x))
-    return nn.functional.relu(self.conv2(x))
-</code></pre>
-<p>class BearNetJaxTyped(nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super(BearNetJaxTyped, self).<strong>init</strong>()<br />
-        self.conv1 = nn.Conv2d(1, 20, 5)<br />
-        self.conv2 = nn.Conv2d(20, 20, 5)</p>
-<pre><code>@beartype
-def forward(self, x: Float[Tensor, "1 1 28 28"]):
-    x = nn.functional.relu(self.conv1(x))
-    return nn.functional.relu(self.conv2(x))
-</code></pre>
-<p>if <strong>name</strong> == "<strong>main</strong>":<br />
-    net = Net()<br />
-    x = torch.randn(1, 1, 28, 28)<br />
-    y = net(x)<br />
-    print(y)</p>
-<pre><code>model = torch.compile(net)
-y = model(x)
-print(y)
+<p>func = Model().to('cpu')</p>
+<p>x = torch.randn(1, 3, 2, 2)</p>
+<p>with torch.no_grad():<br />
+    print(func(x.clone()))</p>
+<pre><code>func1 = torch.compile(func)
+print(func1(x.clone()))
 
-net = BearNet()
-x = torch.randn(1, 1, 28, 28)
-y = net(x)
-print('with beartype: ', y)
-
-model = torch.compile(net)
-y = model(x)
-print('with beartype: ', y)
-
-net = BearNetJaxTyped()
-x = torch.randn(1, 1, 28, 28)
-y = net(x)
-print('with beartype: ', y)
-
-model = torch.compile(net)
-y = model(x)
-print('with beartype: ', y)
+print(torch.allclose(func.other_tensor, func1.other_tensor)) # True
 </code></pre>
-<p>```</p>
-<p>Results:</p>
-<p>```<br />
-  File "/Users/me/projects/phare-sandbox/.venv/lib/python3.11/site-packages/torch/_dynamo/guards.py", line 235, in get<br />
-    return eval(name, self.scope, CLOSURE_VARS)<br />
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
-  File "<string>", line 1, in <module><br />
-torch._dynamo.exc.InternalTorchDynamoError: '_thread._local' object has no attribute 'value'</p>
-<p>You can suppress this exception and fall back to eager by setting:<br />
-    import torch._dynamo<br />
-    torch._dynamo.config.suppress_errors = True<br />
-```</p>
-<p>This script runs fine when disabling beartype:</p>
-<p><code>PYTHONOPTIMIZE=1 python test_compile.py
-... prints out tensors</code></p>
-<p>This is also an issue on Ubuntu virtual machines (e.g. on AWS), and on Jupyter notebooks; workaround for now: https://github.com/beartype/beartype/issues/341 </p>
-<p>Discussion: https://github.com/beartype/beartype/issues/343</p>
-<p>From @justinchuby : </p>
-<p>```quote<br />
-If I have to guess, is it this line?</p>
-<p>https://github.com/pytorch/pytorch/blob/6d9588a12b5834f29bd8970936749a9725e7f609/torch/_dynamo/guards.py#L316</p>
-<p>t = type(self.get(guard.name))</p>
-<p>and somehow in eval(name, self.scope, CLOSURE_VARS) it is trying to access value which does not exist?<br />
+<p>"""<br />
+tensor([[[[ 1.7728,  1.7728,  1.7728,  1.7728],<br />
+          [ 1.7728,  2.1860,  1.7604,  1.7728],<br />
+          [ 1.7728,  0.9550,  2.3261,  1.7728],<br />
+          [ 1.7728,  1.7728,  1.7728,  1.7728]],</p>
+<pre><code>     [[ 0.2579,  0.2579,  0.2579,  0.2579],
+      [ 0.2579, -0.5048,  0.6618,  0.2579],
+      [ 0.2579,  0.9659,  0.0888,  0.2579],
+      [ 0.2579,  0.2579,  0.2579,  0.2579]]]])
+</code></pre>
+<p>tensor([[[[ 1.9624,  1.9624,  1.9624,  1.9624],<br />
+          [ 1.9624,  2.3757,  1.9500,  1.9624],<br />
+          [ 1.9624,  1.1447,  2.5158,  1.9624],<br />
+          [ 1.9624,  1.9624,  1.9624,  1.9624]],</p>
+<pre><code>     [[ 0.2639,  0.2639,  0.2639,  0.2639],
+      [ 0.2639, -0.4989,  0.6677,  0.2639],
+      [ 0.2639,  0.9718,  0.0947,  0.2639],
+      [ 0.2639,  0.2639,  0.2639,  0.2639]]]])
+</code></pre>
+<p>"""<br />
 ```</p>
 <h3>Versions</h3>
 <p>```<br />
-❯ python collect_env.py <br />
 Collecting environment information...<br />
-PyTorch version: 2.1.2<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: None<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: macOS 14.4 (arm64)<br />
-GCC version: Could not collect<br />
-Clang version: 17.0.6<br />
-CMake version: Could not collect<br />
-Libc version: N/A</p>
-<p>Python version: 3.11.5 (main, Sep 11 2023, 08:31:25) [Clang 14.0.6 ] (64-bit runtime)<br />
-Python platform: macOS-14.4-arm64-arm-64bit<br />
-Is CUDA available: False<br />
-CUDA runtime version: No CUDA<br />
-CUDA_MODULE_LOADING set to: N/A<br />
-GPU models and configuration: No CUDA<br />
-Nvidia driver version: No CUDA<br />
-cuDNN version: No CUDA<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Apple M3 Pro</p>
-<p>Versions of relevant libraries:<br />
-[pip3] mypy-extensions==1.0.0<br />
-[pip3] numpy==1.26.2<br />
-[pip3] torch==2.1.2<br />
-[pip3] torchaudio==2.1.2<br />
-[pip3] torcheval==0.0.7<br />
-[pip3] torchvision==0.16.2<br />
-[conda] No relevant packages<br />
-```</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang</p>]]></description>
-      <pubDate>Mon, 18 Mar 2024 06:23:32 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122093</guid>
-    </item>
-    <item>
-      <title>GPT2 SDPA inference pattern-matching for Inductor-CPU</title>
-      <link>https://github.com/pytorch/pytorch/pull/121866</link>
-      <description><![CDATA[<h3>Summary</h3>
-<p>With this PR, SDPA pattern of GPT2 is being mapped to <code>torch.nn.functional.scaled_dot_product_attention</code>.<br />
-While GPT2 supports both a causal mask &amp; an attention mask, this PR considers the case of attention mask being absent.<br />
-TorchBench inference workload for GPT2 also doesn't use an attention-mask.</p>
-<p>This pattern's replacement is being disabled for CUDA because <a href="https://github.com/pytorch/pytorch/actions/runs/8319111885/job/22762567770">CUDA AOT Inductor</a> CI job's <code>GPT2ForSequenceClassification</code> accuracy test failed, although all other trunk CUDA Inductor CI checks had passed.<br />
-Created #122429 to track that particular issue.</p>
-<h3>CPU performance data with TorchBench</h3>
-<p>|MODEL |BATCH SIZE | DTYPE | BEFORE: Speedup over eager-mode with the default Inductor implementation | AFTER: Speedup over eager mode with SDPA op mapped| Perf boost = (AFTER - BEFORE)/BEFORE * 100|<br />
-|--------------------------|-------------|---------|-----------------------------|--------------------------|------------|<br />
-|hf_GPT2| 1 | FP32 | 1.522x | 1.791x| 17.67%|<br />
-|hf_GPT2| 1 | BF16 (AMP) | 1.795x | 2.387x| 32.98%|<br />
-|hf_GPT2| 2 | FP32 |  1.313x |1.629x | 19.3%|<br />
-|hf_GPT2|2| BF16 (AMP) | 1.556x | 1.924x | 23.65%|<br />
-|hf_GPT2_large| 1 | FP32 | 1.380x |1.585x | 12.93%|<br />
-|hf_GPT2_large| 1 | BF16 (AMP) | 1.208x | 1.567x | 22.91%|<br />
-|hf_GPT2_large| 2 | FP32 | 1.188x | 1.490x | 25.42%|<br />
-|hf_GPT2_large|2| BF16 (AMP) | 0.991x | 1.575x | 58.93%|</p>
-<p>Machine - Intel(R) Xeon(R) Platinum 8468H (Xeon 4th gen Sapphire Rapids)<br />
-48 physical cores were used. Intel OpenMP &amp; libtcmalloc were preloaded.</p>
-<p>Example command -<br />
-<code>OMP_NUM_THREADS=48 MKL_NUM_THREADS=48 numactl --membind=0 --cpunodebind=0 -C 0-47 python benchmarks/dynamo/torchbench.py --performance --inference --inductor --float32 -dcpu --only hf_GPT2_large --freezing --batch-size 1</code></p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 13 Mar 2024 15:27:30 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121866</guid>
-    </item>
-    <item>
-      <title>can't compile torchvision RPN with AOTInductor</title>
-      <link>https://github.com/pytorch/pytorch/issues/121036</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>I try to compile an object detection model that uses torchvison's rpn module. it fails when generating anchors with <code>AssertionError: Mutating module attribute cell_anchors during export.</code> I think this is related to https://github.com/pytorch/pytorch/issues/108805</p>
-<h3>Error logs</h3>
-<p>```python<br />
-I0301 19:15:52.323000 140521716340544 torch/fx/experimental/symbolic_shapes.py:1869] [0/0] create_env<br />
-I0301 19:15:52.435000 140521716340544 torch/fx/experimental/symbolic_shapes.py:2620] [0/0] create_symbol s0 = 2 for L['batch_tensor'].size()[0] [2, 13] (_dynamo/variables/builder.py:1791 in <lambda>)<br />
-V0301 19:15:52.437000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval True == True [statically known]<br />
-V0301 19:15:52.437000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval False == False [statically known]<br />
-V0301 19:15:52.537000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval Eq(s0, 9223372036854775807) == False [statically known]<br />
-V0301 19:15:52.538000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval False == False [statically known]<br />
-V0301 19:15:52.539000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval s0 &lt; 9223372036854775807 == True [statically known]<br />
-V0301 19:15:52.575000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval Ne(s0, 1) == True [statically known]<br />
-V0301 19:15:52.592000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval Eq(s0, 1) == False [statically known]<br />
-V0301 19:15:52.659000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval True == True [statically known]<br />
-V0301 19:16:11.974000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval Eq(3<em>s0, 3) == False [statically known]<br />
-V0301 19:16:11.975000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3914] [0/0] eval Ne(3</em>s0, 3) == True [statically known]<br />
-I0301 19:16:12.160000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3622] [0/0] set_replacement s0 = 2 (solve_backed) ValueRanges(lower=2, upper=2, is_bool=False)<br />
-I0301 19:16:12.162000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3622] [0/0] set_replacement s0 = 2 (find) ValueRanges(lower=2, upper=2, is_bool=False)<br />
-I0301 19:16:12.163000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3832] [0/0] eval Eq(s0, 2) [guard added] at torchvision/models/detection/transform.py:243 in batch_images (_dynamo/variables/tensor.py:892 in evaluate_expr)<br />
-V0301 19:16:12.171000 140521716340544 torch/fx/experimental/symbolic_shapes.py:3902] [0/0] eval 2 [trivial]</p>
-<hr />
-<p>AssertionError                            Traceback (most recent call last)<br />
-Cell In[2], line 15<br />
-     12 width_dim = torch.export.Dim("width")<br />
-     14 if not os.path.exists(model_path):<br />
----&gt; 15     so_path = torch._export.aot_compile(<br />
-     16         f = model,<br />
-     17         args = (x, ),<br />
-     18         # Specify the first dimension of the input x as dynamic<br />
-     19         dynamic_shapes={"batch_tensor": {0: batch_dim}},<br />
-     20         # Specify the generated shared library path<br />
-     21         options={<br />
-     22             "aot_inductor.output_path": model_path,<br />
-     23             "max_autotune": True,<br />
-     24         },<br />
-     25     )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_export/<strong>init</strong>.py:382, in aot_compile(f, args, kwargs, constraints, dynamic_shapes, options, remove_runtime_assertions, disable_constraint_solver)<br />
-    378     gm = torch.export._trace._export(f, args, kwargs, constraints, pre_dispatch=True).module()<br />
-    379 else:<br />
-    380     # We want to export to Torch IR here to utilize the pre_grad passes in<br />
-    381     # inductor, which run on Torch IR.<br />
---&gt; 382     gm = _export_to_torch_ir(<br />
-    383         f,<br />
-    384         args,<br />
-    385         kwargs,<br />
-    386         constraints,<br />
-    387         disable_constraint_solver=disable_constraint_solver,<br />
-    388         # Disabling this flag, because instead we can rely on the mapping<br />
-    389         # dynamo_flat_name_to_original_fqn which is coming from Dynamo.<br />
-    390         restore_fqn=False,<br />
-    391     )<br />
-    392 flat_example_inputs = pytree.arg_tree_leaves(<em>args, </em>*(kwargs or {}))<br />
-    394 with torch.no_grad():</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/export/_trace.py:320, in _export_to_torch_ir(f, args, kwargs, constraints, preserve_module_call_signature, disable_constraint_solver, restore_fqn, _log_export_usage)<br />
-    316     module_call_specs: Dict[str, Dict[str, pytree.TreeSpec]] = {}<br />
-    317     with _wrap_submodules(<br />
-    318         f, preserve_module_call_signature, module_call_specs<br />
-    319     ), _ignore_backend_decomps():<br />
---&gt; 320         gm_torch_level, _ = torch._dynamo.export(<br />
-    321             f,<br />
-    322             constraints=constraints,<br />
-    323             assume_static_by_default=True,<br />
-    324             tracing_mode="symbolic",<br />
-    325             disable_constraint_solver=disable_constraint_solver,<br />
-    326             _log_export_usage=_log_export_usage,<br />
-    327         )(<br />
-    328             <em>args,<br />
-    329             </em>*kwargs,<br />
-    330         )<br />
-    331 except (ConstraintViolationError, ValueRangeError) as e:<br />
-    332     raise UserError(UserErrorType.CONSTRAINT_VIOLATION, str(e))  # noqa: TRY200</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py:1314, in export.<locals>.inner(<em>args, </em><em>kwargs)<br />
-   1312 # TODO(voz): We may have instances of <code>f</code> that mutate inputs, we should track sideeffects and reject.<br />
-   1313 try:<br />
--&gt; 1314     result_traced = opt_f(</em>args, **kwargs)<br />
-   1315 except ConstraintViolationError as e:<br />
-   1316     constraint_violation_error = e</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1529, in Module._wrapped_call_impl(self, <em>args, </em><em>kwargs)<br />
-   1527     return self._compiled_call_impl(</em>args, <strong>kwargs)  # type: ignore[misc]<br />
-   1528 else:<br />
--&gt; 1529     return self._call_impl(*args, </strong>kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1538, in Module._call_impl(self, <em>args, </em><em>kwargs)<br />
-   1533 # If we don't have any hooks, we want to skip the rest of the logic in<br />
-   1534 # this function, and just call forward.<br />
-   1535 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks<br />
-   1536         or _global_backward_pre_hooks or _global_backward_hooks<br />
-   1537         or _global_forward_hooks or _global_forward_pre_hooks):<br />
--&gt; 1538     return forward_call(</em>args, **kwargs)<br />
-   1540 try:<br />
-   1541     result = None</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py:455, in _TorchDynamoContext.<strong>call</strong>.<locals>._fn(<em>args, </em><em>kwargs)<br />
-    453 prior = set_eval_frame(callback)<br />
-    454 try:<br />
---&gt; 455     return fn(</em>args, **kwargs)<br />
-    456 finally:<br />
-    457     set_eval_frame(prior)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1529, in Module._wrapped_call_impl(self, <em>args, </em><em>kwargs)<br />
-   1527     return self._compiled_call_impl(</em>args, <strong>kwargs)  # type: ignore[misc]<br />
-   1528 else:<br />
--&gt; 1529     return self._call_impl(*args, </strong>kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1538, in Module._call_impl(self, <em>args, </em><em>kwargs)<br />
-   1533 # If we don't have any hooks, we want to skip the rest of the logic in<br />
-   1534 # this function, and just call forward.<br />
-   1535 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks<br />
-   1536         or _global_backward_pre_hooks or _global_backward_hooks<br />
-   1537         or _global_forward_hooks or _global_forward_pre_hooks):<br />
--&gt; 1538     return forward_call(</em>args, **kwargs)<br />
-   1540 try:<br />
-   1541     result = None</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:912, in catch_errors_wrapper.<locals>.catch_errors(frame, cache_entry, frame_state)<br />
-    908             return hijacked_callback(frame, cache_entry, hooks, frame_state)<br />
-    910 with compile_lock, _disable_current_modes():<br />
-    911     # skip=1: skip this frame<br />
---&gt; 912     return callback(frame, cache_entry, hooks, frame_state, skip=1)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:398, in convert_frame_assert.<locals>._convert_frame_assert(frame, cache_entry, hooks, frame_state, skip)<br />
-    384 compile_id = CompileId(frame_id, frame_compile_id)<br />
-    386 signpost_event(<br />
-    387     "dynamo",<br />
-    388     "_convert_frame_assert._compile",<br />
-   (...)<br />
-    395     },<br />
-    396 )<br />
---&gt; 398 return _compile(<br />
-    399     frame.f_code,<br />
-    400     frame.f_globals,<br />
-    401     frame.f_locals,<br />
-    402     frame.f_builtins,<br />
-    403     compiler_fn,<br />
-    404     one_graph,<br />
-    405     export,<br />
-    406     export_constraints,<br />
-    407     hooks,<br />
-    408     cache_size,<br />
-    409     frame,<br />
-    410     frame_state=frame_state,<br />
-    411     compile_id=compile_id,<br />
-    412     skip=skip + 1,<br />
-    413 )</p>
-<p>File /opt/conda/lib/python3.10/contextlib.py:79, in ContextDecorator.<strong>call</strong>.<locals>.inner(<em>args, </em><em>kwds)<br />
-     76 @wraps(func)<br />
-     77 def inner(</em>args, <strong>kwds):<br />
-     78     with self._recreate_cm():<br />
----&gt; 79         return func(*args, </strong>kwds)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:669, in _compile(code, globals, locals, builtins, compiler_fn, one_graph, export, export_constraints, hooks, cache_size, frame, frame_state, compile_id, skip)<br />
-    659 log.debug(<br />
-    660     "torchdynamo start compiling %s %s:%s, stack (elided %s frames):\n%s",<br />
-    661     code.co_name,<br />
-   (...)<br />
-    666     "".join(traceback.format_list(traceback.extract_stack()[: -2 - skip])),<br />
-    667 )<br />
-    668 try:<br />
---&gt; 669     guarded_code = compile_inner(code, one_graph, hooks, transform)<br />
-    670     return guarded_code<br />
-    671 except (<br />
-    672     Unsupported,<br />
-    673     TorchRuntimeError,<br />
-   (...)<br />
-    680     BisectValidationException,<br />
-    681 ) as e:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/utils.py:256, in dynamo_timed.<locals>.dynamo_timed_inner.<locals>.time_wrapper(<em>args, </em><em>kwargs)<br />
-    254 with torch.profiler.record_function(f"{key} (dynamo_timed)"):<br />
-    255     t0 = time.time()<br />
---&gt; 256     r = func(</em>args, **kwargs)<br />
-    257     time_spent = time.time() - t0<br />
-    258 compilation_time_metrics[key].append(time_spent)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:542, in _compile.<locals>.compile_inner(code, one_graph, hooks, transform)<br />
-    540 CompileContext.get().attempt = attempt<br />
-    541 try:<br />
---&gt; 542     out_code = transform_code_object(code, transform)<br />
-    543     break<br />
-    544 except exc.RestartAnalysis as e:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/bytecode_transformation.py:1033, in transform_code_object(code, transformations, safe)<br />
-   1030 instructions = cleaned_instructions(code, safe)<br />
-   1031 propagate_line_nums(instructions)<br />
--&gt; 1033 transformations(instructions, code_options)<br />
-   1034 return clean_and_assemble_instructions(instructions, keys, code_options)[1]</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:163, in preserve_global_state.<locals>._fn(<em>args, </em><em>kwargs)<br />
-    161 cleanup = setup_compile_debug()<br />
-    162 try:<br />
---&gt; 163     return fn(</em>args, **kwargs)<br />
-    164 finally:<br />
-    165     cleanup.close()</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py:507, in _compile.<locals>.transform(instructions, code_options)<br />
-    505 try:<br />
-    506     with tracing(tracer.output.tracing_context), tracer.set_current_tx():<br />
---&gt; 507         tracer.run()<br />
-    508 except exc.UnspecializeRestartAnalysis:<br />
-    509     speculation_log.clear()</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:2130, in InstructionTranslator.run(self)<br />
-   2129 def run(self):<br />
--&gt; 2130     super().run()</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1202, in InstructionTranslatorBase.CALL_FUNCTION(self, inst)<br />
-   1200 args = self.popn(inst.argval)<br />
-   1201 fn = self.pop()<br />
--&gt; 1202 self.call_function(fn, args, {})</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/nn_module.py:336, in NNModuleVariable.call_function(self, tx, args, kwargs)<br />
-    334 else:<br />
-    335     assert istype(fn, types.FunctionType)<br />
---&gt; 336 return tx.inline_user_function_return(<br />
-    337     variables.UserFunctionVariable(fn, source=fn_source),<br />
-    338     args,<br />
-    339     kwargs,<br />
-    340 )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1243, in InstructionTranslatorBase.CALL_FUNCTION_EX(self, inst)<br />
-   1241 # Map to a dictionary of str -&gt; VariableTracker<br />
-   1242 kwargsvars = kwargsvars.keys_as_python_constant()<br />
--&gt; 1243 self.call_function(fn, argsvars.items, kwargsvars)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:334, in UserMethodVariable.call_function(self, tx, args, kwargs)<br />
-    326     if (<br />
-    327         module_attr is not None<br />
-    328         and module_attr.startswith("torch.nn.")<br />
-    329         or self.is_constant<br />
-    330     ):<br />
-    331         return self.obj.call_method(<br />
-    332             tx, self.fn.<strong>name</strong>, args, kwargs, constant=self.is_constant<br />
-    333         )<br />
---&gt; 334 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:288, in UserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-    283 if self.is_constant:<br />
-    284     return invoke_and_store_as_constant(<br />
-    285         tx, self.fn, self.get_name(), args, kwargs<br />
-    286     )<br />
---&gt; 288 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:89, in BaseUserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-     86 def call_function(<br />
-     87     self, tx, args: "List[VariableTracker]", kwargs: "Dict[str, VariableTracker]"<br />
-     88 ) -&gt; "VariableTracker":<br />
----&gt; 89     return tx.inline_user_function_return(<br />
-     90         self, list(self.self_args()) + list(args), kwargs<br />
-     91     )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1202, in InstructionTranslatorBase.CALL_FUNCTION(self, inst)<br />
-   1200 args = self.popn(inst.argval)<br />
-   1201 fn = self.pop()<br />
--&gt; 1202 self.call_function(fn, args, {})</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/nn_module.py:336, in NNModuleVariable.call_function(self, tx, args, kwargs)<br />
-    334 else:<br />
-    335     assert istype(fn, types.FunctionType)<br />
---&gt; 336 return tx.inline_user_function_return(<br />
-    337     variables.UserFunctionVariable(fn, source=fn_source),<br />
-    338     args,<br />
-    339     kwargs,<br />
-    340 )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1243, in InstructionTranslatorBase.CALL_FUNCTION_EX(self, inst)<br />
-   1241 # Map to a dictionary of str -&gt; VariableTracker<br />
-   1242 kwargsvars = kwargsvars.keys_as_python_constant()<br />
--&gt; 1243 self.call_function(fn, argsvars.items, kwargsvars)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:334, in UserMethodVariable.call_function(self, tx, args, kwargs)<br />
-    326     if (<br />
-    327         module_attr is not None<br />
-    328         and module_attr.startswith("torch.nn.")<br />
-    329         or self.is_constant<br />
-    330     ):<br />
-    331         return self.obj.call_method(<br />
-    332             tx, self.fn.<strong>name</strong>, args, kwargs, constant=self.is_constant<br />
-    333         )<br />
---&gt; 334 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:288, in UserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-    283 if self.is_constant:<br />
-    284     return invoke_and_store_as_constant(<br />
-    285         tx, self.fn, self.get_name(), args, kwargs<br />
-    286     )<br />
---&gt; 288 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:89, in BaseUserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-     86 def call_function(<br />
-     87     self, tx, args: "List[VariableTracker]", kwargs: "Dict[str, VariableTracker]"<br />
-     88 ) -&gt; "VariableTracker":<br />
----&gt; 89     return tx.inline_user_function_return(<br />
-     90         self, list(self.self_args()) + list(args), kwargs<br />
-     91     )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1202, in InstructionTranslatorBase.CALL_FUNCTION(self, inst)<br />
-   1200 args = self.popn(inst.argval)<br />
-   1201 fn = self.pop()<br />
--&gt; 1202 self.call_function(fn, args, {})</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/nn_module.py:336, in NNModuleVariable.call_function(self, tx, args, kwargs)<br />
-    334 else:<br />
-    335     assert istype(fn, types.FunctionType)<br />
---&gt; 336 return tx.inline_user_function_return(<br />
-    337     variables.UserFunctionVariable(fn, source=fn_source),<br />
-    338     args,<br />
-    339     kwargs,<br />
-    340 )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1243, in InstructionTranslatorBase.CALL_FUNCTION_EX(self, inst)<br />
-   1241 # Map to a dictionary of str -&gt; VariableTracker<br />
-   1242 kwargsvars = kwargsvars.keys_as_python_constant()<br />
--&gt; 1243 self.call_function(fn, argsvars.items, kwargsvars)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:334, in UserMethodVariable.call_function(self, tx, args, kwargs)<br />
-    326     if (<br />
-    327         module_attr is not None<br />
-    328         and module_attr.startswith("torch.nn.")<br />
-    329         or self.is_constant<br />
-    330     ):<br />
-    331         return self.obj.call_method(<br />
-    332             tx, self.fn.<strong>name</strong>, args, kwargs, constant=self.is_constant<br />
-    333         )<br />
---&gt; 334 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:288, in UserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-    283 if self.is_constant:<br />
-    284     return invoke_and_store_as_constant(<br />
-    285         tx, self.fn, self.get_name(), args, kwargs<br />
-    286     )<br />
---&gt; 288 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:89, in BaseUserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-     86 def call_function(<br />
-     87     self, tx, args: "List[VariableTracker]", kwargs: "Dict[str, VariableTracker]"<br />
-     88 ) -&gt; "VariableTracker":<br />
----&gt; 89     return tx.inline_user_function_return(<br />
-     90         self, list(self.self_args()) + list(args), kwargs<br />
-     91     )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:470, in break_graph_if_unsupported.<locals>.decorator.<locals>.wrapper(self, inst)<br />
-    466 try:<br />
-    467     TracingContext.set_current_loc(<br />
-    468         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    469     )<br />
---&gt; 470     return inner_fn(self, inst)<br />
-    471 except Unsupported as excp:<br />
-    472     if self.generic_context_manager_depth &gt; 0:<br />
-    473         # We don't support graph break under GenericContextWrappingVariable,<br />
-    474         # If there is, we roll back to the checkpoint and fall back.</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1202, in InstructionTranslatorBase.CALL_FUNCTION(self, inst)<br />
-   1200 args = self.popn(inst.argval)<br />
-   1201 fn = self.pop()<br />
--&gt; 1202 self.call_function(fn, args, {})</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:657, in InstructionTranslatorBase.call_function(self, fn, args, kwargs)<br />
-    655 if inner_fn and callable(inner_fn) and is_forbidden(inner_fn):<br />
-    656     raise AssertionError(f"Attempt to trace forbidden callable {inner_fn}")<br />
---&gt; 657 self.push(fn.call_function(self, args, kwargs))</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:334, in UserMethodVariable.call_function(self, tx, args, kwargs)<br />
-    326     if (<br />
-    327         module_attr is not None<br />
-    328         and module_attr.startswith("torch.nn.")<br />
-    329         or self.is_constant<br />
-    330     ):<br />
-    331         return self.obj.call_method(<br />
-    332             tx, self.fn.<strong>name</strong>, args, kwargs, constant=self.is_constant<br />
-    333         )<br />
---&gt; 334 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:288, in UserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-    283 if self.is_constant:<br />
-    284     return invoke_and_store_as_constant(<br />
-    285         tx, self.fn, self.get_name(), args, kwargs<br />
-    286     )<br />
---&gt; 288 return super().call_function(tx, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/variables/functions.py:89, in BaseUserFunctionVariable.call_function(self, tx, args, kwargs)<br />
-     86 def call_function(<br />
-     87     self, tx, args: "List[VariableTracker]", kwargs: "Dict[str, VariableTracker]"<br />
-     88 ) -&gt; "VariableTracker":<br />
----&gt; 89     return tx.inline_user_function_return(<br />
-     90         self, list(self.self_args()) + list(args), kwargs<br />
-     91     )</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:663, in InstructionTranslatorBase.inline_user_function_return(self, fn, args, kwargs)<br />
-    659 def inline_user_function_return(self, fn, args, kwargs):<br />
-    660     """<br />
-    661     A call to some user defined function by inlining it.<br />
-    662     """<br />
---&gt; 663     return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2266, in InliningInstructionTranslator.inline_call(cls, parent, func, args, kwargs)<br />
-   2263 @classmethod<br />
-   2264 def inline_call(cls, parent, func, args, kwargs):<br />
-   2265     with patch.dict(counters, {"unimplemented": counters["inline_call"]}):<br />
--&gt; 2266         return cls.inline_call</em>(parent, func, args, kwargs)</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/<em>dynamo/symbolic_convert.py:2380, in InliningInstructionTranslator.inline_call</em>(parent, func, args, kwargs)<br />
-   2378 try:<br />
-   2379     with strict_ctx:<br />
--&gt; 2380         tracer.run()<br />
-   2381 except exc.SkipFrame as e:<br />
-   2382     msg = f"SKIPPED INLINING {code}: {e}"</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:793, in InstructionTranslatorBase.run(self)<br />
-    788 try:<br />
-    789     self.output.push_tx(self)<br />
-    790     while (<br />
-    791         self.instruction_pointer is not None<br />
-    792         and not self.output.should_exit<br />
---&gt; 793         and self.step()<br />
-    794     ):<br />
-    795         pass<br />
-    796 except BackendCompilerFailed:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:756, in InstructionTranslatorBase.step(self)<br />
-    752         unimplemented(f"missing: {inst.opname}")<br />
-    753     TracingContext.set_current_loc(<br />
-    754         self.f_code.co_filename, self.lineno, self.f_code.co_name<br />
-    755     )<br />
---&gt; 756     getattr(self, inst.opname)(inst)<br />
-    758     return inst.opname != "RETURN_VALUE"<br />
-    759 except Unsupported:</p>
-<p>File /opt/conda/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py:1308, in InstructionTranslatorBase.STORE_ATTR(self, inst)<br />
-   1303 val, obj = self.popn(2)<br />
-   1305 if isinstance(obj, NNModuleVariable):<br />
-   1306     # We don't allow side effects during export<br />
-   1307     # https://github.com/pytorch/torchdynamo/issues/1475<br />
--&gt; 1308     assert (<br />
-   1309         not self.export<br />
-   1310     ), f"Mutating module attribute {inst.argval} during export."<br />
-   1312 try:<br />
-   1313     BuiltinVariable(setattr).call_function(<br />
-   1314         self, [obj, ConstantVariable.create(inst.argval), val], {}<br />
-   1315     )</p>
-<p>AssertionError: Mutating module attribute cell_anchors during export.</p>
-<p>from user code:<br />
-   File "/opt/workspace/./satlas-src/satlas/model/model.py", line 841, in forward<br />
-    cur_outputs, _ = head(batch_tensor, features)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl<br />
-    return forward_call(<em>args, </em><em>kwargs)<br />
-  File "/opt/workspace/<a href="http://127.0.0.1:8888/lab/tree/satlas-src/satlas/model/model.py#line=530">./satlas-src/satlas/model/model.py", line 531</a>, in forward<br />
-    proposals, proposal_losses = self.rpn(images, features, targets)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl<br />
-    return forward_call(</em>args, <strong>kwargs)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/rpn.py", line 362, in forward<br />
-    anchors = self.anchor_generator(images, features)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl<br />
-    return forward_call(*args, </strong>kwargs)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/anchor_utils.py", line 126, in forward<br />
-    self.set_cell_anchors(dtype, device)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/anchor_utils.py", line 77, in set_cell_anchors<br />
-    self.cell_anchors = [cell_anchor.to(dtype=dtype, device=device) for cell_anchor in self.cell_anchors]<br />
-```</p>
-<h3>Minified repro</h3>
-<p>os.environ["TORCH_DYNAMO_REPRO_AFTER"] = "aot" doesn't seem to do anything. after I run the code, the traceback is the same.</p>
-<p>a minimal repro is to do</p>
-<p>```python<br />
-import torch<br />
-import torch._dynamo as torchdynamo<br />
-from torchvision.models.detection import (<br />
-    maskrcnn_resnet50_fpn,<br />
-)</p>
-<p>import torch._dynamo.config</p>
-<h1>torch._dynamo.config.capture_scalar_outputs = True</h1>
-<p>net = maskrcnn_resnet50_fpn()<br />
-net.eval()</p>
-<h1>Single input which is a list of images.</h1>
-<p>images = [torch.rand(3, 16, 16)]</p>
-<h1>Double-check that the inputs work for the normal net.</h1>
-<p>net(images)<br />
-torch._dynamo.export(net, images, tracing_mode="symbolic", aten_graph=True)</p>
-<p>```</p>
-<p>```python<br />
-AssertionError: Mutating module attribute cell_anchors during export.</p>
-<p>from user code:<br />
-   File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/generalized_rcnn.py", line 104, in forward<br />
-    proposals, proposal_losses = self.rpn(images, features, targets)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl<br />
-    return forward_call(<em>args, </em><em>kwargs)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/rpn.py", line 362, in forward<br />
-    anchors = self.anchor_generator(images, features)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl<br />
-    return forward_call(</em>args, **kwargs)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/anchor_utils.py", line 126, in forward<br />
-    self.set_cell_anchors(dtype, device)<br />
-  File "/opt/conda/lib/python3.10/site-packages/torchvision/models/detection/anchor_utils.py", line 77, in set_cell_anchors<br />
-    self.cell_anchors = [cell_anchor.to(dtype=dtype, device=device) for cell_anchor in self.cell_anchors]</p>
-<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information<br />
-```</p>
-<p>from the test script here: https://docs.google.com/document/d/159NTQQhz8ovIBxbQvGQ-fZ10pF9e2RPXm1JZYqdEzt4/edit from this issue https://github.com/pytorch/pytorch/issues/108805</p>
-<h3>Versions</h3>
-<p>```<br />
-PyTorch version: 2.3.0.dev20240221<br />
+PyTorch version: 2.3.0.dev20240301+cu121<br />
 Is debug build: False<br />
 CUDA used to build PyTorch: 12.1<br />
 ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.26.4<br />
+<p>OS: Ubuntu 22.04.1 LTS (x86_64)<br />
+GCC version: (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0<br />
+Clang version: 11.0.0 (https://github.com/aflgo/aflgo.git fa125da5d70621daf7141c6279877c97708c8c1f)<br />
+CMake version: version 3.22.1<br />
 Libc version: glibc-2.35</p>
-<p>Python version: 3.10.13 (main, Sep 11 2023, 13:44:35) [GCC 11.2.0] (64-bit runtime)<br />
-Python platform: Linux-6.5.0-21-generic-x86_64-with-glibc2.35<br />
+<p>Python version: 3.9.0 (default, Nov 15 2020, 14:28:56)  [GCC 7.3.0] (64-bit runtime)<br />
+Python platform: Linux-6.5.0-26-generic-x86_64-with-glibc2.35<br />
 Is CUDA available: True<br />
-CUDA runtime version: 12.1.105<br />
+CUDA runtime version: Could not collect<br />
 CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA GeForce RTX 3090<br />
-Nvidia driver version: 535.161.07<br />
-cuDNN version: Probably one of the following:<br />
-/usr/lib/x86_64-linux-gnu/libcudnn.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.9.0<br />
+GPU models and configuration: GPU 0: NVIDIA GeForce RTX 3060<br />
+Nvidia driver version: 525.147.05<br />
+cuDNN version: Could not collect<br />
 HIP runtime version: N/A<br />
 MIOpen runtime version: N/A<br />
 Is XNNPACK available: True</p>
 <p>CPU:<br />
 Architecture:                       x86_64<br />
 CPU op-mode(s):                     32-bit, 64-bit<br />
-Address sizes:                      39 bits physical, 48 bits virtual<br />
+Address sizes:                      46 bits physical, 48 bits virtual<br />
 Byte Order:                         Little Endian<br />
-CPU(s):                             12<br />
-On-line CPU(s) list:                0-11<br />
+CPU(s):                             24<br />
+On-line CPU(s) list:                0-23<br />
 Vendor ID:                          GenuineIntel<br />
-Model name:                         Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz<br />
+Model name:                         12th Gen Intel(R) Core(TM) i9-12900K<br />
 CPU family:                         6<br />
-Model:                              158<br />
+Model:                              151<br />
 Thread(s) per core:                 2<br />
-Core(s) per socket:                 6<br />
+Core(s) per socket:                 16<br />
 Socket(s):                          1<br />
-Stepping:                           10<br />
-CPU max MHz:                        4600.0000<br />
+Stepping:                           2<br />
+CPU max MHz:                        5200.0000<br />
 CPU min MHz:                        800.0000<br />
-BogoMIPS:                           6399.96<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities<br />
+BogoMIPS:                           6374.40<br />
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault cat_l2 cdp_l2 ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdt_a rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq tme rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities<br />
 Virtualization:                     VT-x<br />
-L1d cache:                          192 KiB (6 instances)<br />
-L1i cache:                          192 KiB (6 instances)<br />
-L2 cache:                           1.5 MiB (6 instances)<br />
-L3 cache:                           12 MiB (1 instance)<br />
+L1d cache:                          640 KiB (16 instances)<br />
+L1i cache:                          768 KiB (16 instances)<br />
+L2 cache:                           14 MiB (10 instances)<br />
+L3 cache:                           30 MiB (1 instance)<br />
 NUMA node(s):                       1<br />
-NUMA node0 CPU(s):                  0-11<br />
-Vulnerability Gather data sampling: Mitigation; Microcode<br />
-Vulnerability Itlb multihit:        KVM: Mitigation: VMX disabled<br />
-Vulnerability L1tf:                 Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable<br />
-Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT vulnerable<br />
-Vulnerability Meltdown:             Mitigation; PTI<br />
-Vulnerability Mmio stale data:      Mitigation; Clear CPU buffers; SMT vulnerable<br />
-Vulnerability Retbleed:             Mitigation; IBRS<br />
+NUMA node0 CPU(s):                  0-23<br />
+Vulnerability Gather data sampling: Not affected<br />
+Vulnerability Itlb multihit:        Not affected<br />
+Vulnerability L1tf:                 Not affected<br />
+Vulnerability Mds:                  Not affected<br />
+Vulnerability Meltdown:             Not affected<br />
+Vulnerability Mmio stale data:      Not affected<br />
+Vulnerability Retbleed:             Not affected<br />
 Vulnerability Spec rstack overflow: Not affected<br />
 Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl<br />
 Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; IBRS, IBPB conditional, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected<br />
-Vulnerability Srbds:                Mitigation; Microcode<br />
-Vulnerability Tsx async abort:      Mitigation; TSX disabled</p>
+Vulnerability Spectre v2:           Mitigation; Enhanced / Automatic IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
+Vulnerability Srbds:                Not affected<br />
+Vulnerability Tsx async abort:      Not affected</p>
 <p>Versions of relevant libraries:<br />
-[pip3] flake8==5.0.4<br />
-[pip3] mypy==1.0.1<br />
-[pip3] mypy-extensions==0.4.4<br />
 [pip3] numpy==1.26.4<br />
-[pip3] optree==0.10.0<br />
-[pip3] torch==2.3.0.dev20240221<br />
-[pip3] torchaudio==2.2.0.dev20240221<br />
-[pip3] torchelastic==0.2.2<br />
-[pip3] torchvision==0.18.0.dev20240221<br />
+[pip3] pytorch-triton==3.0.0+901819d2b6<br />
+[pip3] torch==2.3.0.dev20240301+cu121<br />
+[pip3] torchaudio==2.2.0.dev20240301+cu118<br />
+[pip3] torchvision==0.18.0.dev20240301+cu118<br />
 [pip3] triton==2.2.0<br />
-[pip3] vit-pytorch==1.6.5<br />
-[conda] blas                      1.0                         mkl<br />
-[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch-nightly<br />
-[conda] mkl                       2023.1.0         h213fc3f_46344<br />
-[conda] mkl-service               2.4.0           py310h5eee18b_1<br />
-[conda] mkl_fft                   1.3.8           py310h5eee18b_0<br />
-[conda] mkl_random                1.2.4           py310hdb19cb5_0<br />
 [conda] numpy                     1.26.4                   pypi_0    pypi<br />
-[conda] optree                    0.10.0                   pypi_0    pypi<br />
-[conda] pytorch                   2.3.0.dev20240221 py3.10_cuda12.1_cudnn8.9.2_0    pytorch-nightly<br />
-[conda] pytorch-cuda              12.1                 ha16c6d3_5    pytorch-nightly<br />
-[conda] pytorch-mutex             1.0                        cuda    pytorch-nightly<br />
-[conda] torchaudio                2.2.0.dev20240221     py310_cu121    pytorch-nightly<br />
-[conda] torchelastic              0.2.2                    pypi_0    pypi<br />
-[conda] torchvision               0.18.0.dev20240221     py310_cu121    pytorch-nightly<br />
+[conda] pytorch-triton            3.0.0+901819d2b6          pypi_0    pypi<br />
+[conda] torch                     2.3.0.dev20240301+cu121          pypi_0    pypi<br />
+[conda] torchaudio                2.2.0.dev20240301+cu118          pypi_0    pypi<br />
+[conda] torchvision               0.18.0.dev20240301+cu118          pypi_0    pypi<br />
 [conda] triton                    2.2.0                    pypi_0    pypi<br />
-[conda] vit-pytorch               1.6.5                    pypi_0    pypi<br />
 ```</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @avikchaudhuri @gmagogsfm @zhxchen17 @tugsbayasgalan @angelayi @suo @ydwu4</p>]]></description>
-      <pubDate>Fri, 01 Mar 2024 11:34:56 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121036</guid>
+<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
+      <pubDate>Wed, 20 Mar 2024 20:22:33 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122382</guid>
     </item>
     <item>
-      <title>[inductor][cpp] move vectorized type conversion to aten/cpu/vec</title>
+      <title>[inductor][cpp] unified the vectorized conversion with `at::vec::convert` for all data types</title>
       <link>https://github.com/pytorch/pytorch/pull/119979</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * <strong>-&gt;</strong> #119979<br />
 * #119734<br />
 * #119655<br />
 * #119654</p>
+<p>This PR unified the vectorized conversion with <code>at::vec::convert</code> for all vectorized data types. The intrinsics implementations are implemented as a specialization and moved to their own arch-specific files. The vectorized conversion logic in cpp Inductor is simplified.</p>
 <p>cc @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
       <pubDate>Wed, 14 Feb 2024 21:46:22 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119979</guid>
     </item>
     <item>
-      <title>[inductor][cpp] generalize vector mask for dtypes</title>
-      <link>https://github.com/pytorch/pytorch/pull/119654</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #119979<br />
-* #119734<br />
-* #119655<br />
-* <strong>-&gt;</strong> #119654</p>
-<p>cc @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
-      <pubDate>Sun, 11 Feb 2024 07:08:46 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119654</guid>
+      <title>Investigate Strictness of torch.compile `is_big_gpu`</title>
+      <link>https://github.com/pytorch/pytorch/issues/109489</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>The check was introduced in https://github.com/pytorch/pytorch/pull/90738 to fix: https://github.com/pytorch/torchdynamo/issues/2015</p>
+<p>However, this causes Triton matmul template codegen not to occur on smaller GPUs (sms &lt; 80), including most people's commercial GPUs.</p>
+<p>We make two observations:<br />
+1. This check was a hotfix that is too strict for most cases<br />
+2. V100 is on the testing path of Triton, so it is likely that this issue is fixed</p>
+<p>Hence, my proposal is to get rid of the check entirely, as long as CI passes.</p>
+<p>CC @jansel as prev discussed (and original code author)</p>
+<h3>Error logs</h3>
+<p><code>[WARNING] not enough SMs to use max_autotune_gemm mode</code></p>
+<h3>Minified repro</h3>
+<p>Use torch.compile on small GPU</p>
+<h3>Versions</h3>
+<details>
+
+PyTorch version: 2.2.0a0+gitc29c493
+Is debug build: False
+CUDA used to build PyTorch: 12.2
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 22.04.3 LTS (x86_64)
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Clang version: Could not collect
+CMake version: version 3.27.2
+Libc version: glibc-2.35
+
+Python version: 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] (64-bit runtime)
+Python platform: Linux-6.2.0-32-generic-x86_64-with-glibc2.35
+Is CUDA available: False
+CUDA runtime version: 12.2.128
+CUDA_MODULE_LOADING set to: N/A
+GPU models and configuration: GPU 0: NVIDIA GeForce RTX 4070 Laptop GPU
+Nvidia driver version: 535.86.10
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.9.4
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.9.4
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+Is XNNPACK available: True
+
+CPU:
+Architecture:                       x86_64
+CPU op-mode(s):                     32-bit, 64-bit
+Address sizes:                      46 bits physical, 48 bits virtual
+Byte Order:                         Little Endian
+CPU(s):                             20
+On-line CPU(s) list:                0-19
+Vendor ID:                          GenuineIntel
+Model name:                         13th Gen Intel(R) Core(TM) i9-13900H
+CPU family:                         6
+Model:                              186
+Thread(s) per core:                 2
+Core(s) per socket:                 14
+Socket(s):                          1
+Stepping:                           2
+CPU max MHz:                        5400.0000
+CPU min MHz:                        400.0000
+BogoMIPS:                           5990.40
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi umip pku ospke waitpkg gfni vaes vpclmulqdq tme rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities
+Virtualization:                     VT-x
+L1d cache:                          544 KiB (14 instances)
+L1i cache:                          704 KiB (14 instances)
+L2 cache:                           11.5 MiB (8 instances)
+L3 cache:                           24 MiB (1 instance)
+NUMA node(s):                       1
+NUMA node0 CPU(s):                  0-19
+Vulnerability Gather data sampling: Not affected
+Vulnerability Itlb multihit:        Not affected
+Vulnerability L1tf:                 Not affected
+Vulnerability Mds:                  Not affected
+Vulnerability Meltdown:             Not affected
+Vulnerability Mmio stale data:      Not affected
+Vulnerability Retbleed:             Not affected
+Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:           Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence
+Vulnerability Srbds:                Not affected
+Vulnerability Tsx async abort:      Not affected
+
+Versions of relevant libraries:
+[pip3] flake8==6.0.0
+[pip3] flake8-bugbear==23.3.23
+[pip3] flake8-comprehensions==3.12.0
+[pip3] flake8-executable==2.1.3
+[pip3] flake8-logging-format==0.9.0
+[pip3] flake8-pyi==23.3.1
+[pip3] flake8-simplify==0.19.3
+[pip3] jax-triton==0.1.4
+[pip3] mypy==1.4.1
+[pip3] mypy-extensions==1.0.0
+[pip3] numpy==1.24.3
+[pip3] pytorch-triton==2.1.0+6e4932cda8
+[pip3] torch==2.2.0a0+git84680cb
+[pip3] torchaudio==2.0.2
+[pip3] torchvision==0.15.2
+[pip3] triton==2.1.0
+[conda] Could not collect
+
+</details>
+<p>cc @ezyang @msaroufim @wconstab @bdhirsh @anijain2305 @zou3519 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @Xia-Weiwen @ngimel</p>]]></description>
+      <pubDate>Mon, 18 Sep 2023 02:44:49 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/109489</guid>
     </item>
   </channel>
 </rss>
