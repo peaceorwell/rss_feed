@@ -4,12 +4,41 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[EZ][BE] Add missing `acosh` op to vec256_float_neon.h (#122513)</title><link>https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</link><description><![CDATA[<p>[EZ][BE] Add missing <code>acosh</code> op to vec256_float_neon.h (#122513)</p>
-<p>As base class has it<br />
-https://github.com/pytorch/pytorch/blob/ed15370aabf951eec2ba0140de5ff71634868791/aten/src/ATen/cpu/vec/vec_base.h#L367-L369</p>
-<p>Discovered while attempting to enabling Inductor vectorization on ARM platform</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122513<br />
-Approved by: https://github.com/Skylion007</p>]]></description><pubDate>Sat, 23 Mar 2024 06:18:02 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</guid></item><item><title>[aoti] Add handling of ir.Constants in promote_constants (#122419)</title><link>https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</link><description>&lt;p&gt;[aoti] Add handling of ir.Constants in promote_constants (#122419)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[BE][CPUInductor] Use C++17 helper templates (#122607)</title><link>https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</link><description><![CDATA[<p>[BE][CPUInductor] Use C++17 helper templates (#122607)</p>
+<p>Such as <code>std::is_same_v</code> ,<code>std::is_integral_v</code> and C++14 one <code>std::enable_if_t</code></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122607<br />
+Approved by: https://github.com/jansel, https://github.com/Skylion007</p>]]></description><pubDate>Mon, 25 Mar 2024 11:01:44 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</guid></item><item><title>[inductor] Improve error message for shape errors in slice_scatter (#122543)</title><link>https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</link><description><![CDATA[<p>[inductor] Improve error message for shape errors in slice_scatter (#122543)</p>
+<p>Fixes #122291</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122543<br />
+Approved by: https://github.com/shunting314</p>]]></description><pubDate>Mon, 25 Mar 2024 10:57:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</guid></item><item><title>GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)</title><link>https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</link><description><![CDATA[<p>GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)</p>
+<h3>Summary</h3>
+<p>With this PR, SDPA pattern of GPT2 is being mapped to <code>torch.nn.functional.scaled_dot_product_attention</code>.<br />
+While GPT2 supports both a causal mask &amp; an attention mask, this PR considers the case of attention mask being absent.<br />
+TorchBench inference workload for GPT2 also doesn't use an attention-mask.</p>
+<p>This pattern's replacement is being disabled for CUDA because <a href="https://github.com/pytorch/pytorch/actions/runs/8319111885/job/22762567770">CUDA AOT Inductor</a> CI job's <code>GPT2ForSequenceClassification</code> accuracy test failed, although all other trunk CUDA Inductor CI checks had passed.<br />
+Created #122429 to track that particular issue.</p>
+<h3>CPU performance data with TorchBench</h3>
+<p>|MODEL |BATCH SIZE | DTYPE | BEFORE: Speedup over eager-mode with the default Inductor implementation | AFTER: Speedup over eager mode with SDPA op mapped| Perf boost = (AFTER - BEFORE)/BEFORE * 100|<br />
+|--------------------------|-------------|---------|-----------------------------|--------------------------|------------|<br />
+|hf_GPT2| 1 | FP32 | 1.522x | 1.791x| 17.67%|<br />
+|hf_GPT2| 1 | BF16 (AMP) | 1.795x | 2.387x| 32.98%|<br />
+|hf_GPT2| 2 | FP32 |  1.313x |1.629x | 19.3%|<br />
+|hf_GPT2|2| BF16 (AMP) | 1.556x | 1.924x | 23.65%|<br />
+|hf_GPT2_large| 1 | FP32 | 1.380x |1.585x | 12.93%|<br />
+|hf_GPT2_large| 1 | BF16 (AMP) | 1.208x | 1.567x | 22.91%|<br />
+|hf_GPT2_large| 2 | FP32 | 1.188x | 1.490x | 25.42%|<br />
+|hf_GPT2_large|2| BF16 (AMP) | 0.991x | 1.575x | 58.93%|</p>
+<p>Machine - Intel(R) Xeon(R) Platinum 8468H (Xeon 4th gen Sapphire Rapids)<br />
+48 physical cores were used. Intel OpenMP &amp; libtcmalloc were preloaded.</p>
+<p>Example command -<br />
+<code>OMP_NUM_THREADS=48 MKL_NUM_THREADS=48 numactl --membind=0 --cpunodebind=0 -C 0-47 python benchmarks/dynamo/torchbench.py --performance --inference --inductor --float32 -dcpu --only hf_GPT2_large --freezing --batch-size 1</code></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121866<br />
+Approved by: https://github.com/Valentine233, https://github.com/jgong5, https://github.com/desertfire</p>]]></description><pubDate>Mon, 25 Mar 2024 07:04:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</guid></item><item><title>[EZ][BE] Add missing `acosh` op to vec256_float_neon.h (#122513)</title><link>https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</link><description>&lt;p&gt;[EZ][BE] Add missing &lt;code&gt;acosh&lt;/code&gt; op to vec256_float_neon.h (#122513)&lt;/p&gt;
+&lt;p&gt;As base class has it&lt;br /&gt;
+https://github.com/pytorch/pytorch/blob/ed15370aabf951eec2ba0140de5ff71634868791/aten/src/ATen/cpu/vec/vec_base.h#L367-L369&lt;/p&gt;
+&lt;p&gt;Discovered while attempting to enabling Inductor vectorization on ARM platform&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122513&lt;br /&gt;
+Approved by: https://github.com/Skylion007&lt;/p&gt;</description><pubDate>Sat, 23 Mar 2024 06:18:02 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</guid></item><item><title>[aoti] Add handling of ir.Constants in promote_constants (#122419)</title><link>https://github.com/pytorch/pytorch/commit/ed15370aabf951eec2ba0140de5ff71634868791</link><description>&lt;p&gt;[aoti] Add handling of ir.Constants in promote_constants (#122419)&lt;/p&gt;
 &lt;p&gt;This issue popped up when enabling predispatch IR on the benchmarks (https://github.com/pytorch/pytorch/pull/122225)&lt;/p&gt;
 &lt;p&gt;On the following model:&lt;br /&gt;
 ```&lt;br /&gt;
