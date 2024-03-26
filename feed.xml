@@ -4,36 +4,58 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[BE][CPUInductor] Use C++17 helper templates (#122607)</title><link>https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</link><description><![CDATA[<p>[BE][CPUInductor] Use C++17 helper templates (#122607)</p>
-<p>Such as <code>std::is_same_v</code> ,<code>std::is_integral_v</code> and C++14 one <code>std::enable_if_t</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122607<br />
-Approved by: https://github.com/jansel, https://github.com/Skylion007</p>]]></description><pubDate>Mon, 25 Mar 2024 11:01:44 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</guid></item><item><title>[inductor] Improve error message for shape errors in slice_scatter (#122543)</title><link>https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</link><description><![CDATA[<p>[inductor] Improve error message for shape errors in slice_scatter (#122543)</p>
-<p>Fixes #122291</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122543<br />
-Approved by: https://github.com/shunting314</p>]]></description><pubDate>Mon, 25 Mar 2024 10:57:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</guid></item><item><title>GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)</title><link>https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</link><description><![CDATA[<p>GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)</p>
-<h3>Summary</h3>
-<p>With this PR, SDPA pattern of GPT2 is being mapped to <code>torch.nn.functional.scaled_dot_product_attention</code>.<br />
-While GPT2 supports both a causal mask &amp; an attention mask, this PR considers the case of attention mask being absent.<br />
-TorchBench inference workload for GPT2 also doesn't use an attention-mask.</p>
-<p>This pattern's replacement is being disabled for CUDA because <a href="https://github.com/pytorch/pytorch/actions/runs/8319111885/job/22762567770">CUDA AOT Inductor</a> CI job's <code>GPT2ForSequenceClassification</code> accuracy test failed, although all other trunk CUDA Inductor CI checks had passed.<br />
-Created #122429 to track that particular issue.</p>
-<h3>CPU performance data with TorchBench</h3>
-<p>|MODEL |BATCH SIZE | DTYPE | BEFORE: Speedup over eager-mode with the default Inductor implementation | AFTER: Speedup over eager mode with SDPA op mapped| Perf boost = (AFTER - BEFORE)/BEFORE * 100|<br />
-|--------------------------|-------------|---------|-----------------------------|--------------------------|------------|<br />
-|hf_GPT2| 1 | FP32 | 1.522x | 1.791x| 17.67%|<br />
-|hf_GPT2| 1 | BF16 (AMP) | 1.795x | 2.387x| 32.98%|<br />
-|hf_GPT2| 2 | FP32 |  1.313x |1.629x | 19.3%|<br />
-|hf_GPT2|2| BF16 (AMP) | 1.556x | 1.924x | 23.65%|<br />
-|hf_GPT2_large| 1 | FP32 | 1.380x |1.585x | 12.93%|<br />
-|hf_GPT2_large| 1 | BF16 (AMP) | 1.208x | 1.567x | 22.91%|<br />
-|hf_GPT2_large| 2 | FP32 | 1.188x | 1.490x | 25.42%|<br />
-|hf_GPT2_large|2| BF16 (AMP) | 0.991x | 1.575x | 58.93%|</p>
-<p>Machine - Intel(R) Xeon(R) Platinum 8468H (Xeon 4th gen Sapphire Rapids)<br />
-48 physical cores were used. Intel OpenMP &amp; libtcmalloc were preloaded.</p>
-<p>Example command -<br />
-<code>OMP_NUM_THREADS=48 MKL_NUM_THREADS=48 numactl --membind=0 --cpunodebind=0 -C 0-47 python benchmarks/dynamo/torchbench.py --performance --inference --inductor --float32 -dcpu --only hf_GPT2_large --freezing --batch-size 1</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121866<br />
-Approved by: https://github.com/Valentine233, https://github.com/jgong5, https://github.com/desertfire</p>]]></description><pubDate>Mon, 25 Mar 2024 07:04:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</guid></item><item><title>[EZ][BE] Add missing `acosh` op to vec256_float_neon.h (#122513)</title><link>https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</link><description>&lt;p&gt;[EZ][BE] Add missing &lt;code&gt;acosh&lt;/code&gt; op to vec256_float_neon.h (#122513)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[Inductor] Support custom op in JIT with cpp wrapper (#122554)</title><link>https://github.com/pytorch/pytorch/commit/537cd66e73e8a9b33c843d55d546471f3074a390</link><description><![CDATA[<p>[Inductor] Support custom op in JIT with cpp wrapper (#122554)</p>
+<p>Summary:  To call custom ops in an ABI-compatible way requires doing boxed call with varargs across C shim. In the JIT mode, we can get around it by calling into Python.  https://gist.github.com/desertfire/be2a65b0a9b47780bb716b53ac2cd2b3 is an example of generated code.</p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D55326556">D55326556</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/122554<br />
+Approved by: https://github.com/jansel, https://github.com/chenyang78</p>]]></description><pubDate>Tue, 26 Mar 2024 10:48:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/537cd66e73e8a9b33c843d55d546471f3074a390</guid></item><item><title>Log autotune time in scuba (#122637)</title><link>https://github.com/pytorch/pytorch/commit/e61aaab72562fe95d76e77b01678d71467e1739e</link><description><![CDATA[<p>Log autotune time in scuba (#122637)</p>
+<p>Summary:<br />
+This diff<br />
+* Refactors triton and autotune caches to be child classes of the original memcache based cache infra<br />
+* Swaps scuba table for autotune<br />
+* Adds autotune time spent/saved to scuba table</p>
+<p>Test Plan:<br />
+Local testing using:<br />
+<code>buck run mode/opt fbcode//caffe2/test/inductor/:max_autotune -- -r test_max_autotune_remote_caching_dynamic_False</code><br />
+and<br />
+<code>TORCH_INDUCTOR_AUTOTUNE_REMOTE_CACHE=1 buck2 run mode/opt //scripts/oulgen:runner</code></p>
+<p>Differential Revision: D55332620</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122637<br />
+Approved by: https://github.com/jamesjwu</p>]]></description><pubDate>Tue, 26 Mar 2024 09:51:33 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e61aaab72562fe95d76e77b01678d71467e1739e</guid></item><item><title>[Inductor] Run pattern matcher over the original graph (#122519)</title><link>https://github.com/pytorch/pytorch/commit/1f5fcb4e203eb343e8c53f6444015c98e8f68d60</link><description><![CDATA[<p>[Inductor] Run pattern matcher over the original graph (#122519)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122519<br />
+Approved by: https://github.com/jansel</p>]]></description><pubDate>Tue, 26 Mar 2024 09:30:32 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1f5fcb4e203eb343e8c53f6444015c98e8f68d60</guid></item><item><title>[ez] Add more files to trigger inductor (#122669)</title><link>https://github.com/pytorch/pytorch/commit/8bad7b63c8b1ba4e7d1a9d86023d5b29068c2cb4</link><description><![CDATA[<p>[ez] Add more files to trigger inductor (#122669)</p>
+<p>To catch https://github.com/pytorch/pytorch/pull/122562/files<br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/122669<br />
+Approved by: https://github.com/desertfire</p>]]></description><pubDate>Tue, 26 Mar 2024 07:19:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/8bad7b63c8b1ba4e7d1a9d86023d5b29068c2cb4</guid></item><item><title>[BE][CPUInductor] Use C++17 helper templates (#122607)</title><link>https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</link><description>&lt;p&gt;[BE][CPUInductor] Use C++17 helper templates (#122607)&lt;/p&gt;
+&lt;p&gt;Such as &lt;code&gt;std::is_same_v&lt;/code&gt; ,&lt;code&gt;std::is_integral_v&lt;/code&gt; and C++14 one &lt;code&gt;std::enable_if_t&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122607&lt;br /&gt;
+Approved by: https://github.com/jansel, https://github.com/Skylion007&lt;/p&gt;</description><pubDate>Mon, 25 Mar 2024 11:01:44 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9d1de31634a5b9c8c990a6356ab8864bb4d9bede</guid></item><item><title>[inductor] Improve error message for shape errors in slice_scatter (#122543)</title><link>https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</link><description>&lt;p&gt;[inductor] Improve error message for shape errors in slice_scatter (#122543)&lt;/p&gt;
+&lt;p&gt;Fixes #122291&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122543&lt;br /&gt;
+Approved by: https://github.com/shunting314&lt;/p&gt;</description><pubDate>Mon, 25 Mar 2024 10:57:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/2db7d874a92f26ada3926b35de5716c1f457220e</guid></item><item><title>GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)</title><link>https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</link><description>&lt;p&gt;GPT2 SDPA inference pattern-matching for Inductor-CPU (#121866)&lt;/p&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;p&gt;With this PR, SDPA pattern of GPT2 is being mapped to &lt;code&gt;torch.nn.functional.scaled_dot_product_attention&lt;/code&gt;.&lt;br /&gt;
+While GPT2 supports both a causal mask &amp;amp; an attention mask, this PR considers the case of attention mask being absent.&lt;br /&gt;
+TorchBench inference workload for GPT2 also doesn't use an attention-mask.&lt;/p&gt;
+&lt;p&gt;This pattern's replacement is being disabled for CUDA because &lt;a href="https://github.com/pytorch/pytorch/actions/runs/8319111885/job/22762567770"&gt;CUDA AOT Inductor&lt;/a&gt; CI job's &lt;code&gt;GPT2ForSequenceClassification&lt;/code&gt; accuracy test failed, although all other trunk CUDA Inductor CI checks had passed.&lt;br /&gt;
+Created #122429 to track that particular issue.&lt;/p&gt;
+&lt;h3&gt;CPU performance data with TorchBench&lt;/h3&gt;
+&lt;p&gt;|MODEL |BATCH SIZE | DTYPE | BEFORE: Speedup over eager-mode with the default Inductor implementation | AFTER: Speedup over eager mode with SDPA op mapped| Perf boost = (AFTER - BEFORE)/BEFORE * 100|&lt;br /&gt;
+|--------------------------|-------------|---------|-----------------------------|--------------------------|------------|&lt;br /&gt;
+|hf_GPT2| 1 | FP32 | 1.522x | 1.791x| 17.67%|&lt;br /&gt;
+|hf_GPT2| 1 | BF16 (AMP) | 1.795x | 2.387x| 32.98%|&lt;br /&gt;
+|hf_GPT2| 2 | FP32 |  1.313x |1.629x | 19.3%|&lt;br /&gt;
+|hf_GPT2|2| BF16 (AMP) | 1.556x | 1.924x | 23.65%|&lt;br /&gt;
+|hf_GPT2_large| 1 | FP32 | 1.380x |1.585x | 12.93%|&lt;br /&gt;
+|hf_GPT2_large| 1 | BF16 (AMP) | 1.208x | 1.567x | 22.91%|&lt;br /&gt;
+|hf_GPT2_large| 2 | FP32 | 1.188x | 1.490x | 25.42%|&lt;br /&gt;
+|hf_GPT2_large|2| BF16 (AMP) | 0.991x | 1.575x | 58.93%|&lt;/p&gt;
+&lt;p&gt;Machine - Intel(R) Xeon(R) Platinum 8468H (Xeon 4th gen Sapphire Rapids)&lt;br /&gt;
+48 physical cores were used. Intel OpenMP &amp;amp; libtcmalloc were preloaded.&lt;/p&gt;
+&lt;p&gt;Example command -&lt;br /&gt;
+&lt;code&gt;OMP_NUM_THREADS=48 MKL_NUM_THREADS=48 numactl --membind=0 --cpunodebind=0 -C 0-47 python benchmarks/dynamo/torchbench.py --performance --inference --inductor --float32 -dcpu --only hf_GPT2_large --freezing --batch-size 1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121866&lt;br /&gt;
+Approved by: https://github.com/Valentine233, https://github.com/jgong5, https://github.com/desertfire&lt;/p&gt;</description><pubDate>Mon, 25 Mar 2024 07:04:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5152945441b2a1387f6e9fc8fe1531bfeb6cabe4</guid></item><item><title>[EZ][BE] Add missing `acosh` op to vec256_float_neon.h (#122513)</title><link>https://github.com/pytorch/pytorch/commit/bf40e3f880cc6820656d5d5fc32a21ca8334c520</link><description>&lt;p&gt;[EZ][BE] Add missing &lt;code&gt;acosh&lt;/code&gt; op to vec256_float_neon.h (#122513)&lt;/p&gt;
 &lt;p&gt;As base class has it&lt;br /&gt;
 https://github.com/pytorch/pytorch/blob/ed15370aabf951eec2ba0140de5ff71634868791/aten/src/ATen/cpu/vec/vec_base.h#L367-L369&lt;/p&gt;
 &lt;p&gt;Discovered while attempting to enabling Inductor vectorization on ARM platform&lt;/p&gt;
