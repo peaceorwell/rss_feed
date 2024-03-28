@@ -4,12 +4,190 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Revert "[Inductor] Run pattern matcher over the original graph (#122519)"</title><link>https://github.com/pytorch/pytorch/commit/b63f6f78dc8a4e6f059b9abc4eb1eed1d490bcfc</link><description><![CDATA[<p>Revert "[Inductor] Run pattern matcher over the original graph (#122519)"</p>
-<p>This reverts commit 1f5fcb4e203eb343e8c53f6444015c98e8f68d60.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/122519 on behalf of https://github.com/atalman due to Breaks internal tests (<a href="https://github.com/pytorch/pytorch/pull/122519#issuecomment-2023022311">comment</a>)</p>]]></description><pubDate>Wed, 27 Mar 2024 07:13:26 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b63f6f78dc8a4e6f059b9abc4eb1eed1d490bcfc</guid></item><item><title>[inductor][cpp] simplify CppVecKernelChecker (remove bool/int8 load as mask and load as float flags) (#119734)</title><link>https://github.com/pytorch/pytorch/commit/105381ea1159eb025a580f008c78f2682caee930</link><description><![CDATA[<p>[inductor][cpp] simplify CppVecKernelChecker (remove bool/int8 load as mask and load as float flags) (#119734)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119734<br />
-Approved by: https://github.com/leslie-fang-intel, https://github.com/jansel<br />
-ghstack dependencies: #119654, #119655</p>]]></description><pubDate>Wed, 27 Mar 2024 03:20:35 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/105381ea1159eb025a580f008c78f2682caee930</guid></item><item><title>[Inductor] Support custom op in JIT with cpp wrapper (#122554)</title><link>https://github.com/pytorch/pytorch/commit/537cd66e73e8a9b33c843d55d546471f3074a390</link><description>&lt;p&gt;[Inductor] Support custom op in JIT with cpp wrapper (#122554)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Add wrapper for fbgemm quantization operations (#122763)</title><link>https://github.com/pytorch/pytorch/commit/966ae943dfcd3dfcfac7bcf2267a730b4ca4606b</link><description><![CDATA[<p>Add wrapper for fbgemm quantization operations (#122763)</p>
+<p>Summary:<br />
+We add wrappers for fbgemm's packing so we can pass it through PT2 to<br />
+lowering phase of AOTInductor.</p>
+<p>Test Plan:<br />
+Included in commit.<br />
+test_quantized_ops::test_wrapped_fbgemm_linear_fp16</p>
+<p>Reviewers:</p>
+<p>Subscribers:</p>
+<p>Tasks:</p>
+<p>Tags:</p>
+<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D55433204">D55433204</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/122763<br />
+Approved by: https://github.com/jerryzh168<br />
+ghstack dependencies: #122762</p>]]></description><pubDate>Thu, 28 Mar 2024 10:41:18 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/966ae943dfcd3dfcfac7bcf2267a730b4ca4606b</guid></item><item><title>[AOTInductor] Support use_runtime_constant_folding for CPU. (#122563)</title><link>https://github.com/pytorch/pytorch/commit/091a24495b29d7aa077b16b508972f88d3a5aad5</link><description><![CDATA[<p>[AOTInductor] Support use_runtime_constant_folding for CPU. (#122563)</p>
+<p>Summary:<br />
+We allow CPU to use the config use_runtime_constant_folding.<br />
+Changes include<br />
+1. Rearrange USE_CUDA flags. Add CPU sections that consumes memory directly.<br />
+2. Codegen changes to accomodate cpp fusions for CPU only. Specifically, we shouldn't generate 2 headers that would cause re-declaration.</p>
+<p>Test Plan: Activate tests that were deactivated for CPU before.</p>
+<p>Reviewed By: khabinov</p>
+<p>Differential Revision: D55234300</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122563<br />
+Approved by: https://github.com/chenyang78</p>]]></description><pubDate>Thu, 28 Mar 2024 09:49:05 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/091a24495b29d7aa077b16b508972f88d3a5aad5</guid></item><item><title>[Inductor]Fix a couple of broken unit tests (#122714)</title><link>https://github.com/pytorch/pytorch/commit/4670dcc94c64f8f34673476ca2db3b840e41daf4</link><description><![CDATA[<p>[Inductor]Fix a couple of broken unit tests (#122714)</p>
+<p>Summary: Titled</p>
+<p>Test Plan:<br />
+<code>buck2 test mode/dev-nosan //caffe2/test/inductor:group_batch_fusion</code><br />
+Buck UI: https://www.internalfb.com/buck2/ad05a43c-cb4a-443e-8904-b4d53e4f4b1e<br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/13510798909218388<br />
+Network: Up: 107KiB  Down: 28KiB  (reSessionID-d7146e4f-773a-46ea-9852-f10f59302479)<br />
+Jobs completed: 24. Time elapsed: 1:49.3s.<br />
+Cache hits: 0%. Commands: 2 (cached: 0, remote: 0, local: 2)<br />
+Tests finished: Pass 9. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<p><code>buck2 test 'fbcode//mode/opt' fbcode//caffe2/test/inductor/fb:split_cat_fx_passes_fb</code></p>
+<p>Buck UI: https://www.internalfb.com/buck2/82dbf3b0-c747-4c07-98b8-53b69afa3157<br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/1125900267699118<br />
+Network: Up: 1.4GiB  Down: 2.3GiB  (reSessionID-0bd22c6d-5dfe-4b4a-bc24-705eadac884b)<br />
+Jobs completed: 252570. Time elapsed: 7:25.2s.<br />
+Cache hits: 95%. Commands: 123778 (cached: 117999, remote: 2779, local: 3000)<br />
+Tests finished: Pass 1. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<p>Differential Revision: D55378009</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122714<br />
+Approved by: https://github.com/SherlockNoMad</p>]]></description><pubDate>Thu, 28 Mar 2024 09:44:30 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/4670dcc94c64f8f34673476ca2db3b840e41daf4</guid></item><item><title>[PT2][Inductor][Observability] Improve the optimus scuba log (#122361)</title><link>https://github.com/pytorch/pytorch/commit/9693797491a3b20dc1ea7825b6d26f8aace90322</link><description><![CDATA[<p>[PT2][Inductor][Observability] Improve the optimus scuba log (#122361)</p>
+<p>Summary: Titled</p>
+<p>Test Plan:<br />
+<code>buck2 test mode/dev-nosan //caffe2/test/inductor:group_batch_fusion</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/18014398535709463<br />
+Network: Up: 113KiB           Down: 480KiB           (reSessionID-1d2e3558-15b5-4a4e-8c5d-10c983afb389)<br />
+Discovered 9. Pass 0. Fail 0. Fatal 0. Skip 0. Timeout 0<br />
+Command: test.                                                                                 Remaining: 9/24. Cache hits: 0%. Time elapsed: 44.3s<br />
+Command: test.                                                                                 Remaining: 9/24. Cache hits: 0%. Time elapsed: 44.4s<br />
+Command: test.                                                                                 Remaining: 9/24. Cache hits: 0%. Time elapsed: 44.5s<br />
+Network: Up: 117KiB  Down: 507KiB  (reSessionID-1d2e3558-15b5-4a4e-8c5d-10c983afb389)<br />
+Jobs completed: 24. Time elapsed: 1:48.3s.<br />
+Cache hits: 0%. Commands: 2 (cached: 0, remote: 0, local: 2)<br />
+Tests finished: Pass 9. Fail 0. Fatal 0. Skip 0. Build failure 0<br />
+<code>buck2 test mode/dev-nosan //caffe2/test/inductor:split_cat_fx_passes</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/16044073698893554<br />
+Network: Up: 120KiB  Down: 60KiB  (reSessionID-57f2c21b-3f4e-462b-9e5b-fe3dd15f6b7d)<br />
+Jobs completed: 28. Time elapsed: 1:47.5s.<br />
+Cache hits: 0%. Commands: 2 (cached: 0, remote: 0, local: 2)<br />
+Tests finished: Pass 11. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<p>optimus_scuba_log:<br />
+<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GIbj2haUwKx69H8BAKXdGqXZSpoybr0LAAAz', 'group_batch_fusion_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GFqhiRYcJ_C4JFoDABKPTsfpzjJ_br0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GIvswhaiAVyipcoGAJZ5sUi8Bb5qbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GFneTxcVBPaqVuwCADCiI4q1mEwlbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GJc0Phn87ljuMO0CADBPGqqehKp2br0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLWB_BbvLyT7D_0DABmygDYPDjJ_br0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GO6eQBeIj6oV3o4JAFLzQ3ECMTIrbr0LAAAz', 'inductor_pre_grad': Counter({'pattern_matcher_nodes': 2006, 'pattern_matcher_count': 1806, 'normalization_pass': 861, 'remove_split_with_size_one_pass': 748, 'merge_splits_pass': 82, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 4, 'batch_layernorm': 1, 'batch_sigmoid': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'scmerge_split_removed': 1, 'scmerge_cat_removed': 1}), 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMoKmxYg6AUeQ40KAMDaJ4EVDwYmbr0LAAAz', 'group_batch_fusion_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GHIvQxkrV1PMBggEACv7786a2bE8br0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GIpBNxXupQTHWx8BALSiVrKgDbtfbr0LAAAz', 'inductor_post_grad': Counter({'pattern_matcher_nodes': 2093, 'pattern_matcher_count': 1893, 'normalization_pass': 861, 'remove_split_with_size_one_pass': 748, 'merge_splits_pass': 82, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 4, 'batch_layernorm': 1, 'batch_sigmoid': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'scmerge_split_removed': 1, 'scmerge_cat_removed': 1, 'batch_aten_mul': 1})}</code></p>
+<p>Differential Revision: D55107000</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122361<br />
+Approved by: https://github.com/jackiexu1992</p>]]></description><pubDate>Thu, 28 Mar 2024 09:13:32 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9693797491a3b20dc1ea7825b6d26f8aace90322</guid></item><item><title>[inductor][Autotune] Add matrix_instr_nonkdim to triton_meta (#122852)</title><link>https://github.com/pytorch/pytorch/commit/049d68d8bb1c0a10b41ae70ddb60d84b052c2cb5</link><description><![CDATA[<p>[inductor][Autotune] Add matrix_instr_nonkdim to triton_meta (#122852)</p>
+<p>Summary: Previous work <code>https://github.com/pytorch/pytorch/pull/120742</code> to enable <code>matrix_instr_nonkdim</code> only dealt with the autotuner benchmarking, but failed to enable the parameter in Triton meta for real runs. <code>matrix_instr_nonkdim</code> needs to be visible to the compiler driver to set up the optimization pipeline, so it's unlike other kernel parameters such as <code>BLOCK_N</code> that can be just set inside the kernel itself.</p>
+<p>Test Plan:<br />
+P1201466917</p>
+<p>triton_heuristics.template(<br />
+    num_stages=1,<br />
+    num_warps=4,<br />
+    triton_meta={'signature': {0: '<em>fp32', 1: '</em>fp32', 2: '*fp32'}, 'device': 0, 'device_type': 'cuda', 'constants': {}, 'configs': [instance_descriptor(divisible_by_16=(0, 1, 2), equal_to_1=(), ids_of_folded_args=(), divisible_by_8=())], 'matrix_instr_nonkdim': 16},<br />
+    inductor_meta={'kernel_name': 'triton_tem_fused_mm_0', 'backend_hash': None},<br />
+  )</p>
+<p>Perf :<br />
+Before: 1.693ms    0.134GB    79.28GB/s<br />
+After:    1.577ms    0.134GB    85.12GB/s</p>
+<p>Differential Revision: D55456401</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122852<br />
+Approved by: https://github.com/xw285cornell</p>]]></description><pubDate>Thu, 28 Mar 2024 08:58:38 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/049d68d8bb1c0a10b41ae70ddb60d84b052c2cb5</guid></item><item><title>[dynamo] Fix traceback generation on runtime errors (#122746)</title><link>https://github.com/pytorch/pytorch/commit/f178d996a893737f44c97c18a7ed6358780374db</link><description><![CDATA[<p>[dynamo] Fix traceback generation on runtime errors (#122746)</p>
+<p>Fixes <code>During handling of the above exception, another exception occurred: [...] torch._dynamo.exc.Unsupported: generator</code>. traceback.format_exc uses generators which isn't supported by dynamo yet.</p>
+<details>
+  <summary>current error message</summary>
+
+```
+======================================================================
+ERROR: test_custom_fn_saved_tensors (__main__.TestCompiledAutograd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 307, in __call__
+    return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1537, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "<eval_with_key>.0", line 4, in forward
+    def forward(self, inputs, sizes, hooks):
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/xmfan/core/pytorch/torch/testing/_internal/common_utils.py", line 2741, in wrapper
+    method(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/test/inductor/test_compiled_autograd.py", line 499, in test_custom_fn_saved_tensors
+    self.check_output_and_recompiles(fn, 1)
+  File "/home/xmfan/core/pytorch/test/inductor/test_compiled_autograd.py", line 61, in check_output_and_recompiles
+    actual = list(opt_fn())
+  File "/home/xmfan/core/pytorch/test/inductor/test_compiled_autograd.py", line 495, in fn
+    loss.backward()
+  File "/home/xmfan/core/pytorch/torch/_tensor.py", line 534, in backward
+    torch.autograd.backward(
+  File "/home/xmfan/core/pytorch/torch/autograd/__init__.py", line 267, in backward
+    _engine_run_backward(
+  File "/home/xmfan/core/pytorch/torch/autograd/graph.py", line 766, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1537, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/_dynamo/eval_frame.py", line 397, in _fn
+    res = fn(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 741, in call_wrapped
+    return self._wrapped_call(self, *args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 315, in __call__
+    _WrappedCall._generate_error_message(topmost_framesummary),
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 289, in _generate_error_message
+    tb_repr = get_traceback()
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 288, in get_traceback
+    return traceback.format_exc()
+  File "/home/xmfan/.conda/envs/benchmarks/lib/python3.10/traceback.py", line 183, in format_exc
+    return "".join(format_exception(*sys.exc_info(), limit=limit, chain=chain))
+  File "/home/xmfan/.conda/envs/benchmarks/lib/python3.10/traceback.py", line 136, in format_exception
+    return list(te.format(chain=chain))
+  File "/home/xmfan/core/pytorch/torch/_dynamo/convert_frame.py", line 941, in catch_errors
+    return callback(frame, cache_entry, hooks, frame_state, skip=1)
+  File "/home/xmfan/core/pytorch/torch/_dynamo/convert_frame.py", line 348, in _convert_frame_assert
+    unimplemented("generator")
+  File "/home/xmfan/core/pytorch/torch/_dynamo/exc.py", line 199, in unimplemented
+    raise Unsupported(msg)
+torch._dynamo.exc.Unsupported: generator
+```
+
+</details>
+
+<p>With this change, we get back the descriptive error message:</p>
+<details>
+  <summary>post-fix error message</summary>
+
+```
+Traceback (most recent call last):
+  File "/home/xmfan/core/pytorch/torch/fx/graph_module.py", line 307, in __call__
+    return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/xmfan/core/pytorch/torch/nn/modules/module.py", line 1537, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "<eval_with_key>.0", line 4, in forward
+    def forward(self, inputs, sizes, hooks):
+IndexError: list index out of range
+
+Call using an FX-traced Module, line 4 of the traced Module's generated forward function:
+
+def forward(self, inputs, sizes, hooks):
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ <--- HERE
+    getitem = inputs[0]
+
+    getitem_1 = inputs[1];  inputs = None
+```
+
+</details>
+
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122746<br />
+Approved by: https://github.com/jansel, https://github.com/anijain2305<br />
+ghstack dependencies: #122691</p>]]></description><pubDate>Thu, 28 Mar 2024 06:40:54 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f178d996a893737f44c97c18a7ed6358780374db</guid></item><item><title>Revert "[Inductor] Run pattern matcher over the original graph (#122519)"</title><link>https://github.com/pytorch/pytorch/commit/b63f6f78dc8a4e6f059b9abc4eb1eed1d490bcfc</link><description>&lt;p&gt;Revert "[Inductor] Run pattern matcher over the original graph (#122519)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 1f5fcb4e203eb343e8c53f6444015c98e8f68d60.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/122519 on behalf of https://github.com/atalman due to Breaks internal tests (&lt;a href="https://github.com/pytorch/pytorch/pull/122519#issuecomment-2023022311"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Wed, 27 Mar 2024 07:13:26 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b63f6f78dc8a4e6f059b9abc4eb1eed1d490bcfc</guid></item><item><title>[inductor][cpp] simplify CppVecKernelChecker (remove bool/int8 load as mask and load as float flags) (#119734)</title><link>https://github.com/pytorch/pytorch/commit/105381ea1159eb025a580f008c78f2682caee930</link><description>&lt;p&gt;[inductor][cpp] simplify CppVecKernelChecker (remove bool/int8 load as mask and load as float flags) (#119734)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119734&lt;br /&gt;
+Approved by: https://github.com/leslie-fang-intel, https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #119654, #119655&lt;/p&gt;</description><pubDate>Wed, 27 Mar 2024 03:20:35 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/105381ea1159eb025a580f008c78f2682caee930</guid></item><item><title>[Inductor] Support custom op in JIT with cpp wrapper (#122554)</title><link>https://github.com/pytorch/pytorch/commit/537cd66e73e8a9b33c843d55d546471f3074a390</link><description>&lt;p&gt;[Inductor] Support custom op in JIT with cpp wrapper (#122554)&lt;/p&gt;
 &lt;p&gt;Summary:  To call custom ops in an ABI-compatible way requires doing boxed call with varargs across C shim. In the JIT mode, we can get around it by calling into Python.  https://gist.github.com/desertfire/be2a65b0a9b47780bb716b53ac2cd2b3 is an example of generated code.&lt;/p&gt;
 &lt;p&gt;Differential Revision: &lt;a href="https://our.internmc.facebook.com/intern/diff/D55326556"&gt;D55326556&lt;/a&gt;&lt;br /&gt;
 Pull Request resolved: https://github.com/pytorch/pytorch/pull/122554&lt;br /&gt;
