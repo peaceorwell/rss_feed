@@ -47,14 +47,15 @@ def get_commits_with_keyword(repo, keyword, days=1):
             break
         for commit_data in response.json():
             commit_message = commit_data['commit']['message']
-            if keyword.lower() in commit_message.lower():
-                commit_info = {
-                    'title': commit_message.split("\n")[0],
-                    'url': commit_data['html_url'],
-                    'message': commit_message,
-                    'date': format_rfc2822(commit_data['commit']['committer']['date'])
-                }
-                commits.append(commit_info)
+            for k in keyword:
+                if k.lower() in commit_message.lower():
+                    commit_info = {
+                        'title': commit_message.split("\n")[0],
+                        'url': commit_data['html_url'],
+                        'message': commit_message,
+                        'date': format_rfc2822(commit_data['commit']['committer']['date'])
+                    }
+                    commits.append(commit_info)
         page += 1
     return commits
 
@@ -127,7 +128,7 @@ def append_to_rss_feed(commits, feed_path='feed.xml'):
 
 # 设置仓库和关键词
 repo = "pytorch/pytorch"
-keyword = "inductor"
+keyword = ["inductor","triton","aoti", "aotinductor"]
 
 # 获取commits并更新RSS feed
 commits = get_commits_with_keyword(repo, keyword)
