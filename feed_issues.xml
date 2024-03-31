@@ -5,27 +5,176 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>[fix] inductor `split` lowering fails if `item()` is captured</title>
-      <link>https://github.com/pytorch/pytorch/pull/123032</link>
-      <description><![CDATA[<p>Fixes #122937</p>
+      <title>[Inductor][1/n]Split cat customization</title>
+      <link>https://github.com/pytorch/pytorch/pull/123045</link>
+      <description><![CDATA[<p>Summary: Change the config and revise the group batch fusion in order not to reuse the exsiting pre_grad and post_grad fusion options</p>
+<p>Test Plan:</p>
+<h1>unit test</h1>
+<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor:split_cat_fx_passes</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/17732923560510096<br />
+Network: Up: 15MiB  Down: 155MiB  (reSessionID-6a577a14-1772-42d9-9ae8-bfdc62f406a3)<br />
+Jobs completed: 267487. Time elapsed: 2:39.7s.<br />
+Cache hits: 99%. Commands: 104465 (cached: 104457, remote: 8, local: 0)<br />
+Tests finished: Pass 11. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor/fb:split_cat_fx_passes_fb</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/9007199283031382<br />
+Network: Up: 28MiB  Down: 177MiB  (reSessionID-a3081518-7cba-4c83-b442-c16655ecb2cd)<br />
+Jobs completed: 183164. Time elapsed: 1:41.4s.<br />
+Cache hits: 99%. Commands: 75875 (cached: 75862, remote: 12, local: 1)<br />
+Tests finished: Pass 1. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor:group_batch_fusion</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/10133099189612276<br />
+Network: Up: 1.3MiB           Down: 3.1MiB           (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)<br />
+Discovered 9. Pass 0. Fail 0. Fatal 0. Skip 0. Timeout 0<br />
+Network: Up: 1.4MiB  Down: 3.2MiB  (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)<br />
+Jobs completed: 68. Time elapsed: 2:19.9s.<br />
+Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)<br />
+Tests finished: Pass 9. Fail 0. Fatal 0. Skip 0. Build failure 0<br />
+<code>buck2 test @mode/dev-nosan //caffe2/test/inductor:perf</code><br />
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/5066549804623287<br />
+Network: Up: 1.5MiB  Down: 1.1MiB  (reSessionID-8d912a20-fceb-4698-89c3-d28e0708831f)<br />
+Jobs completed: 164. Time elapsed: 1:42.2s.<br />
+Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)<br />
+Tests finished: Pass 57. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
+<h1>local reproduce</h1>
+<p>case 1: with split cat<br />
+<code>buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch-split --model_type "cmf" --flow_id 524546542</code><br />
+optimus parameter sent to the scuba:<br />
+<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLL6RBZb-ssXJYcBAMzw0oaKtp80br0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GH1LAxcxv0Ae_BkFAHVav3K3oosDbr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNb0jwR-Ukkqns4CAGRmOqucfedDbr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GHsIQxm-hn3SPrgCAKq1E-HBsoZHbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOrJORmbMTV_xlQDAOwolqclPsIAbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCqkmRblvVKybGUDACVxkwVIrWxLbr0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCB1QBfko_kVN0wFAKGjSZv4DJULbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMwJPRmu4ry88swDAO1gdA5RCKIXbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLXCORnNiKeQFmoDABR93CRKmP8Sbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBMIPRnlwQyjSD4BANPuaMhV7MUjbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GJ9KPxkOv4LL8_0DAA65D4kh4JYDbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 2844, 'pattern_matcher_count': 2604, 'normalization_pass': 886, 'remove_split_with_size_one_pass': 748, 'merge_splits_pass': 82, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 4, 'batch_aten_mul': 4, 'batch_sigmoid': 2, 'batch_aten_sub': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'scmerge_split_removed': 1, 'scmerge_cat_removed': 1, 'batch_aten_add': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEcvPxmxBj-pd8gCABE1QgB-d6N6br0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEvQxhYomJGj2FMBAEXXAI8Vgzhmbr0LAAAz'}</code><br />
+P1202819405</p>
+<p>case 2: without split cat<br />
+<code>buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch --model_type "cmf" --flow_id 524546542</code><br />
+optimus parameter sent to the scuba:<br />
+<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAY7PxmGthuyjSwEAHF_A767YbMkbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLDPtBacXyybEOICAKaGCPatq5oabr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBu7ORkiDJu42QAEAGmlVTgO_Mpbbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GC893BZNl99ftY4BAHm5Z8sM4ptSbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCAeuRYgzPO5RcsCAPO3Z7tdMNMKbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GHBIQxm1jlU-xhsFAONkzhh2mgknbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDoUPhmZ0noiaGMDAJHYuuiwHEAUbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 1189, 'pattern_matcher_count': 757, 'batch_aten_mul': 9, 'batch_aten_sub': 3, 'batch_sigmoid': 2, 'batch_aten_add': 2, 'batch_layernorm': 1, 'batch_linear_post_grad': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAluthYxi8uxpI4BAIQDzn3OyywUbr0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDjsJhTK5VAcot4CADIcAixghrYibr0LAAAz', 'PostGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEPfJxfJwktC7wsEAA0QbkqYNuVAbr0LAAAz'}</code><br />
+P1202823734</p>
+<h1>e2e</h1>
+<p>training_platform:fd4f02cd855f5cc0ccb49317a5a6c8bb</p>
+<p>with split cat<br />
+f546646358</p>
+<p>without split cat<br />
+f546647159</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sat, 30 Mar 2024 10:57:00 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123032</guid>
+      <pubDate>Sat, 30 Mar 2024 21:48:49 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123045</guid>
     </item>
     <item>
-      <title>[inductor] Move compile workers to a subprocess</title>
-      <link>https://github.com/pytorch/pytorch/pull/122941</link>
+      <title>ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'</title>
+      <link>https://github.com/pytorch/pytorch/issues/123042</link>
+      <description><![CDATA[<p>Code:<br />
+```python<br />
+torch._dynamo.config.suppress_errors = True</p>
+<p>self.pipe = OotdPipeline.from_pretrained(<br />
+    MODEL_PATH,<br />
+    unet_garm=unet_garm,<br />
+    unet_vton=unet_vton,<br />
+    vae=vae,<br />
+    torch_dtype=torch.float16,<br />
+    variant="fp16",<br />
+    use_safetensors=True,<br />
+    safety_checker=None,<br />
+    requires_safety_checker=False,<br />
+    local_files_only=True,<br />
+).to(self.gpu_id)</p>
+<p>self.pipe.unet_garm = torch.compile(self.pipe.unet_garm, mode="reduce-overhead", fullgraph=True)<br />
+self.pipe.unet_vton = torch.compile(self.pipe.unet_vton, mode="reduce-overhead", fullgraph=True)<br />
+<code>Error Message:</code>bash<br />
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/_triton.py", line 57, in triton_hash_with_backend<br />
+    from triton.compiler.compiler import triton_key<br />
+torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:<br />
+ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler' (/usr/local/lib/python3.10/dist-packages/triton/compiler/compiler.py)<br />
+```</p>
+<h3>Versions</h3>
+<p>PyTorch version: 2.4.0.dev20240330+cu121<br />
+Is debug build: False<br />
+CUDA used to build PyTorch: 12.1<br />
+ROCM used to build PyTorch: N/A</p>
+<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
+Clang version: Could not collect<br />
+CMake version: version 3.29.0<br />
+Libc version: glibc-2.35</p>
+<p>Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] (64-bit runtime)<br />
+Python platform: Linux-5.10.0-28-cloud-amd64-x86_64-with-glibc2.35<br />
+Is CUDA available: True<br />
+CUDA runtime version: 12.1.105<br />
+CUDA_MODULE_LOADING set to: LAZY<br />
+GPU models and configuration: GPU 0: NVIDIA L4<br />
+Nvidia driver version: 535.104.05<br />
+cuDNN version: Could not collect<br />
+HIP runtime version: N/A<br />
+MIOpen runtime version: N/A<br />
+Is XNNPACK available: True</p>
+<p>CPU:<br />
+Architecture:                       x86_64<br />
+CPU op-mode(s):                     32-bit, 64-bit<br />
+Address sizes:                      46 bits physical, 48 bits virtual<br />
+Byte Order:                         Little Endian<br />
+CPU(s):                             96<br />
+On-line CPU(s) list:                0-95<br />
+Vendor ID:                          GenuineIntel<br />
+Model name:                         Intel(R) Xeon(R) CPU @ 2.20GHz<br />
+CPU family:                         6<br />
+Model:                              85<br />
+Thread(s) per core:                 2<br />
+Core(s) per socket:                 24<br />
+Socket(s):                          2<br />
+Stepping:                           7<br />
+BogoMIPS:                           4400.42<br />
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat avx512_vnni md_clear arch_capabilities<br />
+Hypervisor vendor:                  KVM<br />
+Virtualization type:                full<br />
+L1d cache:                          1.5 MiB (48 instances)<br />
+L1i cache:                          1.5 MiB (48 instances)<br />
+L2 cache:                           48 MiB (48 instances)<br />
+L3 cache:                           77 MiB (2 instances)<br />
+NUMA node(s):                       2<br />
+NUMA node0 CPU(s):                  0-23,48-71<br />
+NUMA node1 CPU(s):                  24-47,72-95<br />
+Vulnerability Gather data sampling: Not affected<br />
+Vulnerability Itlb multihit:        Not affected<br />
+Vulnerability L1tf:                 Not affected<br />
+Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT Host state unknown<br />
+Vulnerability Meltdown:             Not affected<br />
+Vulnerability Mmio stale data:      Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown<br />
+Vulnerability Retbleed:             Mitigation; Enhanced IBRS<br />
+Vulnerability Spec rstack overflow: Not affected<br />
+Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
+Vulnerability Spectre v2:           Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
+Vulnerability Srbds:                Not affected<br />
+Vulnerability Tsx async abort:      Mitigation; Clear CPU buffers; SMT Host state unknown</p>
+<p>Versions of relevant libraries:<br />
+[pip3] numpy==1.24.4<br />
+[pip3] onnxruntime==1.16.2<br />
+[pip3] pytorch-triton==0.0.1<br />
+[pip3] torch==2.4.0.dev20240330+cu121<br />
+[pip3] torchaudio==2.2.0.dev20240330+cu121<br />
+[pip3] torchvision==0.19.0.dev20240330+cu121<br />
+[pip3] triton==2.2.0<br />
+[conda] Could not collect</p>]]></description>
+      <pubDate>Sat, 30 Mar 2024 15:54:19 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123042</guid>
+    </item>
+    <item>
+      <title>[aotinductor] Fix benchmarks with self.autocast for run_performance_test</title>
+      <link>https://github.com/pytorch/pytorch/pull/122954</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #123012<br />
-* #123011<br />
-* <strong>-&gt;</strong> #122941<br />
-* #123010<br />
-* #123009</p>
-<p>In many environments using fork-based parallelism causes issues because user processes are not fork-safe.  This moves our parallel compile work pool into a subprocess that we control (that should be fork safe).</p>
-<p>Perf run: https://github.com/pytorch/pytorch/actions/runs/8486887873</p>
+* <strong>-&gt;</strong> #122954<br />
+* #122883</p>
+<p>https://github.com/pytorch/pytorch/pull/110490 fixes the self.autocast in the <code>check_accuracy</code> function. Fix it in the <code>run_performance_test</code> function as well.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
+      <pubDate>Thu, 28 Mar 2024 23:29:41 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122954</guid>
+    </item>
+    <item>
+      <title>Inductor: don't change the stride_order of FlexibleLayout if it's already the same as required</title>
+      <link>https://github.com/pytorch/pytorch/pull/122945</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #122945</p>
+<p>Fixes https://github.com/pytorch/pytorch/issues/122489</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 28 Mar 2024 20:34:51 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122941</guid>
+      <pubDate>Thu, 28 Mar 2024 21:39:50 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122945</guid>
     </item>
     <item>
       <title>[AOTInductor] Support quantized linear on CPU with fbgemm</title>
@@ -43,330 +192,83 @@ test_aot_inductor::test_quantized_linear</p>
 <p>Reviewers:</p>
 <p>Subscribers:</p>
 <p>Tasks:</p>
-<p>Tags:</p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>
+<p>Tags:<br />
+@diff-train-skip-merge<br />
+cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>
 <p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D55512029">D55512029</a></p>]]></description>
       <pubDate>Thu, 28 Mar 2024 20:03:28 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122939</guid>
     </item>
     <item>
-      <title>Inductor: aten.split_with_sizes.default: TypeError: Cannot convert symbols to int</title>
-      <link>https://github.com/pytorch/pytorch/issues/122937</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>Internal xref: https://fb.workplace.com/groups/6829516587176185/posts/7024545131006662</p>
-<p>This program</p>
-<p>```<br />
-import torch<br />
-import torch._dynamo.config</p>
-<p>torch._dynamo.config.capture_scalar_outputs = True</p>
-<p>@torch.compile()<br />
-def f(x, il, jl):<br />
-    i0, i1, i2 = il.tolist()<br />
-    j0, j1, j2 = jl.tolist()<br />
-    for i in [i0, i1, i2, j0, j1, j2]:<br />
-        torch._check_is_size(i)<br />
-    r = torch.zeros(x.item())<br />
-    return torch.ops.aten.split_with_sizes.default(r, [i0 + j0, i1 + j1, i2 + j2])</p>
-<p>f(torch.tensor(20), torch.tensor([2, 5, 3]), torch.tensor([3, 4, 3]))<br />
-```</p>
-<p>fails with</p>
-<p>```<br />
-  File "/data/users/ezyang/a/pytorch/torch/_inductor/lowering.py", line 1358, in split_with_sizes<br />
-    return split(x, sizes, dim, clamp=False)<br />
-  File "/data/users/ezyang/a/pytorch/torch/_inductor/lowering.py", line 298, in wrapped<br />
-    out = decomp_fn(<em>args, </em>*kwargs)<br />
-  File "/data/users/ezyang/a/pytorch/torch/_inductor/lowering.py", line 1340, in split<br />
-    x_size = V.graph.sizevars.evaluate_static_shape(x.get_size()[dim])<br />
-  File "/data/users/ezyang/a/pytorch/torch/_inductor/sizevars.py", line 394, in evaluate_static_shape<br />
-    right = self.size_hint(left)<br />
-  File "/data/users/ezyang/a/pytorch/torch/_inductor/sizevars.py", line 431, in size_hint<br />
-    return int(out)<br />
-  File "/home/ezyang/local/a/pytorch-env/lib/python3.10/site-packages/sympy/core/expr.py", line 320, in <strong>int</strong><br />
-    raise TypeError("Cannot convert symbols to int")<br />
-torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:<br />
-LoweringException: TypeError: Cannot convert symbols to int<br />
-  target: aten.split_with_sizes.default<br />
-  args[0]: TensorBox(StorageBox(<br />
-    Pointwise(<br />
-      'cpu',<br />
-      torch.float32,<br />
-      def inner_fn(index):<br />
-          i0 = index<br />
-          tmp0 = ops.constant(0, torch.float32)<br />
-          return tmp0<br />
-      ,<br />
-      ranges=[u27],<br />
-      origin_node=full,<br />
-      origins={full}<br />
-    )<br />
-  ))<br />
-  args[1]: [u21 + u24, u22 + u25, u23 + u26]</p>
-<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
-<p>You can suppress this exception and fall back to eager by setting:<br />
-    import torch._dynamo<br />
-    torch._dynamo.config.suppress_errors = True<br />
-```</p>
-<p>I think this is just the split_with_sizes lowering is written poorly, we don't actually need to get a hint for the input dim being split over if we have a list of splits, just use those splits directly.</p>
-<h3>Versions</h3>
-<p>main</p>
-<p>cc @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Thu, 28 Mar 2024 19:33:10 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122937</guid>
-    </item>
-    <item>
-      <title>Compile torch 1.12.1 from source using cuda 12.1</title>
-      <link>https://github.com/pytorch/pytorch/issues/122936</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>I am compiling torch 1.12.1 from source using cuda 12.1 and always get errors as follows, I  wonder whether torch version mismatch with that of cuda<br />
-<img alt="image" src="https://github.com/pytorch/pytorch/assets/73052387/1944e19f-3fda-4524-b67f-04039bbf886e" /></p>
-<h3>Versions</h3>
-<p>Collecting environment information...<br />
-```<br />
-PyTorch version: N/A<br />
-Is debug build: N/A<br />
-CUDA used to build PyTorch: N/A<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.26.4<br />
-Libc version: glibc-2.35</p>
-<p>Python version: 3.9.18 (main, Sep 11 2023, 13:41:44)  [GCC 11.2.0] (64-bit runtime)<br />
-Python platform: Linux-5.15.0-101-generic-x86_64-with-glibc2.35<br />
-Is CUDA available: N/A<br />
-CUDA runtime version: 12.1.105<br />
-CUDA_MODULE_LOADING set to: N/A<br />
-GPU models and configuration: <br />
-GPU 0: NVIDIA GeForce RTX 4090<br />
-GPU 1: NVIDIA GeForce RTX 4090<br />
-GPU 2: NVIDIA GeForce RTX 4090</p>
-<p>Nvidia driver version: 535.161.07<br />
-cuDNN version: Probably one of the following:<br />
-/usr/lib/x86_64-linux-gnu/libcudnn.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.9.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.9.0<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: N/A</p>
-<p>CPU:<br />
-Architecture:                       x86_64<br />
-CPU op-mode(s):                     32-bit, 64-bit<br />
-Address sizes:                      52 bits physical, 57 bits virtual<br />
-Byte Order:                         Little Endian<br />
-CPU(s):                             40<br />
-On-line CPU(s) list:                0-39<br />
-Vendor ID:                          GenuineIntel<br />
-Model name:                         Intel(R) Xeon(R) Silver 4416+<br />
-CPU family:                         6<br />
-Model:                              143<br />
-Thread(s) per core:                 2<br />
-Core(s) per socket:                 20<br />
-Socket(s):                          1<br />
-Stepping:                           7<br />
-CPU max MHz:                        3900.0000<br />
-CPU min MHz:                        800.0000<br />
-BogoMIPS:                           4000.00<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cat_l2 cdp_l3 invpcid_single intel_ppin cdp_l2 ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust sgx bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb intel_pt avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local split_lock_detect avx_vnni avx512_bf16 wbnoinvd dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg tme avx512_vpopcntdq la57 rdpid bus_lock_detect cldemote movdiri movdir64b enqcmd sgx_lc fsrm md_clear serialize tsxldtrk pconfig arch_lbr amx_bf16 avx512_fp16 amx_tile amx_int8 flush_l1d arch_capabilities<br />
-Virtualization:                     VT-x<br />
-L1d cache:                          960 KiB (20 instances)<br />
-L1i cache:                          640 KiB (20 instances)<br />
-L2 cache:                           40 MiB (20 instances)<br />
-L3 cache:                           37.5 MiB (1 instance)<br />
-NUMA node(s):                       1<br />
-NUMA node0 CPU(s):                  0-39<br />
-Vulnerability Gather data sampling: Not affected<br />
-Vulnerability Itlb multihit:        Not affected<br />
-Vulnerability L1tf:                 Not affected<br />
-Vulnerability Mds:                  Not affected<br />
-Vulnerability Meltdown:             Not affected<br />
-Vulnerability Mmio stale data:      Not affected<br />
-Vulnerability Retbleed:             Not affected<br />
-Vulnerability Spec rstack overflow: Not affected<br />
-Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
-Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
-Vulnerability Srbds:                Not affected<br />
-Vulnerability Tsx async abort:      Not affected</p>
-<p>Versions of relevant libraries:<br />
-[pip3] numpy==1.26.4<br />
-[conda] blas                      1.0                         mkl<br />
-[conda] magma-cuda121             2.6.1                         1    pytorch<br />
-[conda] mkl                       2023.1.0         h213fc3f_46344<br />
-[conda] mkl-include               2023.1.0         h06a4308_46344<br />
-[conda] mkl-service               2.4.0            py39h5eee18b_1<br />
-[conda] mkl_fft                   1.3.8            py39h5eee18b_0<br />
-[conda] mkl_random                1.2.4            py39hdb19cb5_0<br />
-[conda] numpy                     1.26.4           py39h5f9d8c6_0<br />
-[conda] numpy-base                1.26.4           py39hb5e798b_0 <br />
-<code>``</code><br />
-`</p>]]></description>
-      <pubDate>Thu, 28 Mar 2024 19:00:17 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122936</guid>
-    </item>
-    <item>
-      <title>[fix] 'from' in python code generated by inductor, resulting in SyntaxError</title>
-      <link>https://github.com/pytorch/pytorch/pull/122632</link>
-      <description><![CDATA[<p><code>from</code> is  a python keyword.  Python code containing <code>aten.random.from</code> will result in syntax errors. This PR handle this special case in the codegen of inductor. </p>
-<p>Although only <code>aten.random(_).</code>  has an <code>from</code> overload for now, all possible cases were handled.</p>
-<p>Fixes #121621 </p>
+      <title>fix amp for AOTInductor</title>
+      <link>https://github.com/pytorch/pytorch/pull/122883</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122954<br />
+* <strong>-&gt;</strong> #122883</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 25 Mar 2024 10:47:03 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122632</guid>
+      <pubDate>Thu, 28 Mar 2024 01:38:59 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122883</guid>
     </item>
     <item>
-      <title>[Quant][Inductor] Enable lowering of qlinear-binary(-unary) fusion for X86Inductor</title>
-      <link>https://github.com/pytorch/pytorch/pull/122593</link>
+      <title>[WIP][Inductor Intel GPU backend Upstream] Reuse inductor test for Intel GPU (PART 1)</title>
+      <link>https://github.com/pytorch/pytorch/pull/122866</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122667<br />
-* <strong>-&gt;</strong> #122593<br />
-* #122387<br />
-* #122288</p>
-<p><strong>Description</strong><br />
-Lower the qlinear binary post op pattern to Inductor. Use post op sum (in-place) if the extra input has the same dtype as output. Otherwise, it uses binary add.</p>
-<p><strong>Supported linear-binary(-unary) patterns</strong><br />
-```<br />
-    linear(X)   extra input<br />
-           \   /<br />
-            Add<br />
-             |<br />
-        Optional(relu)<br />
-             |<br />
-             Y</p>
-<ol>
-<li>
-<p>int8-mixed-fp32<br />
-+---+---------------+-----------+------------------------------+---------+<br />
-| # | Add type      | Quant out | Pattern                      | Post op |<br />
-+---+---------------+-----------+------------------------------+---------+<br />
-| 1 | In-/out-place | Yes       | linear + fp32 -&gt; (relu) -&gt; q | add     |<br />
-+---+---------------+-----------+------------------------------+---------+<br />
-| 2 | In-/out-place | No        | linear + fp32 -&gt; (relu)      | sum     |<br />
-+---+---------------+-----------+------------------------------+---------+</p>
-</li>
-<li>
-<p>int8-mixed-bf16<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| # | X2 dtype | Add type      | Quant out | Pattern                                          | Post op |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 1 | BF16     | In-/out-place | Yes       | linear + bf16 -&gt; (relu) -&gt; to_fp32 -&gt; q          | add     |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 2 | BF16     | In-/out-place | No        | linear + bf16 -&gt; (relu)                          | sum     |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 3 | FP32     | Out-place     | Yes       | linear + fp32 -&gt; (relu) -&gt; q                     | add     |<br />
-|   |          | In-place right|           |                                                  |         |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 4 | FP32     | Out-place     | No        | linear + fp32 -&gt; (relu)                          | sum     |<br />
-|   |          | In-place right|           |                                                  |         |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 5 | FP32     | In-place left | Yes       | linear + fp32 -&gt; to_bf16 -&gt; relu -&gt; to_fp32 -&gt; q | add     |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-| 6 | FP32     | In-place left | No        | linear + fp32 -&gt; to_bf16 -&gt; (relu)               | add     |<br />
-+---+----------+---------------+-----------+--------------------------------------------------+---------+<br />
-```<br />
-Note<br />
-(1) The positions of linear and the extra input can be swapped.<br />
-(2) we don't insert q-dq before the extra input of linear-add by recipe. But if q-dq is found at the<br />
-extra input, we don't match that pattern because we cannot match all these patterns in 3 passes.</p>
-</li>
-</ol>
-<p><strong>Test plan</strong><br />
-python test/inductor/test_mkldnn_pattern_matcher.py -k test_qlinear_add<br />
-python test/inductor/test_cpu_cpp_wrapper.py -k test_qlinear_add</p>
+* <strong>-&gt;</strong> #122866<br />
+* #121895<br />
+* #122254<br />
+* #121883</p>
+<p>backend.</p>
 <p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 24 Mar 2024 23:49:36 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122593</guid>
+      <pubDate>Wed, 27 Mar 2024 20:28:58 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122866</guid>
     </item>
     <item>
-      <title>[Quant][PT2E] Enable linear-binary(-unary) post-op recipe for X86Inductor quantizer</title>
-      <link>https://github.com/pytorch/pytorch/pull/122387</link>
+      <title>Inductor cpp wrapper: fix dtype of ShapeAsConstantBuffer</title>
+      <link>https://github.com/pytorch/pytorch/pull/122297</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122667<br />
-* #122593<br />
-* <strong>-&gt;</strong> #122387<br />
-* #122288</p>
-<p>As the title<br />
-<strong>Test plan</strong><br />
-python test/test_quantization.py -k test_linear_binary</p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 20 Mar 2024 22:29:18 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122387</guid>
+* <strong>-&gt;</strong> #122297</p>
+<p>For <code>at::scalar_tensor</code> the default dtype will be <code>float</code> (<a href="https://github.com/pytorch/pytorch/blob/0d8e960f74acd359358e0b729c4803d2b71849e5/aten/src/ATen/native/TensorFactories.cpp#L856">link to scalar_tensor</a>, <a href="https://github.com/pytorch/pytorch/blob/0d8e960f74acd359358e0b729c4803d2b71849e5/c10/core/TensorOptions.h#L551">link to default dtype</a>) if we don't set the <code>dtype</code> value. However, the input scalar value is not necessarily a <code>float</code> value. With <code>torch::tensor(x)</code>, the dtype of the tensor will be decided according to the dtype of the scalar.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Wed, 20 Mar 2024 00:58:21 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122297</guid>
     </item>
     <item>
-      <title>[inductor]re-enable cpu reduction ut</title>
-      <link>https://github.com/pytorch/pytorch/pull/122289</link>
-      <description><![CDATA[<p>Re-enable these two ut. I can pass these two ut on my local and we can see the status in the CI for this PR.</p>
-<p>See the background about why they are disabled https://github.com/pytorch/pytorch/issues/93542, https://github.com/pytorch/pytorch/issues/87157.</p>
-<p>After https://github.com/pytorch/pytorch/pull/115620. The reduction orders should be deterministic.<br />
-However, the orders may not exactly same with ref path (<code>aten</code>). We may can set larger tolerance if they still cannot be passed in CI.</p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122289</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 19 Mar 2024 23:43:23 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122289</guid>
-    </item>
-    <item>
-      <title>[Quant][Inductor] Add qlinear_pointwise.binary op for X86Inductor backend</title>
-      <link>https://github.com/pytorch/pytorch/pull/122288</link>
+      <title>[WIP][Inductor Intel GPU backend Upstream] Enable triton installation for Intel GPU</title>
+      <link>https://github.com/pytorch/pytorch/pull/122254</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122667<br />
-* #122593<br />
-* #122387<br />
-* <strong>-&gt;</strong> #122288</p>
-<p><strong>Description</strong><br />
-Add qlinear_binary op for X86Inductor backend of quantization PT2E. It only supports <code>add</code> and <code>add_relu</code> now.<br />
-It will use post op sum if the extra input has the same dtype as output. Otherwise, it uses binary add.<br />
-<code>+-------------------+--------------+---------------+
-| Extra input dtype | Output dtype | Post op       |
-+-------------------+--------------+---------------+
-| Fp32/bf16         | fp32/bf16    | sum           |
-+-------------------+--------------+---------------+
-| Fp32/bf16         | int8         | add           |
-+-------------------+--------------+---------------+
-| int8              | fp32/bf16    | not supported |
-+-------------------+--------------+---------------+
-| int8              | int8         | sum           |
-+-------------------+--------------+---------------+</code></p>
-<p><strong>Test plan</strong><br />
-python test_quantization.py -k test_qlinear_add_pt2e<br />
-python test_quantization.py -k test_qlinear_add_relu_pt2e</p>
+* #122866<br />
+* #121895<br />
+* <strong>-&gt;</strong> #122254<br />
+* #121883</p>
+<p>Intel GPU.</p>
+<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10</p>]]></description>
+      <pubDate>Tue, 19 Mar 2024 17:14:59 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122254</guid>
+    </item>
+    <item>
+      <title>[WIP][Inductor Intel GPU backend Upstream] Add Inductor Intel GPU backend.</title>
+      <link>https://github.com/pytorch/pytorch/pull/121895</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122866<br />
+* <strong>-&gt;</strong> #121895<br />
+* #122254<br />
+* #121883</p>
 <p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 19 Mar 2024 23:40:10 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122288</guid>
+      <pubDate>Thu, 14 Mar 2024 00:00:56 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121895</guid>
     </item>
     <item>
-      <title>[HOO][dynamo] Contextual hints for torch.compile backends</title>
-      <link>https://github.com/pytorch/pytorch/pull/121639</link>
-      <description><![CDATA[<p><strong>Idea:</strong><br />
-This is a draft for a feature that allows end-user to add contextual hints to chunks of code via HOO mechanism. </p>
-<p>Such feature allows user to provide more structure and allow better programmability for the topology he creates as he would be able to provide additional hints to the torch.compile backend. One trivial example would be allowing end user to specify streams he would like specific parts of the topology to be ran on, assuming the backend that later optimizes it is able to take that information into account.</p>
-<p>This is not intended to be final implementation (I guess) but more like a discussion opener.</p>
-<p><strong>High level:</strong><br />
-Implemented <strong>hinted_context</strong> higher-order-op that allows to specify function, arguments and a <strong>hint</strong>.</p>
-<p>For the purpose of the draft, the <strong>hint</strong> currently is a JSON string that is going to be propagated into all ops within specified function. Such hints can be nested to provide even more structure to the operations.</p>
-<p>Hints can be specified in two manners: <br />
-- <strong>hints only inside the FWD code</strong>, in that scenario hints are going to be visible in FWD only<br />
-- <strong>hints inside autograd overridden ops</strong>, in that scenario user can specify hints for FWD and BWD separately</p>
-<p>Provided test shows various usages, including nested annotations for both cases above. Each test runs on dummy backend that just prints the hint metadata from the nodes:<br />
-<img alt="image" src="https://github.com/pytorch/pytorch/assets/122799060/cce26bcf-9ffc-4b0b-ab92-524284e29e50" /></p>
-<p>Fixes #118181</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
-      <pubDate>Mon, 11 Mar 2024 07:20:07 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121639</guid>
-    </item>
-    <item>
-      <title>nanogpt_generate: C++ compile times out, because the generated .cpp file is too large.</title>
-      <link>https://github.com/pytorch/pytorch/issues/111227</link>
-      <description><![CDATA[<p><code>nanogpt_generate</code> exists in torchbench before https://github.com/pytorch/benchmark/pull/1911,</p>
-<p>Repro:<br />
-```<br />
-benchmarks/dynamo/torchbench.py --bfloat16 --accuracy --inference --device cuda --export-aot-inductor  --only nanogpt_generate</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng</p>]]></description>
-      <pubDate>Fri, 13 Oct 2023 11:31:33 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/111227</guid>
+      <title>[WIP][Inductor Intel GPU backend Upstream] Register general runtime device for Intel GPU</title>
+      <link>https://github.com/pytorch/pytorch/pull/121883</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122866<br />
+* #121895<br />
+* #122254<br />
+* <strong>-&gt;</strong> #121883</p>
+<p>interface for Intel GPU.</p>
+<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
+      <pubDate>Wed, 13 Mar 2024 18:20:58 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121883</guid>
     </item>
   </channel>
 </rss>
