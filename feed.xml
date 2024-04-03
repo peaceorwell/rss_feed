@@ -4,57 +4,101 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[Inductor][1/n]Split cat customization (#123045)</title><link>https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</link><description><![CDATA[<p>[Inductor][1/n]Split cat customization (#123045)</p>
-<p>Summary: Change the config and revise the group batch fusion in order not to reuse the exsiting pre_grad and post_grad fusion options</p>
-<p>Test Plan:</p>
-<h1>unit test</h1>
-<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor:split_cat_fx_passes</code><br />
-Test UI: https://www.internalfb.com/intern/testinfra/testrun/17732923560510096<br />
-Network: Up: 15MiB  Down: 155MiB  (reSessionID-6a577a14-1772-42d9-9ae8-bfdc62f406a3)<br />
-Jobs completed: 267487. Time elapsed: 2:39.7s.<br />
-Cache hits: 99%. Commands: 104465 (cached: 104457, remote: 8, local: 0)<br />
-Tests finished: Pass 11. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
-<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor/fb:split_cat_fx_passes_fb</code><br />
-Test UI: https://www.internalfb.com/intern/testinfra/testrun/9007199283031382<br />
-Network: Up: 28MiB  Down: 177MiB  (reSessionID-a3081518-7cba-4c83-b442-c16655ecb2cd)<br />
-Jobs completed: 183164. Time elapsed: 1:41.4s.<br />
-Cache hits: 99%. Commands: 75875 (cached: 75862, remote: 12, local: 1)<br />
-Tests finished: Pass 1. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
-<p><code>buck2 test @mode/dev-nosan //caffe2/test/inductor:group_batch_fusion</code><br />
-Test UI: https://www.internalfb.com/intern/testinfra/testrun/10133099189612276<br />
-Network: Up: 1.3MiB           Down: 3.1MiB           (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)<br />
-Discovered 9. Pass 0. Fail 0. Fatal 0. Skip 0. Timeout 0<br />
-Network: Up: 1.4MiB  Down: 3.2MiB  (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)<br />
-Jobs completed: 68. Time elapsed: 2:19.9s.<br />
-Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)<br />
-Tests finished: Pass 9. Fail 0. Fatal 0. Skip 0. Build failure 0<br />
-<code>buck2 test @mode/dev-nosan //caffe2/test/inductor:perf</code><br />
-Test UI: https://www.internalfb.com/intern/testinfra/testrun/5066549804623287<br />
-Network: Up: 1.5MiB  Down: 1.1MiB  (reSessionID-8d912a20-fceb-4698-89c3-d28e0708831f)<br />
-Jobs completed: 164. Time elapsed: 1:42.2s.<br />
-Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)<br />
-Tests finished: Pass 57. Fail 0. Fatal 0. Skip 0. Build failure 0</p>
-<h1>local reproduce</h1>
-<p>case 1: with split cat<br />
-<code>buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch-split --model_type "cmf" --flow_id 524546542</code><br />
-optimus parameter sent to the scuba:<br />
-<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLL6RBZb-ssXJYcBAMzw0oaKtp80br0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GH1LAxcxv0Ae_BkFAHVav3K3oosDbr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNb0jwR-Ukkqns4CAGRmOqucfedDbr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GHsIQxm-hn3SPrgCAKq1E-HBsoZHbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOrJORmbMTV_xlQDAOwolqclPsIAbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCqkmRblvVKybGUDACVxkwVIrWxLbr0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCB1QBfko_kVN0wFAKGjSZv4DJULbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMwJPRmu4ry88swDAO1gdA5RCKIXbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLXCORnNiKeQFmoDABR93CRKmP8Sbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBMIPRnlwQyjSD4BANPuaMhV7MUjbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GJ9KPxkOv4LL8_0DAA65D4kh4JYDbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 2844, 'pattern_matcher_count': 2604, 'normalization_pass': 886, 'remove_split_with_size_one_pass': 748, 'merge_splits_pass': 82, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 4, 'batch_aten_mul': 4, 'batch_sigmoid': 2, 'batch_aten_sub': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'scmerge_split_removed': 1, 'scmerge_cat_removed': 1, 'batch_aten_add': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEcvPxmxBj-pd8gCABE1QgB-d6N6br0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEvQxhYomJGj2FMBAEXXAI8Vgzhmbr0LAAAz'}</code><br />
-P1202819405</p>
-<p>case 2: without split cat<br />
-<code>buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch --model_type "cmf" --flow_id 524546542</code><br />
-optimus parameter sent to the scuba:<br />
-<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAY7PxmGthuyjSwEAHF_A767YbMkbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLDPtBacXyybEOICAKaGCPatq5oabr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBu7ORkiDJu42QAEAGmlVTgO_Mpbbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GC893BZNl99ftY4BAHm5Z8sM4ptSbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GCAeuRYgzPO5RcsCAPO3Z7tdMNMKbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GHBIQxm1jlU-xhsFAONkzhh2mgknbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDoUPhmZ0noiaGMDAJHYuuiwHEAUbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 1189, 'pattern_matcher_count': 757, 'batch_aten_mul': 9, 'batch_aten_sub': 3, 'batch_sigmoid': 2, 'batch_aten_add': 2, 'batch_layernorm': 1, 'batch_linear_post_grad': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAluthYxi8uxpI4BAIQDzn3OyywUbr0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDjsJhTK5VAcot4CADIcAixghrYibr0LAAAz', 'PostGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEPfJxfJwktC7wsEAA0QbkqYNuVAbr0LAAAz'}</code><br />
-P1202823734</p>
-<h1>e2e</h1>
-<p>training_platform:fd4f02cd855f5cc0ccb49317a5a6c8bb</p>
-<p>with split cat<br />
-f546646358</p>
-<p>without split cat<br />
-f546647159</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123045<br />
-Approved by: https://github.com/jackiexu1992</p>]]></description><pubDate>Tue, 02 Apr 2024 06:36:22 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</guid></item><item><title>Revert "[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)"</title><link>https://github.com/pytorch/pytorch/commit/1f503dffb3edb0ca4a326a8cba8c36832abc979f</link><description><![CDATA[<p>Revert "[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)"</p>
-<p>This reverts commit 7eadb157bd96a9e641f64cdfa759aa1dfaaa7dd5.</p>
-<p>Reverted https://github.com/pytorch/pytorch/pull/123136 on behalf of https://github.com/albanD due to broke ROCm CI (<a href="https://github.com/pytorch/pytorch/pull/123136#issuecomment-2032163699">comment</a>)</p>]]></description><pubDate>Tue, 02 Apr 2024 06:17:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1f503dffb3edb0ca4a326a8cba8c36832abc979f</guid></item><item><title>Remove cuda dependencies when building AOTriton (#122982)</title><link>https://github.com/pytorch/pytorch/commit/76a87e33a0fdd0639842218ce26943e7b4f3838b</link><description>&lt;p&gt;Remove cuda dependencies when building AOTriton (#122982)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)</title><link>https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</link><description><![CDATA[<p>Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)</p>
+<p>I noticed that when enabling CUDA graphs in Inductor, most of the CPU time was spent issuing copies from the new inputs to the graph's input tensors. This meant that my workload was still somewhat CPU bound.<br />
+<img width="1204" alt="Screenshot 2024-03-28 at 14 18 49" src="https://github.com/pytorch/pytorch/assets/120810/9ac2462d-ef46-4051-8b22-e677845ca83e"></p>
+<p>I tried to improve this situation by using the new <code>_foreach_copy_</code> operator, in order to group all the copies into one operator. There was already a comment in the code indicating that this was a desired optimization. It did indeed improve the situation substantially:<br />
+<img width="908" alt="Screenshot 2024-03-28 at 14 21 21" src="https://github.com/pytorch/pytorch/assets/120810/67548ac8-2b41-46ba-8588-cea6470301cc"></p>
+<p>On device, the situation also improved, with the memcpys being merged into fewer larger kernels:<br />
+Before:<br />
+<img width="848" alt="Screenshot 2024-03-28 at 14 24 48" src="https://github.com/pytorch/pytorch/assets/120810/e12e27c4-6d86-40cf-9478-061bc10920d7"><br />
+After:<br />
+<img width="824" alt="Screenshot 2024-03-28 at 14 24 06" src="https://github.com/pytorch/pytorch/assets/120810/a4771b5c-6848-4510-a841-ffa5bba3023f"></p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123162<br />
+Approved by: https://github.com/eellison</p>]]></description><pubDate>Wed, 03 Apr 2024 11:34:41 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</guid></item><item><title>[quant][be] Simplify fake_quant_per_channel (#123186)</title><link>https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</link><description><![CDATA[<p>[quant][be] Simplify fake_quant_per_channel (#123186)</p>
+<p>Summary: We probably don't need<br />
+<code>torch._C._AutoDispatchBelowAutograd()</code>, which is to prevent<br />
+infinite recursion if the implementation calls itself. Let's<br />
+remove it and see if anything breaks. The other major change<br />
+is registering the op to the more general Autograd dispatch<br />
+key so it can be used on cuda as well.</p>
+<p>Test Plan:<br />
+python test/inductor/test_cpu_repro.py -k test_decomposed_fake_quant_per_channel</p>
+<p>Reviewers: zou3519, bdhirsh</p>
+<p>Subscribers: zou3519, bdhirsh, jerryzh168, leslie-fang-intel<br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/123186<br />
+Approved by: https://github.com/zou3519, https://github.com/leslie-fang-intel</p>]]></description><pubDate>Wed, 03 Apr 2024 10:06:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</guid></item><item><title>[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)</title><link>https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</link><description><![CDATA[<p>[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)</p>
+<ul>
+<li>
+<p>Adds a configurable GEMM size threshold for the usage of Cutlass GEMM Kernels <strong>_inductor.config.cutlass_backend_min_gemm_size</strong></p>
+</li>
+<li>
+<p>During GEMM algorithm choice generation: <strong>if no viable choices can be generated using the configured backends, the ATen backend will be used as a fallback backend</strong>, even if it is not enabled in <strong>_inductor.config.max_autotune_gemm_backends</strong></p>
+</li>
+</ul>
+<p>Test plan:<br />
+CI<br />
+Additional unit test in test_cutlass_backend.py</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121491<br />
+Approved by: https://github.com/jansel<br />
+ghstack dependencies: #121490</p>]]></description><pubDate>Wed, 03 Apr 2024 05:34:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</guid></item><item><title>[Inductor] Make codecache CUDA compilation more robust &amp; flexible (#121490)</title><link>https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</link><description><![CDATA[<p>[Inductor] Make codecache CUDA compilation more robust &amp; flexible (#121490)</p>
+<p>Minor changes which make the CUDA compilation within _inductor/codecache.py<br />
+more robust and flexible.</p>
+<p>Test plan:<br />
+CI<br />
+Additional test in test_codecache.py</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121490<br />
+Approved by: https://github.com/jansel</p>]]></description><pubDate>Wed, 03 Apr 2024 04:56:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</guid></item><item><title>[Inductor][1/n]Split cat customization (#123045)</title><link>https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</link><description>&lt;p&gt;[Inductor][1/n]Split cat customization (#123045)&lt;/p&gt;
+&lt;p&gt;Summary: Change the config and revise the group batch fusion in order not to reuse the exsiting pre_grad and post_grad fusion options&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;/p&gt;
+&lt;h1&gt;unit test&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;buck2 test @mode/dev-nosan //caffe2/test/inductor:split_cat_fx_passes&lt;/code&gt;&lt;br /&gt;
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/17732923560510096&lt;br /&gt;
+Network: Up: 15MiB  Down: 155MiB  (reSessionID-6a577a14-1772-42d9-9ae8-bfdc62f406a3)&lt;br /&gt;
+Jobs completed: 267487. Time elapsed: 2:39.7s.&lt;br /&gt;
+Cache hits: 99%. Commands: 104465 (cached: 104457, remote: 8, local: 0)&lt;br /&gt;
+Tests finished: Pass 11. Fail 0. Fatal 0. Skip 0. Build failure 0&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;buck2 test @mode/dev-nosan //caffe2/test/inductor/fb:split_cat_fx_passes_fb&lt;/code&gt;&lt;br /&gt;
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/9007199283031382&lt;br /&gt;
+Network: Up: 28MiB  Down: 177MiB  (reSessionID-a3081518-7cba-4c83-b442-c16655ecb2cd)&lt;br /&gt;
+Jobs completed: 183164. Time elapsed: 1:41.4s.&lt;br /&gt;
+Cache hits: 99%. Commands: 75875 (cached: 75862, remote: 12, local: 1)&lt;br /&gt;
+Tests finished: Pass 1. Fail 0. Fatal 0. Skip 0. Build failure 0&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;buck2 test @mode/dev-nosan //caffe2/test/inductor:group_batch_fusion&lt;/code&gt;&lt;br /&gt;
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/10133099189612276&lt;br /&gt;
+Network: Up: 1.3MiB           Down: 3.1MiB           (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)&lt;br /&gt;
+Discovered 9. Pass 0. Fail 0. Fatal 0. Skip 0. Timeout 0&lt;br /&gt;
+Network: Up: 1.4MiB  Down: 3.2MiB  (reSessionID-0d312a2d-e19e-4ba6-9f96-7eb5863734e7)&lt;br /&gt;
+Jobs completed: 68. Time elapsed: 2:19.9s.&lt;br /&gt;
+Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)&lt;br /&gt;
+Tests finished: Pass 9. Fail 0. Fatal 0. Skip 0. Build failure 0&lt;br /&gt;
+&lt;code&gt;buck2 test @mode/dev-nosan //caffe2/test/inductor:perf&lt;/code&gt;&lt;br /&gt;
+Test UI: https://www.internalfb.com/intern/testinfra/testrun/5066549804623287&lt;br /&gt;
+Network: Up: 1.5MiB  Down: 1.1MiB  (reSessionID-8d912a20-fceb-4698-89c3-d28e0708831f)&lt;br /&gt;
+Jobs completed: 164. Time elapsed: 1:42.2s.&lt;br /&gt;
+Cache hits: 0%. Commands: 13 (cached: 0, remote: 1, local: 12)&lt;br /&gt;
+Tests finished: Pass 57. Fail 0. Fatal 0. Skip 0. Build failure 0&lt;/p&gt;
+&lt;h1&gt;local reproduce&lt;/h1&gt;
+&lt;p&gt;case 1: with split cat&lt;br /&gt;
+&lt;code&gt;buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch-split --model_type "cmf" --flow_id 524546542&lt;/code&gt;&lt;br /&gt;
+optimus parameter sent to the scuba:&lt;br /&gt;
+&lt;code&gt;{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GLL6RBZb-ssXJYcBAMzw0oaKtp80br0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GH1LAxcxv0Ae_BkFAHVav3K3oosDbr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GNb0jwR-Ukkqns4CAGRmOqucfedDbr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GHsIQxm-hn3SPrgCAKq1E-HBsoZHbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GOrJORmbMTV_xlQDAOwolqclPsIAbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GCqkmRblvVKybGUDACVxkwVIrWxLbr0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GCB1QBfko_kVN0wFAKGjSZv4DJULbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GMwJPRmu4ry88swDAO1gdA5RCKIXbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GLXCORnNiKeQFmoDABR93CRKmP8Sbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GBMIPRnlwQyjSD4BANPuaMhV7MUjbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GJ9KPxkOv4LL8_0DAA65D4kh4JYDbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 2844, 'pattern_matcher_count': 2604, 'normalization_pass': 886, 'remove_split_with_size_one_pass': 748, 'merge_splits_pass': 82, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 4, 'batch_aten_mul': 4, 'batch_sigmoid': 2, 'batch_aten_sub': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'scmerge_split_removed': 1, 'scmerge_cat_removed': 1, 'batch_aten_add': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GEcvPxmxBj-pd8gCABE1QgB-d6N6br0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GEvQxhYomJGj2FMBAEXXAI8Vgzhmbr0LAAAz'}&lt;/code&gt;&lt;br /&gt;
+P1202819405&lt;/p&gt;
+&lt;p&gt;case 2: without split cat&lt;br /&gt;
+&lt;code&gt;buck2 run @mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch --model_type "cmf" --flow_id 524546542&lt;/code&gt;&lt;br /&gt;
+optimus parameter sent to the scuba:&lt;br /&gt;
+&lt;code&gt;{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GAY7PxmGthuyjSwEAHF_A767YbMkbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GLDPtBacXyybEOICAKaGCPatq5oabr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GBu7ORkiDJu42QAEAGmlVTgO_Mpbbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GC893BZNl99ftY4BAHm5Z8sM4ptSbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GCAeuRYgzPO5RcsCAPO3Z7tdMNMKbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GHBIQxm1jlU-xhsFAONkzhh2mgknbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GDoUPhmZ0noiaGMDAJHYuuiwHEAUbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 1189, 'pattern_matcher_count': 757, 'batch_aten_mul': 9, 'batch_aten_sub': 3, 'batch_sigmoid': 2, 'batch_aten_add': 2, 'batch_layernorm': 1, 'batch_linear_post_grad': 1}), 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GAluthYxi8uxpI4BAIQDzn3OyywUbr0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GDjsJhTK5VAcot4CADIcAixghrYibr0LAAAz', 'PostGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;amp;handle=GEPfJxfJwktC7wsEAA0QbkqYNuVAbr0LAAAz'}&lt;/code&gt;&lt;br /&gt;
+P1202823734&lt;/p&gt;
+&lt;h1&gt;e2e&lt;/h1&gt;
+&lt;p&gt;training_platform:fd4f02cd855f5cc0ccb49317a5a6c8bb&lt;/p&gt;
+&lt;p&gt;with split cat&lt;br /&gt;
+f546646358&lt;/p&gt;
+&lt;p&gt;without split cat&lt;br /&gt;
+f546647159&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/123045&lt;br /&gt;
+Approved by: https://github.com/jackiexu1992&lt;/p&gt;</description><pubDate>Tue, 02 Apr 2024 06:36:22 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</guid></item><item><title>Revert "[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)"</title><link>https://github.com/pytorch/pytorch/commit/1f503dffb3edb0ca4a326a8cba8c36832abc979f</link><description>&lt;p&gt;Revert "[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)"&lt;/p&gt;
+&lt;p&gt;This reverts commit 7eadb157bd96a9e641f64cdfa759aa1dfaaa7dd5.&lt;/p&gt;
+&lt;p&gt;Reverted https://github.com/pytorch/pytorch/pull/123136 on behalf of https://github.com/albanD due to broke ROCm CI (&lt;a href="https://github.com/pytorch/pytorch/pull/123136#issuecomment-2032163699"&gt;comment&lt;/a&gt;)&lt;/p&gt;</description><pubDate>Tue, 02 Apr 2024 06:17:03 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/1f503dffb3edb0ca4a326a8cba8c36832abc979f</guid></item><item><title>Remove cuda dependencies when building AOTriton (#122982)</title><link>https://github.com/pytorch/pytorch/commit/76a87e33a0fdd0639842218ce26943e7b4f3838b</link><description>&lt;p&gt;Remove cuda dependencies when building AOTriton (#122982)&lt;/p&gt;
 &lt;p&gt;Downloading CUDA sometimes fails and breaks the build process, but AOTriton does not need these packages for its own Triton fork. This commit comments out the related downloading scripts.&lt;/p&gt;
 &lt;p&gt;The actual changes from Triton can be found at: https://github.com/ROCm/triton/commit/9b73a543a5545960bcaf2830900b0560eec443c5&lt;/p&gt;
 &lt;p&gt;Fixes the following building error&lt;br /&gt;
