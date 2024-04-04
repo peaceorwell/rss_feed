@@ -4,51 +4,62 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)</title><link>https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</link><description><![CDATA[<p>Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)</p>
-<p>I noticed that when enabling CUDA graphs in Inductor, most of the CPU time was spent issuing copies from the new inputs to the graph's input tensors. This meant that my workload was still somewhat CPU bound.<br />
-<img width="1204" alt="Screenshot 2024-03-28 at 14 18 49" src="https://github.com/pytorch/pytorch/assets/120810/9ac2462d-ef46-4051-8b22-e677845ca83e"></p>
-<p>I tried to improve this situation by using the new <code>_foreach_copy_</code> operator, in order to group all the copies into one operator. There was already a comment in the code indicating that this was a desired optimization. It did indeed improve the situation substantially:<br />
-<img width="908" alt="Screenshot 2024-03-28 at 14 21 21" src="https://github.com/pytorch/pytorch/assets/120810/67548ac8-2b41-46ba-8588-cea6470301cc"></p>
-<p>On device, the situation also improved, with the memcpys being merged into fewer larger kernels:<br />
-Before:<br />
-<img width="848" alt="Screenshot 2024-03-28 at 14 24 48" src="https://github.com/pytorch/pytorch/assets/120810/e12e27c4-6d86-40cf-9478-061bc10920d7"><br />
-After:<br />
-<img width="824" alt="Screenshot 2024-03-28 at 14 24 06" src="https://github.com/pytorch/pytorch/assets/120810/a4771b5c-6848-4510-a841-ffa5bba3023f"></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123162<br />
-Approved by: https://github.com/eellison</p>]]></description><pubDate>Wed, 03 Apr 2024 11:34:41 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</guid></item><item><title>[quant][be] Simplify fake_quant_per_channel (#123186)</title><link>https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</link><description><![CDATA[<p>[quant][be] Simplify fake_quant_per_channel (#123186)</p>
-<p>Summary: We probably don't need<br />
-<code>torch._C._AutoDispatchBelowAutograd()</code>, which is to prevent<br />
-infinite recursion if the implementation calls itself. Let's<br />
-remove it and see if anything breaks. The other major change<br />
-is registering the op to the more general Autograd dispatch<br />
-key so it can be used on cuda as well.</p>
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Revert "[inductor] Fix fresh_inductor_cache() (#122661)"</title><link>https://github.com/pytorch/pytorch/commit/a808559fc65235c59a647369edec2e8d813989bd</link><description><![CDATA[<p>Revert "[inductor] Fix fresh_inductor_cache() (#122661)"</p>
+<p>This reverts commit ba7d396eb73e91c1846ed770f470245ef578a923.</p>
+<p>Reverted https://github.com/pytorch/pytorch/pull/122661 on behalf of https://github.com/clee2000 due to new test is failing internally (<a href="https://github.com/pytorch/pytorch/pull/122661#issuecomment-2037977934">comment</a>)</p>]]></description><pubDate>Thu, 04 Apr 2024 10:55:55 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a808559fc65235c59a647369edec2e8d813989bd</guid></item><item><title>Back out "Precompile triton templates (#121998)" (#123305)</title><link>https://github.com/pytorch/pytorch/commit/e0c9764660095df7aedc6aa4e7826b5cac5bd251</link><description><![CDATA[<p>Back out "Precompile triton templates (#121998)" (#123305)</p>
+<p>Summary: We are reverting #121998 because the change plus search-autotune-cache led to significant compilation time increase, causing stuck job detector to trigger and then kill the training job.</p>
 <p>Test Plan:<br />
-python test/inductor/test_cpu_repro.py -k test_decomposed_fake_quant_per_channel</p>
-<p>Reviewers: zou3519, bdhirsh</p>
-<p>Subscribers: zou3519, bdhirsh, jerryzh168, leslie-fang-intel<br />
-Pull Request resolved: https://github.com/pytorch/pytorch/pull/123186<br />
-Approved by: https://github.com/zou3519, https://github.com/leslie-fang-intel</p>]]></description><pubDate>Wed, 03 Apr 2024 10:06:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</guid></item><item><title>[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)</title><link>https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</link><description><![CDATA[<p>[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)</p>
-<ul>
-<li>
-<p>Adds a configurable GEMM size threshold for the usage of Cutlass GEMM Kernels <strong>_inductor.config.cutlass_backend_min_gemm_size</strong></p>
-</li>
-<li>
-<p>During GEMM algorithm choice generation: <strong>if no viable choices can be generated using the configured backends, the ATen backend will be used as a fallback backend</strong>, even if it is not enabled in <strong>_inductor.config.max_autotune_gemm_backends</strong></p>
-</li>
-</ul>
-<p>Test plan:<br />
-CI<br />
-Additional unit test in test_cutlass_backend.py</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121491<br />
-Approved by: https://github.com/jansel<br />
-ghstack dependencies: #121490</p>]]></description><pubDate>Wed, 03 Apr 2024 05:34:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</guid></item><item><title>[Inductor] Make codecache CUDA compilation more robust &amp; flexible (#121490)</title><link>https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</link><description><![CDATA[<p>[Inductor] Make codecache CUDA compilation more robust &amp; flexible (#121490)</p>
-<p>Minor changes which make the CUDA compilation within _inductor/codecache.py<br />
-more robust and flexible.</p>
-<p>Test plan:<br />
-CI<br />
-Additional test in test_codecache.py</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121490<br />
-Approved by: https://github.com/jansel</p>]]></description><pubDate>Wed, 03 Apr 2024 04:56:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</guid></item><item><title>[Inductor][1/n]Split cat customization (#123045)</title><link>https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</link><description>&lt;p&gt;[Inductor][1/n]Split cat customization (#123045)&lt;/p&gt;
+CI tests</p>
+<p>Reviewed By: nmacchioni</p>
+<p>Differential Revision: D55712203</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123305<br />
+Approved by: https://github.com/eellison, https://github.com/nmacchioni, https://github.com/xw285cornell</p>]]></description><pubDate>Thu, 04 Apr 2024 08:05:10 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e0c9764660095df7aedc6aa4e7826b5cac5bd251</guid></item><item><title>Make u/int8 cat inductor fallback cpu-only (#123278)</title><link>https://github.com/pytorch/pytorch/commit/d9cbd57dfe47d298d7795cc806015d716e461b30</link><description><![CDATA[<p>Make u/int8 cat inductor fallback cpu-only (#123278)</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123278<br />
+Approved by: https://github.com/Chillee</p>]]></description><pubDate>Thu, 04 Apr 2024 05:54:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/d9cbd57dfe47d298d7795cc806015d716e461b30</guid></item><item><title>Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)</title><link>https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</link><description>&lt;p&gt;Reduce CPU overhead of copying inputs in CUDAGraph trees via foreach_copy (#123162)&lt;/p&gt;
+&lt;p&gt;I noticed that when enabling CUDA graphs in Inductor, most of the CPU time was spent issuing copies from the new inputs to the graph's input tensors. This meant that my workload was still somewhat CPU bound.&lt;br /&gt;
+&lt;img width="1204" alt="Screenshot 2024-03-28 at 14 18 49" src="https://github.com/pytorch/pytorch/assets/120810/9ac2462d-ef46-4051-8b22-e677845ca83e"&gt;&lt;/p&gt;
+&lt;p&gt;I tried to improve this situation by using the new &lt;code&gt;_foreach_copy_&lt;/code&gt; operator, in order to group all the copies into one operator. There was already a comment in the code indicating that this was a desired optimization. It did indeed improve the situation substantially:&lt;br /&gt;
+&lt;img width="908" alt="Screenshot 2024-03-28 at 14 21 21" src="https://github.com/pytorch/pytorch/assets/120810/67548ac8-2b41-46ba-8588-cea6470301cc"&gt;&lt;/p&gt;
+&lt;p&gt;On device, the situation also improved, with the memcpys being merged into fewer larger kernels:&lt;br /&gt;
+Before:&lt;br /&gt;
+&lt;img width="848" alt="Screenshot 2024-03-28 at 14 24 48" src="https://github.com/pytorch/pytorch/assets/120810/e12e27c4-6d86-40cf-9478-061bc10920d7"&gt;&lt;br /&gt;
+After:&lt;br /&gt;
+&lt;img width="824" alt="Screenshot 2024-03-28 at 14 24 06" src="https://github.com/pytorch/pytorch/assets/120810/a4771b5c-6848-4510-a841-ffa5bba3023f"&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/123162&lt;br /&gt;
+Approved by: https://github.com/eellison&lt;/p&gt;</description><pubDate>Wed, 03 Apr 2024 11:34:41 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9aed9c8c873fb74cfbc629ed16c5e12dfe302cc1</guid></item><item><title>[quant][be] Simplify fake_quant_per_channel (#123186)</title><link>https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</link><description>&lt;p&gt;[quant][be] Simplify fake_quant_per_channel (#123186)&lt;/p&gt;
+&lt;p&gt;Summary: We probably don't need&lt;br /&gt;
+&lt;code&gt;torch._C._AutoDispatchBelowAutograd()&lt;/code&gt;, which is to prevent&lt;br /&gt;
+infinite recursion if the implementation calls itself. Let's&lt;br /&gt;
+remove it and see if anything breaks. The other major change&lt;br /&gt;
+is registering the op to the more general Autograd dispatch&lt;br /&gt;
+key so it can be used on cuda as well.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+python test/inductor/test_cpu_repro.py -k test_decomposed_fake_quant_per_channel&lt;/p&gt;
+&lt;p&gt;Reviewers: zou3519, bdhirsh&lt;/p&gt;
+&lt;p&gt;Subscribers: zou3519, bdhirsh, jerryzh168, leslie-fang-intel&lt;br /&gt;
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/123186&lt;br /&gt;
+Approved by: https://github.com/zou3519, https://github.com/leslie-fang-intel&lt;/p&gt;</description><pubDate>Wed, 03 Apr 2024 10:06:45 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/fe29a8fbea6d3b90a029e7ca2b6ca8f9c47098d2</guid></item><item><title>[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)</title><link>https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</link><description>&lt;p&gt;[Inductor Cutlass backend] GEMM size threshold for Cutlass backend usage (#121491)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Adds a configurable GEMM size threshold for the usage of Cutlass GEMM Kernels &lt;strong&gt;_inductor.config.cutlass_backend_min_gemm_size&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;During GEMM algorithm choice generation: &lt;strong&gt;if no viable choices can be generated using the configured backends, the ATen backend will be used as a fallback backend&lt;/strong&gt;, even if it is not enabled in &lt;strong&gt;_inductor.config.max_autotune_gemm_backends&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Test plan:&lt;br /&gt;
+CI&lt;br /&gt;
+Additional unit test in test_cutlass_backend.py&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121491&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #121490&lt;/p&gt;</description><pubDate>Wed, 03 Apr 2024 05:34:16 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/74b3a7920ef9b96315ef20adef858b00cc067af6</guid></item><item><title>[Inductor] Make codecache CUDA compilation more robust &amp; flexible (#121490)</title><link>https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</link><description>&lt;p&gt;[Inductor] Make codecache CUDA compilation more robust &amp;amp; flexible (#121490)&lt;/p&gt;
+&lt;p&gt;Minor changes which make the CUDA compilation within _inductor/codecache.py&lt;br /&gt;
+more robust and flexible.&lt;/p&gt;
+&lt;p&gt;Test plan:&lt;br /&gt;
+CI&lt;br /&gt;
+Additional test in test_codecache.py&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/121490&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;/p&gt;</description><pubDate>Wed, 03 Apr 2024 04:56:48 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f2e67179eeace264a5f39ae1f45ccf6e5e557aff</guid></item><item><title>[Inductor][1/n]Split cat customization (#123045)</title><link>https://github.com/pytorch/pytorch/commit/c40f386afd732efb49bd4ce10003999f77113ed4</link><description>&lt;p&gt;[Inductor][1/n]Split cat customization (#123045)&lt;/p&gt;
 &lt;p&gt;Summary: Change the config and revise the group batch fusion in order not to reuse the exsiting pre_grad and post_grad fusion options&lt;/p&gt;
 &lt;p&gt;Test Plan:&lt;/p&gt;
 &lt;h1&gt;unit test&lt;/h1&gt;
