@@ -5,61 +5,360 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>[PT2][Inductor] Add decompose_mem_bound_mm to the customization pre and post grad passes</title>
-      <link>https://github.com/pytorch/pytorch/pull/123376</link>
-      <description><![CDATA[<p>Summary: Titled. It can give more flexibility to customize passes</p>
-<p>Test Plan:</p>
-<h1>unit test</h1>
-<p><code>buck2 test mode/dev-nosan //caffe2/test/inductor:decompose_mem_bound_mm</code></p>
-<h1>local reproduce</h1>
-<h3>with decompose</h3>
-<p><code>buck2 run mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch-split-decompose --model_type "cmf" --flow_id 540761965</code><br />
-optimus parameter sent to the scuba:<br />
-P1204802500<br />
-<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLxXNRNO6q8ixo4CAIn5QalwADlsbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GN8MQhmQrZaii4sFAJ37FLW-yjkobr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GKYr2xa3vOkEKIQDAL5eKqkDWQAebr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAjzORm9OYV951kBAF5WyqbckVY2br0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMpzQhbeucEI_BwDAOK0nUGoCsZkbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDJ2whaLisgDsYMDABd4ox_-2gp5br0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GJY4Pxkg0hntj9UCALgYP3xMdmMMbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GO1gCxfWSaDFqhIBABzCPhU827F7br0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GPzyNBaxHtNFJdADADH7AsWMwixBbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBxaWAofHuojr0EBALKAINF-n_Ebbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GPTR_RZdqWhlGmwEADUfB1t_xKN-br0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 3615, 'pattern_matcher_count': 3231, 'normalization_pass': 825, 'remove_split_with_size_one_pass': 673, 'merge_splits_pass': 85, 'merge_getitem_cat_pass': 11, 'batch_aten_mul': 11, 'scmerge_split_sections_removed': 5, 'scmerge_split_removed': 4, 'scmerge_cat_removed': 4, 'decompose_mm': 4, 'decompose_mmt': 4, 'batch_aten_sub': 3, 'batch_sigmoid': 2, 'batch_linear': 2, 'batch_aten_add': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'batch_relu': 1, 'batch_linear_post_grad': 1}), 'PreGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEp2SBdLi4Q9SfYCALG5AsLl-LJubr0LAAAz', 'BatchReLuPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMry_BbFwSc8epcBAP7-LFeL-aRbbr0LAAAz', 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GKpamxaU2v4MlyANANGbWkDgUAQabr0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOMotxYcfE3jsWEBAFi0ABcmUboYbr0LAAAz', 'PostGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GC3yQRku3hY9VmkBAH3QvuAf5z8Cbr0LAAAz'}</code></p>
-<h3>without decompose</h3>
-<p>optimus parameter sent to the scuba:<br />
-P1204807273<br />
-<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLDLYxbo4HnP1ssDAKDGl5fN9SUnbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOKrQBnK6dfZg3YDALrJX7r23dN8br0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GER6ChcNzZ9NX94DAH6ZWJFFD5Uzbr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNmRphbUGk2zvswAAJ3sOh3WWGBAbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDYJJBQRWfOYB0wFAJpCr7RsFnsQbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GM2ABxPOewvvdm8FAMPnyXSb6Fwzbr0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOkqSBYgyv9G4tQCAFBtGCq1OUhkbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMdbSBeSWQGyOGkDANtexORtG0lMbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GF8rvghuhGGVZXMBAPKAC7WPIeUGbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDWyCheBejGMvq0FAApYMMDOu7Jwbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDRgqxE_qCrmMyIDAL5TQ977TQknbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 2323, 'pattern_matcher_count': 2071, 'normalization_pass': 825, 'remove_split_with_size_one_pass': 673, 'merge_splits_pass': 85, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 5, 'scmerge_split_removed': 4, 'scmerge_cat_removed': 4, 'batch_sigmoid': 2, 'batch_linear': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'batch_aten_mul': 1, 'batch_relu': 1}), 'PreGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNyUxRYGchkL_gMLAKk5mC-cbU9zbr0LAAAz', 'BatchReLuPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GD19_BZMbHm46BMNAE05wMFtvB9mbr0LAAAz'}</code></p>
-<h1>e2e</h1>
-<p>ads_dper3:7e4cfda95bb1b45d35d5057f0567a8a4<br />
-training_platform:ab49a1063522f415f3d3c16719b15eb5</p>
-<h3>with decompose</h3>
-<p>use old config<br />
-f547807297<br />
-{F1478026031}<br />
-add to the post grad fusion options<br />
-f547807915<br />
-{F1478026133}</p>
-<h3>without decompose</h3>
-<p>f547807676<br />
- {F1478027534}</p>
-<h3>QPS &gt; 5%</h3>
-<p>{F1478024873}</p>
-<h3>NE</h3>
-<p>{F1478028259}</p>
-<p>Differential Revision: D55679277</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 04 Apr 2024 11:30:00 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123376</guid>
+      <title>torch.compile x custom ops: op that accepts float also accepts Tensor in eager-mode</title>
+      <link>https://github.com/pytorch/pytorch/issues/123470</link>
+      <description><![CDATA[<p>ops that accept float will accept single-element Tensor in place of the float in eager-mode PyTorch. Underneath torch.compile, this errors:<br />
+```<br />
+import torch<br />
+import torch.ao.quantization.fx._decomposed<br />
+from torch._subclasses.fake_tensor import FakeTensorMode # W: 'torch.<br />
+from torch.library import Library # W: 'torch.library.cust<br />
+from torch import Tensor # W: 'torch.Tensor' imported but unused</p>
+<p>lib = Library("mylib", "FRAGMENT") # W: Use `torch.library._scoped_li<br />
+lib.define("op(Tensor x, float scale) -&gt; Tensor")<br />
+lib.impl("op", lambda x, y: x.clone(), "CompositeExplicitAutograd")<br />
+op = torch.ops.mylib.op.default</p>
+<h1>@custom_op("mylib::op", mutates_args=())</h1>
+<h1>def op(x: Tensor, scale: float) -&gt; Tensor:</h1>
+<h1>return x.clone()</h1>
+<p>x = torch.zeros(3, 16, 8, 8, dtype=torch.int8)<br />
+scale = torch.tensor(0.01)</p>
+<p>@torch.compile(backend="eager", fullgraph=True)<br />
+def f(x, scale):<br />
+    return op(x, scale)</p>
+<p>f(x, scale)<br />
+<code>gives:</code><br />
+TorchRuntimeError: Failed running call_function mylib.op.default(<em>(FakeTensor(..., size=(3, 16, 8, 8), dtype=torch.int8), FakeTensor(..., size=<br />
+())), </em>*{}):<br />
+mylib::op() Expected a value of type 'float' for argument 'scale' but instead found type 'FakeTensor'.<br />
+Position: 1<br />
+Value: FakeTensor(..., size=())<br />
+Declaration: mylib::op(Tensor x, float scale) -&gt; Tensor<br />
+Cast error details: Unable to cast Python instance of type <class 'torch._subclasses.fake_tensor.FakeTensor'> to C++ type '?' (#define PYBIND11<br />
+_DETAILED_ERROR_MESSAGES or compile in debug mode for details)</p>
+<p>from user code:<br />
+   File "<ipython-input-2-4388c01b4a06>", line 21, in f<br />
+    return op(x, scale)</p>
+<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
+<p>You can suppress this exception and fall back to eager by setting:<br />
+    import torch._dynamo<br />
+    torch._dynamo.config.suppress_errors = True<br />
+```</p>]]></description>
+      <pubDate>Fri, 05 Apr 2024 11:43:57 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123470</guid>
     </item>
     <item>
-      <title>DISABLED test_accumulate_grad_with_zero_numel_grad (__main__.TestAutogradWithCompiledAutograd)</title>
-      <link>https://github.com/pytorch/pytorch/issues/123373</link>
-      <description><![CDATA[<p>Platforms: asan, linux, mac, macos, rocm, slow</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_accumulate_grad_with_zero_numel_grad&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/23442500180">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 13 workflow(s) with 39 failures and 13 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_accumulate_grad_with_zero_numel_grad</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 04 Apr 2024 10:39:24 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123373</guid>
+      <title>AOTAutograd: add config to error when overlapping input checks would cause slow compile / runtimes</title>
+      <link>https://github.com/pytorch/pytorch/pull/123455</link>
+      <description><![CDATA[<p>We should eventually make the non-overlapping checks faster when dynamic shapes are enabled, but this is pretty difficult to do. So for now this PR adds a config that lets us fail fast when this situation happens, instead of causing compile times to secretly come to a crawl.</p>
+<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123455</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
+      <pubDate>Fri, 05 Apr 2024 08:31:47 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123455</guid>
+    </item>
+    <item>
+      <title>[inductor][cpu]PT2E and QAT quantization regression in 2024-03-31 nightly release</title>
+      <link>https://github.com/pytorch/pytorch/issues/123448</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>PT2E and QAT quantization regression in 2024-03-31 nightly release</p>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 15">
+<link id=Main-File rel=Main-File
+href="file:///C:/Users/zengxian/AppData/Local/Temp/msohtmlclip1/01/clip.htm">
+<link rel=File-List
+href="file:///C:/Users/zengxian/AppData/Local/Temp/msohtmlclip1/01/clip_filelist.xml">
+<!--table
+    {mso-displayed-decimal-separator:"\.";
+    mso-displayed-thousand-separator:"\,";}
+@page
+    {margin:1.0in .75in 1.0in .75in;
+    mso-header-margin:.5in;
+    mso-footer-margin:.5in;}
+tr
+    {mso-height-source:auto;}
+col
+    {mso-width-source:auto;}
+br
+    {mso-data-placement:same-cell;}
+td
+    {padding-top:1px;
+    padding-right:1px;
+    padding-left:1px;
+    mso-ignore:padding;
+    color:black;
+    font-size:11.0pt;
+    font-weight:400;
+    font-style:normal;
+    text-decoration:none;
+    font-family:Calibri, sans-serif;
+    mso-font-charset:0;
+    mso-number-format:General;
+    text-align:general;
+    vertical-align:bottom;
+    border:none;
+    mso-background-source:auto;
+    mso-pattern:auto;
+    mso-protection:locked visible;
+    white-space:nowrap;
+    mso-rotate:0;}
+.xl66
+    {mso-number-format:Scientific;}
+-->
+</head>
+
+<body link=blue vlink=purple>
+
+
+model_name | PT2E_new | PT2E_old
+-- | -- | --
+densenet121 | 534.6600164 | 1217.14198
+mobilenet_v2 | 4760.843136 | 5860.936014
+mobilenet_v3_large | 3652.993057 | 5596.587481
+squeezenet1_1 | 7583.483788 | 9030.394544
+
+
+
+</body>
+
+</html>
+
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 15">
+<link id=Main-File rel=Main-File
+href="file:///C:/Users/zengxian/AppData/Local/Temp/msohtmlclip1/01/clip.htm">
+<link rel=File-List
+href="file:///C:/Users/zengxian/AppData/Local/Temp/msohtmlclip1/01/clip_filelist.xml">
+
+<!--table
+    {mso-displayed-decimal-separator:"\.";
+    mso-displayed-thousand-separator:"\,";}
+@page
+    {margin:1.0in .75in 1.0in .75in;
+    mso-header-margin:.5in;
+    mso-footer-margin:.5in;}
+tr
+    {mso-height-source:auto;}
+col
+    {mso-width-source:auto;}
+br
+    {mso-data-placement:same-cell;}
+td
+    {padding-top:1px;
+    padding-right:1px;
+    padding-left:1px;
+    mso-ignore:padding;
+    color:black;
+    font-size:11.0pt;
+    font-weight:400;
+    font-style:normal;
+    text-decoration:none;
+    font-family:Calibri, sans-serif;
+    mso-font-charset:0;
+    mso-number-format:General;
+    text-align:general;
+    vertical-align:bottom;
+    border:none;
+    mso-background-source:auto;
+    mso-pattern:auto;
+    mso-protection:locked visible;
+    white-space:nowrap;
+    mso-rotate:0;}
+.xl68
+    {mso-number-format:Scientific;}
+-->
+
+</head>
+
+<body link=blue vlink=purple>
+
+
+model_name | QAT_new | QAT_old
+-- | -- | --
+densenet121 | 535.9700177 | 1234.085813
+mobilenet_v2 | 5058.754669 | 6045.72933
+squeezenet1_1 | 7979.238023 | 9213.892967
+mobilenet_v3_large-eval_throughput | 4231.302988 | 6811.576935
+shufflenet_v2_x1_0-eval_throughput | 5354.989357 | 6619.653679
+
+
+
+
+</body>
+
+</html>
+
+<h3>Versions</h3>
+<p></table><p>SW info</p><table border="1" class="dataframe table"><br />
+<br />
+<thead>
+    <tr style="text-align: right;">
+      <th>SW</th>
+      <th>Nightly commit</th>
+      <th>Main commit</th>
+    </tr>
+  </thead></p>
+<tbody>
+    <tr>
+      <td>Pytorch</td>
+      <td>4af23dd</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Torchbench</td>
+      <td>/</td>
+      <td>ee35d764</td>
+    </tr>
+    <tr>
+      <td>torchaudio</td>
+      <td>ea437b3</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>torchtext</td>
+      <td>b0ebddc</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>torchvision</td>
+      <td>2c4665f</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>torchdata</td>
+      <td>0790338</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>dynamo_benchmarks</td>
+      <td>nightly</td>
+      <td>/</td>
+    </tr>
+  </tbody>
+<p></table><p>Reference SW info (nightly)</p><table border="1" class="dataframe table"><br />
+<br />
+<thead>
+    <tr style="text-align: right;">
+      <th>item</th>
+      <th>commit</th>
+    </tr>
+  </thead></p>
+<tbody>
+    <tr>
+      <td>torchbench</td>
+      <td>ee35d764</td>
+    </tr>
+    <tr>
+      <td>torch</td>
+      <td>2.4.0a0+git384cbf2</td>
+    </tr>
+    <tr>
+      <td>torchvision</td>
+      <td>0.19.0a0+a0c79b3</td>
+    </tr>
+    <tr>
+      <td>torchtext</td>
+      <td>0.16.0a0+b0ebddc</td>
+    </tr>
+    <tr>
+      <td>torchaudio</td>
+      <td>2.2.0a0+17a7081</td>
+    </tr>
+    <tr>
+      <td>torchdata</td>
+      <td>0.7.1a0+0790338</td>
+    </tr>
+    <tr>
+      <td>dynamo_benchmarks</td>
+      <td>nightly</td>
+    </tr>
+  </tbody>
+</table>
+<p>Repro:<br />
+```<br />
+git clone -b chuanqiw/inductor_quant https://github.com/pytorch/benchmark.git<br />
+cd benchmark<br />
+pip install --no-deps -r requirements.txt<br />
+pip install --no-cache Jinja2==3.1.2 markupsafe==2.0.1 beartype==0.15.0 &amp;&amp; pip install mpmath==1.3.0<br />
+python install.py --continue_on_fail<br />
+export LD_PRELOAD=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}/lib/libiomp5.so:${CONDA_PREFIX:-"$(dirname $(which conda))/../"}/lib/libjemalloc.so<br />
+export MALLOC_CONF="oversize_threshold:1,background_thread:true,metadata_thp:auto,dirty_decay_ms:-1,muzzy_decay_ms:-1"</p>
+<h1>PT2E</h1>
+<p>TORCHINDUCTOR_FREEZING=1 python run_benchmark.py cpu -m ${models} --torchdynamo inductor --quantize --launcher --launcher-args="--throughput-mode" -b 128 --metrics throughputs<br />
+mv .userbenchmark/cpu ptq<br />
+cat ptq/metric* # to see the results</p>
+<h1>QAT</h1>
+<p>TORCHINDUCTOR_FREEZING=1 python run_benchmark.py cpu -m ${models} --torchdynamo inductor --quantize --is_qat --launcher --launcher-args="--throughput-mode" -b 128 --metrics throughputs<br />
+mv .userbenchmark/cpu qat<br />
+cat qat/metric* # to see the results<br />
+```<br />
+Suspected guilty commit: https://github.com/pytorch/pytorch/commit/6f4ed57b8aaa980169f8ed7f6219afd808487bc5<br />
+<a href="https://github.com/pytorch/pytorch/files/14887092/torchbench-densenet121-inference-ptq-performance-drop_guilty_commit.log">torchbench-densenet121-inference-ptq-performance-drop_guilty_commit.log</a><br />
+cc @WeizhuoZhang-intel @chuanqi129</p>]]></description>
+      <pubDate>Fri, 05 Apr 2024 07:32:23 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123448</guid>
+    </item>
+    <item>
+      <title>[aotinductor] Add test case for outputs with views</title>
+      <link>https://github.com/pytorch/pytorch/pull/123415</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123415</p>
+<p>Also test views instead of .contiguous() for outputs with multiple aliases.</p>
+<p><code>output_handles[0] = buf0.release();
+        output_handles[1] = output_handles[0];
+        output_handles[2] = wrap_with_raii_handle_if_needed(tmp_tensor_handle_0).release();</code></p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 19:08:38 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123415</guid>
+    </item>
+    <item>
+      <title>[inductor] Write generated files from parent process</title>
+      <link>https://github.com/pytorch/pytorch/pull/123409</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #123012<br />
+* #123011<br />
+* #122941<br />
+* <strong>-&gt;</strong> #123409</p>
+<p>Before this PR we would pass generated source code over a pipe to the compile worker then the compile worker would write out the file.  Doing it this way is faster and results in smaller messages to the workers (and lets us skip creating the workers in the warm start case).</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 16:38:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123409</guid>
+    </item>
+    <item>
+      <title>[Compile FSDP2][1/n] Support using user-defined object instance method as hook</title>
+      <link>https://github.com/pytorch/pytorch/pull/123399</link>
+      <description><![CDATA[<p>FSDP2 has this pattern of using user-defined object instance method as hook, and it will throw this error under compile:<br />
+<code>torch._dynamo.exc.Unsupported: call_function UserDefinedObjectVariable(_pre_forward) [FSDPManagedNNModuleVariable(), TupleVariable(), ConstDictVariable()] {}</code></p>
+<p>This PR adds support for it by always allowing to call into a UserDefinedObjectVariable that's an instance method (i.e. <code>MethodType</code>).</p>
+<p>Supersedes https://github.com/pytorch/pytorch/pull/123320.</p>
+<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @chauhang @voznesenskym @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @LucasLLC</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 15:28:06 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123399</guid>
+    </item>
+    <item>
+      <title>[inductor] Optionally save inductor cache on benchmark CI failure</title>
+      <link>https://github.com/pytorch/pytorch/pull/123389</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123389</p>
+<p>Summary:</p>
+<p>Test Plan:</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 13:42:29 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123389</guid>
     </item>
     <item>
       <title>[compiled autograd][dynamo] Codegen aliases to keep grad mutated tensors alive</title>
@@ -72,16 +371,39 @@ To find relevant log snippets:<br />
 * #123007<br />
 * #122746<br />
 * #122691</p>
+<p>The current codegen is problematic if __compiled_fn_0 clears the inputs list, since we need it for assignment afterwards<br />
+<code>python
+def forward(inputs):
+    __compiled_fn_0 = ...  # The actual function needs to be provided
+    graph_out_0 = __compiled_fn_0(inputs)  # clears inputs
+    temp_list = []
+    temp_list.append(graph_out_0[0])
+    inputs[4].grad = graph_out_0[1]  # inputs is empty, index error
+    inputs[7].grad = graph_out_0[2]
+    inputs[8].grad = graph_out_0[3]
+    inputs[9].grad = graph_out_0[3]
+    del graph_out_0
+    return temp_list</code></p>
+<p>With this fix, we use aliases to keep the tensors alive<br />
+<code>python
+def forward(inputs):
+    __compiled_fn_0 = ...  # The actual function needs to be provided
+    inputs_ref_1 = inputs[9]
+    inputs_ref_2 = inputs[4]
+    inputs_ref_3 = inputs[8]
+    inputs_ref_4 = inputs[7]
+    graph_out_0 = __compiled_fn_0(inputs)
+    temp_list = []
+    temp_list.append(graph_out_0[0])
+    inputs_ref_2.grad = graph_out_0[1]
+    inputs_ref_4.grad = graph_out_0[2]
+    inputs_ref_3.grad = graph_out_0[3]
+    inputs_ref_1.grad = graph_out_0[3]
+    del graph_out_0
+    return temp_list</code></p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
       <pubDate>Thu, 04 Apr 2024 08:49:46 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123359</guid>
-    </item>
-    <item>
-      <title>Add aot_test_inductor to test_inductor</title>
-      <link>https://github.com/pytorch/pytorch/pull/123340</link>
-      <description><![CDATA[<p>Fixes #ISSUE_NUMBER</p>]]></description>
-      <pubDate>Thu, 04 Apr 2024 04:26:40 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123340</guid>
     </item>
     <item>
       <title>[Inductor] Add a device agnostic DeviceGuard class to inductor</title>
@@ -95,42 +417,6 @@ To find relevant log snippets:<br />
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123338</guid>
     </item>
     <item>
-      <title>DISABLED test_item_unbacked_stride_nobreak_cuda (__main__.TestInductorDynamicCUDA)</title>
-      <link>https://github.com/pytorch/pytorch/issues/123333</link>
-      <description><![CDATA[<p>Platforms: linux, slow</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_item_unbacked_stride_nobreak_cuda&amp;suite=TestInductorDynamicCUDA&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/23425507787">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 4 workflow(s) with 12 failures and 4 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_item_unbacked_stride_nobreak_cuda</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_torchinductor_dynamic_shapes.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 04 Apr 2024 01:40:05 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123333</guid>
-    </item>
-    <item>
-      <title>DISABLED test_access_saved_tensor_twice_without_recomputation_works (__main__.TestAutogradWithCompiledAutograd)</title>
-      <link>https://github.com/pytorch/pytorch/issues/123331</link>
-      <description><![CDATA[<p>Platforms: asan, linux, mac, macos, rocm, slow</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_access_saved_tensor_twice_without_recomputation_works&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/23425291639">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 29 workflow(s) with 87 failures and 29 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_access_saved_tensor_twice_without_recomputation_works</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 04 Apr 2024 01:39:22 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123331</guid>
-    </item>
-    <item>
       <title>[inductor] Bypass FX graph cache when we have HigherOrderOperators</title>
       <link>https://github.com/pytorch/pytorch/pull/123325</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
@@ -142,180 +428,95 @@ To find relevant log snippets:<br />
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123325</guid>
     </item>
     <item>
-      <title>DISABLED test_buffer_mutation_3_non_abi_compatible_cuda (__main__.AOTInductorTestNonABICompatibleCuda)</title>
-      <link>https://github.com/pytorch/pytorch/issues/123321</link>
-      <description><![CDATA[<p>Platforms: rocm<br />
-This test was disabled because it is failing on main branch (<a href="https://torch-ci.com/failure?failureCaptures=%5B%22inductor%2Ftest_aot_inductor.py%3A%3AAOTInductorTestNonABICompatibleCuda%3A%3Atest_buffer_mutation_3_non_abi_compatible_cuda%22%5D">recent examples</a>).</p>
-<p>Probably the same as https://github.com/pytorch/pytorch/issues/123251</p>
-<p>cc @jeffdaily @sunway513 @jithunnair-amd @pruthvistony @ROCmSupport @dllehr-amd @jataylo @hongxiayang @clee2000</p>]]></description>
-      <pubDate>Wed, 03 Apr 2024 18:59:26 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123321</guid>
-    </item>
-    <item>
-      <title>[Compile FSDP2][1/n] Change FSDP2 hooks to staticmethod</title>
-      <link>https://github.com/pytorch/pytorch/pull/123320</link>
-      <description><![CDATA[<p><code>torch.compile</code> hook support doesn't work with instance-bound methods yet, so changing FSDP2 hooks to <code>staticmethod</code>.</p>
-<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @chauhang</p>]]></description>
-      <pubDate>Wed, 03 Apr 2024 18:15:01 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123320</guid>
-    </item>
-    <item>
-      <title>compile creates FakeTensors with dynamic shapes even when dynamic=False when inputs are views</title>
-      <link>https://github.com/pytorch/pytorch/issues/123298</link>
-      <description><![CDATA[<p>Example:</p>
-<p>```<br />
-import torch<br />
-from torch.testing._internal.two_tensor import TwoTensor</p>
-<p>@torch.compile(backend="aot_eager", dynamic=False)<br />
-def f(x):<br />
-    if x.shape[0] &gt; 5:<br />
-        return x + 1<br />
-    else:<br />
-        return x + 2</p>
-<p>x_inner = torch.ones(4)<br />
-x = TwoTensor(x_inner, x_inner)<br />
-x_view = x.view(2, 2)<br />
-out = f(x_view)<br />
-```</p>
-<p>Running with <code>TORCH_LOGS="+dynamic"</code>, you can see a lot of symint compute going on. If you put a breakpoint <a href="https://github.com/pytorch/pytorch/blob/main/torch/_subclasses/meta_utils.py#L1278">here</a>, the returned FakeTensor has SymInts for its sizes, even though we compiled with <code>dynamic=False</code></p>
-<p>cc @eellison</p>]]></description>
-      <pubDate>Wed, 03 Apr 2024 14:11:11 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123298</guid>
-    </item>
-    <item>
-      <title>[inductor] Add explicit fmas in variance formulas</title>
-      <link>https://github.com/pytorch/pytorch/pull/123269</link>
+      <title>[testing][inductor] Specialize on unguarded alignment of example inputs</title>
+      <link>https://github.com/pytorch/pytorch/pull/123319</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122736<br />
-* #122915<br />
-* #115435<br />
-* <strong>-&gt;</strong> #123269<br />
-* #122518</p>
-<p>The <code>dx = x - mean</code> calculation in the variance is a classic<br />
-big - big = small scenario where precision is at a premium.</p>
-<p>Calculating it with an fma as <code>fma(sum, 1/N, -x)</code> results in 1 fewer rounding<br />
-and so we can expect greater accuracy overall.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 03 Apr 2024 08:27:36 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123269</guid>
+* <strong>-&gt;</strong> #123319</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Wed, 03 Apr 2024 18:06:18 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123319</guid>
     </item>
     <item>
-      <title>[dynamo] Emit FUNCTORCH_STACK_MATCH guard in vmap(compile(f)) case</title>
-      <link>https://github.com/pytorch/pytorch/pull/122786</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122786</p>
-<p>Fixes: #122201</p>
-<p>cc @zou3519 @Chillee @samdow @kshitij12345 @janeyx99 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
-      <pubDate>Wed, 27 Mar 2024 06:02:22 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122786</guid>
-    </item>
-    <item>
-      <title>[inductor] Fix fresh_inductor_cache()</title>
-      <link>https://github.com/pytorch/pytorch/pull/122661</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122661</p>
-<p>Summary: Modify fresh_inductor_cache() to clear cached state before mocking the toplevel cache_dir directory. Any lru_caches (or otherwise) can use the @clear_on_fresh_inductor_cache decorator to register the cache for clearing. Also change the base inductor TestCase class to use fresh_inductor_cache(). Previously that TestCase was only mocking the subdirectory within the toplevel cache dir designated for the FX graph cache artifacts.</p>
+      <title>profile pt2 compile time with strobelight</title>
+      <link>https://github.com/pytorch/pytorch/pull/123311</link>
+      <description><![CDATA[<p>For oss this diff adds a decorator @profile_sb_fbcode that is a nop for non meta workload.</p>
+<p>Facebook:<br />
+With this diff someone can generate a strobelight profile for pt2 compilation.<br />
+users need to set the env variable TORCH_COMPILE_SL_PROFILE =TRUE .</p>
+<p>For example:<br />
+<code>TORCH_COMPILE_SL_PROFILE =TRUE buck2 run  @//mode/inplace  @//mode/opt  //caffe2/fb/strobelight:compiletime_profile_example</code><br />
+see sample output bellow, at the end of summary. </p>
+<p>The way this works, is that a unique id is generated and associated with all samples that are collected for functions that are decorated with profile_sb_fbcode. <br />
+This id can then be used to combine different strobe light profile into one. (for example three compilation events happens in the code bellow). </p>
+<p>Right now the following two functions are annotated with  profile_sb_fbcode.  bw_compiler and _compile. if two profile_sl_fbcode is called recursively, recursive invocations are ignored and a log is printed. </p>
+<p>The output is:<br />
+<code>Strobelight is enabled for pt2 compilation
+Unique user-id for this run is: 2024-04-03-13:59:49147091devvm4561.ash0.facebook.com
+You can use the following link to access the strobelight profile at the end of the run:
+https://www.internalfb.com/intern/scuba/query/?dataset=pyperf_experimental%2Fon_demand&amp;drillstate=%7B%22purposes%22%3A[]%2C%22end%22%3A%22now%22%2C%22start%22%3A%22-30%20days%22%2C%22filterMode%22%3A%22DEFAULT%22%2C%22modifiers%22%3A[]%2C%22sampleCols%22%3A[]%2C%22cols%22%3A[%22namespace_id%22%2C%22namespace_process_id%22]%2C%22derivedCols%22%3A[]%2C%22mappedCols%22%3A[]%2C%22enumCols%22%3A[]%2C%22return_remainder%22%3Afalse%2C%22should_pivot%22%3Afalse%2C%22is_timeseries%22%3Afalse%2C%22hideEmptyColumns%22%3Afalse%2C%22timezone%22%3A%22America%2FLos_Angeles%22%2C%22compare%22%3A%22none%22%2C%22samplingRatio%22%3A%221%22%2C%22metric%22%3A%22count%22%2C%22aggregation_field%22%3A%22async_stack_complete%22%2C%22top%22%3A10000%2C%22aggregateList%22%3A[]%2C%22param_dimensions%22%3A[%7B%22dim%22%3A%22py_async_stack%22%2C%22op%22%3A%22edge%22%2C%22param%22%3A%220%22%2C%22anchor%22%3A%220%22%7D]%2C%22order%22%3A%22weight%22%2C%22order_desc%22%3Atrue%2C%22constraints%22%3A[[%7B%22column%22%3A%22run_user%22%2C%22op%22%3A%22eq%22%2C%22value%22%3A[%22[%5C%222024-04-03-13:59:49147091devvm4561.ash0.facebook.com%5C%22]%22]%7D]]%2C%22c_constraints%22%3A[[]]%2C%22b_constraints%22%3A[[]]%2C%22ignoreGroupByInComparison%22%3Afalse%7D&amp;view=GraphProfilerView&amp;&amp;pool=uber&amp;graphprofiler_filter=&amp;graphprofiler_column_to_sort_by=exclusive
+the link below takes you to the collected strobelight profile
+https://www.internalfb.com/intern/scuba/query/?dataset=pyperf_experimental%2Fon_demand&amp;drillstate=%7B%22dimensions%22%3A%5B%5D%2C%22param_dimensions%22%3A%5B%7B%22anchor%22%3A%220%22%2C%22param%22%3A%220%22%2C%22op%22%3A%22edge%22%2C%22dim%22%3A%22py_async_stack%22%7D%5D%2C%22constraints%22%3A%5B%5B%7B%22value%22%3A%5B%22%5B%5C%22-6800545191281321%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_id%22%7D%2C%7B%22value%22%3A%5B%22%5B%5C%222024-04-03-13%3A59%3A49147091devvm4561.ash0.facebook.com%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_user%22%7D%5D%5D%2C%22top%22%3A10000%2C%22end%22%3A%221712181610%22%2C%22start%22%3A%221712174410%22%7D&amp;view=GraphProfilerView&amp;
+1 storbelight success runs out of 1 non-ignored runs.
+strobelight run id is: 6181728288420687
+the link below takes you to the collected strobelight profile
+https://www.internalfb.com/intern/scuba/query/?dataset=pyperf_experimental%2Fon_demand&amp;drillstate=%7B%22dimensions%22%3A%5B%5D%2C%22param_dimensions%22%3A%5B%7B%22anchor%22%3A%220%22%2C%22param%22%3A%220%22%2C%22op%22%3A%22edge%22%2C%22dim%22%3A%22py_async_stack%22%7D%5D%2C%22constraints%22%3A%5B%5B%7B%22value%22%3A%5B%22%5B%5C%226181728288420687%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_id%22%7D%2C%7B%22value%22%3A%5B%22%5B%5C%222024-04-03-13%3A59%3A49147091devvm4561.ash0.facebook.com%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_user%22%7D%5D%5D%2C%22top%22%3A10000%2C%22end%22%3A%221712181621%22%2C%22start%22%3A%221712174421%22%7D&amp;view=GraphProfilerView&amp;
+2 storbelight success runs out of 2 non-ignored runs.
+strobelight run id is: -1026103682715688
+the link below takes you to the collected strobelight profile
+https://www.internalfb.com/intern/scuba/query/?dataset=pyperf_experimental%2Fon_demand&amp;drillstate=%7B%22dimensions%22%3A%5B%5D%2C%22param_dimensions%22%3A%5B%7B%22anchor%22%3A%220%22%2C%22param%22%3A%220%22%2C%22op%22%3A%22edge%22%2C%22dim%22%3A%22py_async_stack%22%7D%5D%2C%22constraints%22%3A%5B%5B%7B%22value%22%3A%5B%22%5B%5C%22-1026103682715688%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_id%22%7D%2C%7B%22value%22%3A%5B%22%5B%5C%222024-04-03-13%3A59%3A49147091devvm4561.ash0.facebook.com%5C%22%5D%22%5D%2C%22op%22%3A%22eq%22%2C%22column%22%3A%22run_user%22%7D%5D%5D%2C%22top%22%3A10000%2C%22end%22%3A%221712181647%22%2C%22start%22%3A%221712174447%22%7D&amp;view=GraphProfilerView&amp;
+3 storbelight success runs out of 3 non-ignored runs.</code></p>
 <p>Test Plan:<br />
-- New unit test<br />
-- All existing inductor tests will exercise fresh_inductor_cache()</p>
+Was tested on buck2 run  @//mode/inplace  @//mode/opt  //caffe2/fb/strobelight:compiletime_profile_example</p>
+<p>This was also tested in one of the ads benchmarks<br />
+<code>TORCH_COMPILE_SL_PROFILE =TRUE buck2 run mode/opt mode/inplace //pytorch/benchmark:run -- ads_mc_igctr_mc3_v0 -d cuda -t train --torchdynamo inductor</code><br />
+The results matches the results reported in <br />
+https://fb.workplace.com/groups/257735836456307/permalink/657458576484029</p>
+<p>Differential Revision: D55672271</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 25 Mar 2024 16:12:42 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122661</guid>
+      <pubDate>Wed, 03 Apr 2024 16:17:04 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123311</guid>
     </item>
     <item>
-      <title>[WIP][compiled autograd][aot] Trim runtime refs for list inputs from dynamo</title>
-      <link>https://github.com/pytorch/pytorch/pull/122535</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #122535<br />
-* #123359<br />
-* #122353<br />
-* #123212<br />
-* #123007<br />
-* #122746<br />
-* #122691</p>
+      <title>[fix] inductor `split` lowering fails if `item()` is captured</title>
+      <link>https://github.com/pytorch/pytorch/pull/123032</link>
+      <description><![CDATA[<p>Fixes #122937</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 22 Mar 2024 16:04:37 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122535</guid>
+      <pubDate>Sat, 30 Mar 2024 10:57:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123032</guid>
     </item>
     <item>
-      <title>[inductor] Add explicit ops.fma and use it in softmax_backward</title>
-      <link>https://github.com/pytorch/pytorch/pull/122518</link>
+      <title>[minifier] Don't recompile for accuracy minification</title>
+      <link>https://github.com/pytorch/pytorch/pull/123005</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122736<br />
-* #122915<br />
-* #115435<br />
-* #123269<br />
-* <strong>-&gt;</strong> #122518</p>
-<p>This allows us to generate an fma even when fp-fusion is disabled<br />
-in the compiler.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 22 Mar 2024 12:48:00 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122518</guid>
-    </item>
-    <item>
-      <title>compile: ban mutations on non-compositional uses of as_strided</title>
-      <link>https://github.com/pytorch/pytorch/pull/122502</link>
-      <description><![CDATA[<p>Fixes https://github.com/pytorch/pytorch/issues/104505</p>
-<p>I was originally going to ban all usages of as_strided + mutation in functionalization. But I'm pretty sure that as_strided + mutation is fine when we are calling as_strided on a base tensor.</p>
-<p>So in this PR I added a slightly more conservative check: if we see an as_strided + mutation, where the input to an as_strided was <strong>another</strong> view op, then I error loudly in functionalization and link to the github issue above (in case anyone runs into this in the real world)</p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #123349<br />
-* #123347<br />
-* #123350<br />
-* #123348<br />
-* #122751<br />
-* <strong>-&gt;</strong> #122502<br />
-* #118802</p>
+* #123006<br />
+* <strong>-&gt;</strong> #123005</p>
+<p><code>backend_aot_accuracy_fails</code> reruns <code>compile_fx_inner</code> on the real inputs which<br />
+means the graph is recompiled with static shapes. This meant accuracy failures<br />
+related to dynamic shapes would never be captured by <code>REPRO_AFTER=aot</code>.</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
-      <pubDate>Fri, 22 Mar 2024 08:15:38 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122502</guid>
+      <pubDate>Fri, 29 Mar 2024 15:48:26 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123005</guid>
     </item>
     <item>
-      <title>[compiled autograd][dynamo] Make compiled graph take in boxed inputs</title>
-      <link>https://github.com/pytorch/pytorch/pull/122353</link>
+      <title>[WIP][Inductor Intel GPU backend Upstream] Reuse inductor test for Intel GPU (PART 1)</title>
+      <link>https://github.com/pytorch/pytorch/pull/122866</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122535<br />
-* #123359<br />
-* <strong>-&gt;</strong> #122353<br />
-* #123212<br />
-* #123007<br />
-* #122746<br />
-* #122691</p>
-<h3>Context</h3>
-<p>In today's Dynamo, we lift all tensors encountered during tracing to be individual graph inputs, even when they were in a container. </p>
-<p>And <a href="https://github.com/pytorch/pytorch/blob/fdc281f2587f9a5a935de1f1368e7ad7ed0f9828/torch/_dynamo/codegen.py#L371">Dynamo generates</a> the runtime function's signature using the graph's graphargs. </p>
-<p>This means that the generated function will have each grapharg as an argument, which is problematic if we want to free the inputs in inductor codegen. See <a href="https://github.com/pytorch/pytorch/pull/83137#issuecomment-1211320670">python function arguments are kept alive for the duration of the function call</a>. </p>
-<p>```python</p>
-<h1>original code</h1>
-<p>def forward(inputs):<br />
-  a, b, c, d, e = inputs<br />
-  inputs.clear()<br />
-  out = a<br />
-  out += b<br />
-  del b  # frees memory<br />
-  out += c<br />
-  del c  # frees memory<br />
-  out += d<br />
-  del d  # frees memory<br />
-  out += e<br />
-  del e  # frees memory<br />
-  return out</p>
-<h1>compiled code:</h1>
-<p>def forward(a, b, c, d, e):<br />
-  # b, c, d, e can't be freed before end of function<br />
-```</p>
-<p>This isn't a concern when compiling forward because a, b, c, d, e are all from user code, and should be kept alive. But when compiling backwards, a, b, c, d, e may be intermediate results i.e. activations, that we DO want to clear ASAP to remain on par with eager peak memory.</p>
-<h3>Solution</h3>
-<p>We have encountered similar memory problems in AOTAutograd before, where we adopted the boxed calling convention (wrapping to-be-freed objects in a list), adding list clearing to inductor codegen, and being careful about holding references to elements in the input list. We need to do something similar, but for inputs from the user program (compiled autograd fx graph in this case).</p>
-<p>This PR support lists as graphargs/placeholder nodes. When tracing a list of tensors, we create a node for it, and pre-emptively initialize variable trackers for its elements before they are used in the user program. Subsequent uses of those variables will find hits in the lookup table <code>input_source_to_var</code>.</p>
-<p>With the inputs as a list in the graph args, our compiled code can free inputs just like in the eager case.<br />
-<code>python
-def forward(inputs):
-  # a, b, c, d, e can be freed within the function now</code></p>
-<p>Currently, AOT/Inductor flattens list input via <a href="https://github.com/pytorch/pytorch/blob/597f479643f82859307ece38971f1c8e7d657c80/torch/_inductor/compile_fx.py#L1454-L1478">flatten_graph_inputs wrapper</a>, which is why this PR's CI can be green. Additional changes are needed to its runtime wrapper, done in the next PR. The next step is to ensure that we are careful in forwarding the list to inductor codegen without holding additional references.</p>
+* <strong>-&gt;</strong> #122866</p>
+<p>backend.</p>
+<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Wed, 27 Mar 2024 20:28:58 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122866</guid>
+    </item>
+    <item>
+      <title>[Inductor] Pass device interface to the worker compile</title>
+      <link>https://github.com/pytorch/pytorch/pull/122492</link>
+      <description><![CDATA[<p>Summary: In <code>codecache.py</code> pass the device_interface directly to <code>_worker_compile()</code> instead of calling <code>get_device_interface()</code> from inside the function.</p>
+<p>If the device_interface is registered by an out-of-tree module then it will only be registered inside the main process and not inside the worker process. This fixes this issue. Happy to add a test if required. </p>
+<p>Test plan:<br />
+No tests added</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 20 Mar 2024 15:17:56 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122353</guid>
+      <pubDate>Fri, 22 Mar 2024 04:05:21 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122492</guid>
     </item>
     <item>
       <title>[effects] Add inductor support for tokens</title>
@@ -370,286 +571,40 @@ When doing inductor lowering, we convert <code>with_effects</code> calls to an <
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122347</guid>
     </item>
     <item>
-      <title>Missing Symbols When running AOTInductor example with Libtorch c++11 ABI</title>
-      <link>https://github.com/pytorch/pytorch/issues/122313</link>
+      <title>[HOP][inductor] Support pytrees as associative_scan input</title>
+      <link>https://github.com/pytorch/pytorch/pull/122137</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #122137<br />
+* #119430</p>
+<p>This allows <code>associative_scan</code> to take an arbitrary pytree of tensors,<br />
+which is flattened to their leaves before calling the <code>associative_scan</code><br />
+higher order operator.</p>
+<p>I also add support in inductor to generate code for scanning over sequences<br />
+of tensors.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Mon, 18 Mar 2024 14:10:41 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122137</guid>
+    </item>
+    <item>
+      <title>torch.compile() and optimizer UX issues</title>
+      <link>https://github.com/pytorch/pytorch/issues/120814</link>
       <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>I am trying to run the AOTInductor example model with the c++11 libtroch with cxx11-abi-shared-with-debs , see https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.2.1%2Bcu118.zip (also with the cuda 12.1 version) but get the following unknown symbols error:</p>
-<p>```<br />
-root@0b74fe279d1f:/tmp/build# ./aoti_example /tmp/example/model.so <br />
-terminate called after throwing an instance of 'c10::DynamicLibraryError'<br />
-  what():  Error in dlopen: /tmp/example/model.so: undefined symbol: _ZN3c107WarningC1ESt7variantIJNS0_11UserWarningENS0_18DeprecationWarningEEERKNS_14SourceLocationESsb<br />
-Exception raised from DynamicLibrary at ../aten/src/ATen/DynamicLibrary.cpp:38 (most recent call first):<br />
-frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits\<char>, std::allocator\<char> >) + 0x6c (0x7f43696d0a0c in /tmp/libtorch/lib/libc10.so)<br />
-frame #1: <unknown function> + 0x1148f11 (0x7f43526e1f11 in /tmp/libtorch/lib/libtorch_cpu.so)<br />
-frame #2: torch::inductor::AOTIModelContainerRunner::AOTIModelContainerRunner(char const<em>, unsigned long, bool, char const</em>) + 0x8a (0x7f43569c295a in /tmp/libtorch/lib/libtorch_cpu.so)<br />
-frame #3: <unknown function> + 0xa2c4 (0x55cb652cd2c4 in ./aoti_example)<br />
-frame #4: <unknown function> + 0x4af5 (0x55cb652c7af5 in ./aoti_example)<br />
-frame #5: <unknown function> + 0x29d90 (0x7f42fd7b4d90 in /lib/x86_64-linux-gnu/libc.so.6)<br />
-frame #6: __libc_start_main + 0x80 (0x7f42fd7b4e40 in /lib/x86_64-linux-gnu/libc.so.6)<br />
-frame #7: <unknown function> + 0x4955 (0x55cb652c7955 in ./aoti_example)</p>
-<p>Aborted (core dumped)<br />
-<code>``
- The example work when I set the</code>-DCMAKE_PREFIX_PATH=python3 -c 'import torch;print(torch.utils.cmake_prefix_path)'`  . However, I need to use libtroch because I need to link against opencv too, which is not possible with the python-provided library. </p>
-<h2>Reproduce:</h2>
-<p>Basically, follow the <a href="https://pytorch.org/docs/stable/torch.compiler_aot_inductor.html">AOTInductor example</a> and use https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.2.1%2Bcu118.zip as libtorch.</p>
-<p>In more detail:<br />
-- AOT Compile the model with the following code:<br />
-```<br />
-import os<br />
-import torch</p>
-<p>class Model(torch.nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super().<strong>init</strong>()<br />
-        self.fc1 = torch.nn.Linear(10, 16)<br />
-        self.relu = torch.nn.ReLU()<br />
-        self.fc2 = torch.nn.Linear(16, 1)<br />
-        self.sigmoid = torch.nn.Sigmoid()</p>
-<pre><code>def forward(self, x):
-    x = self.fc1(x)
-    x = self.relu(x)
-    x = self.fc2(x)
-    x = self.sigmoid(x)
-    return x
-</code></pre>
-<p>with torch.no_grad():<br />
-    device = "cuda" if torch.cuda.is_available() else "cpu"<br />
-    model = Model().to(device=device)<br />
-    example_inputs=(torch.randn(8, 10, device=device),)<br />
-    batch_dim = torch.export.Dim("batch", min=1, max=1024)<br />
-    so_path = torch._export.aot_compile(<br />
-        model,<br />
-        example_inputs,<br />
-        # Specify the first dimension of the input x as dynamic<br />
-        dynamic_shapes={"x": {0: batch_dim}},<br />
-        # Specify the generated shared library path<br />
-        options={"aot_inductor.output_path": os.path.join(os.getcwd(), "model.so")},<br />
-    )<br />
-<code>- Compile the follwoing c++ code</code></p>
-<h1>include <iostream></h1>
-<h1>include <vector></h1>
-<h1>include <torch/torch.h></h1>
-<h1>include <torch/csrc/inductor/aoti_model_container_runner_cuda.h></h1>
-<p>int main() {<br />
-    c10::InferenceMode mode;</p>
-<pre><code>torch::inductor::AOTIModelContainerRunnerCuda runner("model.so");
-std::vector&lt;torch::Tensor&gt; inputs = {torch::randn({8, 10}, at::kCUDA)};
-std::vector&lt;torch::Tensor&gt; outputs = runner.run(inputs);
-std::cout &lt;&lt; "Result from the first inference:"&lt;&lt; std::endl;
-std::cout &lt;&lt; outputs[0] &lt;&lt; std::endl;
-
-// The second inference uses a different batch size and it works because we
-// specified that dimension as dynamic when compiling model.so.
-std::cout &lt;&lt; "Result from the second inference:"&lt;&lt; std::endl;
-std::cout &lt;&lt; runner.run({torch::randn({2, 10}, at::kCUDA)})[0] &lt;&lt; std::endl;
-
-return 0;
-</code></pre>
-<p>}<br />
-<code>``
-- Instantiate cmake with</code>cmake -DCMAKE_PREFIX_PATH=/workspace/libtorch/share/cmake/<code>and DO NOT USE</code>cmake -DCMAKE_PREFIX_PATH=python3 -c 'import torch;print(torch.utils.cmake_prefix_path)' ..`. <br />
-- Run the compiled binary. </p>
+<p>I was trying to get some toy training loop going and there were a few sharp bits that we should probably document in 1 place</p>
+<ol>
+<li>Need to instantiate both <code>optimizer</code> and <code>criterion</code> outside of the compiled function</li>
+<li>There are graph breaks on <code>optimizer.zero_grad()</code> and <code>optimizer.step()</code>, those graph breaks are deliberate since per @janeyx99 these would take too long to trace but users might still to try to fix them to make their models go faster</li>
+<li><code>loss.backward()</code> fails in fullgraph with an <code>torch._dynamo.exc.Unsupported: Tensor.backward</code> error</li>
+</ol>
+<p>There might be more, will update this issue if I find them</p>
+<h3>Error logs</h3>
+<p>https://gist.github.com/msaroufim/15a4b97c3f45cead4b2feb90894ed8d3</p>
+<h3>Minified repro</h3>
+<p>n</p>
 <h3>Versions</h3>
-<p>Collecting environment information...<br />
-PyTorch version: 2.2.0+cu121<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 12.1<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.22.1<br />
-Libc version: glibc-2.35</p>
-<p>Python version: 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] (64-bit runtime)<br />
-Python platform: Linux-5.15.0-91-generic-x86_64-with-glibc2.35<br />
-Is CUDA available: True<br />
-CUDA runtime version: 11.8.89<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA RTX A5000<br />
-Nvidia driver version: 535.146.02<br />
-cuDNN version: Could not collect<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Architecture:                       x86_64<br />
-CPU op-mode(s):                     32-bit, 64-bit<br />
-Address sizes:                      43 bits physical, 48 bits virtual<br />
-Byte Order:                         Little Endian<br />
-CPU(s):                             128<br />
-On-line CPU(s) list:                0-127<br />
-Vendor ID:                          AuthenticAMD<br />
-Model name:                         AMD EPYC 7542 32-Core Processor<br />
-CPU family:                         23<br />
-Model:                              49<br />
-Thread(s) per core:                 2<br />
-Core(s) per socket:                 32<br />
-Socket(s):                          2<br />
-Stepping:                           0<br />
-Frequency boost:                    enabled<br />
-CPU max MHz:                        2900.0000<br />
-CPU min MHz:                        1500.0000<br />
-BogoMIPS:                           5800.28<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid overflow_recov succor smca sme sev sev_es<br />
-Virtualization:                     AMD-V<br />
-L1d cache:                          2 MiB (64 instances)<br />
-L1i cache:                          2 MiB (64 instances)<br />
-L2 cache:                           32 MiB (64 instances)<br />
-L3 cache:                           256 MiB (16 instances)<br />
-NUMA node(s):                       2<br />
-NUMA node0 CPU(s):                  0-31,64-95<br />
-NUMA node1 CPU(s):                  32-63,96-127<br />
-Vulnerability Gather data sampling: Not affected<br />
-Vulnerability Itlb multihit:        Not affected<br />
-Vulnerability L1tf:                 Not affected<br />
-Vulnerability Mds:                  Not affected<br />
-Vulnerability Meltdown:             Not affected<br />
-Vulnerability Mmio stale data:      Not affected<br />
-Vulnerability Retbleed:             Mitigation; untrained return thunk; SMT enabled with STIBP protection<br />
-Vulnerability Spec rstack overflow: Mitigation; safe RET<br />
-Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
-Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; Retpolines, IBPB conditional, STIBP always-on, RSB filling, PBRSB-eIBRS Not affected<br />
-Vulnerability Srbds:                Not affected<br />
-Vulnerability Tsx async abort:      Not affected</p>
-<p>Versions of relevant libraries:<br />
-[pip3] flake8==7.0.0<br />
-[pip3] mypy==1.9.0<br />
-[pip3] mypy-extensions==1.0.0<br />
-[pip3] numpy==1.24.1<br />
-[pip3] torch==2.2.0<br />
-[pip3] torchaudio==2.1.0+cu118<br />
-[pip3] torchdata==0.7.1<br />
-[pip3] torchtext==0.17.0<br />
-[pip3] torchvision==0.17.0<br />
-[pip3] triton==2.2.0<br />
-[conda] Could not collect</p>
-<p>cc @jbschlosser</p>]]></description>
-      <pubDate>Wed, 20 Mar 2024 06:43:35 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/122313</guid>
-    </item>
-    <item>
-      <title>Update torch.compile_faq w.r.t to functorch</title>
-      <link>https://github.com/pytorch/pytorch/pull/122213</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #123357<br />
-* #123268<br />
-* <strong>-&gt;</strong> #122213<br />
-* #122212<br />
-* #122211</p>]]></description>
-      <pubDate>Tue, 19 Mar 2024 09:47:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122213</guid>
-    </item>
-    <item>
-      <title>[Inductor cutlass backend] Add bmm support</title>
-      <link>https://github.com/pytorch/pytorch/pull/121734</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #121492<br />
-* <strong>-&gt;</strong> #121734<br />
-* #121497</p>
-<p>Add support for bmm ( batch matrix multiply ) op through the Cutlass backend.</p>
-<p>Test Plan:<br />
- * CI<br />
- * Added test in test_cutlass_backend.py</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 12 Mar 2024 09:23:08 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121734</guid>
-    </item>
-    <item>
-      <title>Warning static library kineto_LIBRARY-NOTFOUND not found when trying build tutorial torch.compiler_aot_inductor.html</title>
-      <link>https://github.com/pytorch/pytorch/issues/121668</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>I observe following error when try to follow this tutorial:<br />
-https://pytorch.org/docs/main/torch.compiler_aot_inductor.html</p>
-<p>Here is the output log:</p>
-<p>```<br />
-CMAKE_PREFIX_PATH=/home/atalman/miniconda3/envs/py310/lib/python3.10/site-packages/torch/share/cmake cmake ..<br />
--- The C compiler identification is GNU 9.4.0<br />
--- The CXX compiler identification is GNU 9.4.0<br />
--- Detecting C compiler ABI info<br />
--- Detecting C compiler ABI info - done<br />
--- Check for working C compiler: /usr/bin/cc - skipped<br />
--- Detecting C compile features<br />
--- Detecting C compile features - done<br />
--- Detecting CXX compiler ABI info<br />
--- Detecting CXX compiler ABI info - done<br />
--- Check for working CXX compiler: /usr/bin/c++ - skipped<br />
--- Detecting CXX compile features<br />
--- Detecting CXX compile features - done<br />
--- Found CUDA: /usr/local/cuda (found version "12.1") <br />
--- The CUDA compiler identification is NVIDIA 12.1.105<br />
--- Detecting CUDA compiler ABI info<br />
--- Detecting CUDA compiler ABI info - done<br />
--- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped<br />
--- Detecting CUDA compile features<br />
--- Detecting CUDA compile features - done<br />
--- Found CUDAToolkit: /usr/local/cuda/include (found version "12.1.105") <br />
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD<br />
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed<br />
--- Looking for pthread_create in pthreads<br />
--- Looking for pthread_create in pthreads - not found<br />
--- Looking for pthread_create in pthread<br />
--- Looking for pthread_create in pthread - found<br />
--- Found Threads: TRUE<br />
--- Caffe2: CUDA detected: 12.1<br />
--- Caffe2: CUDA nvcc is: /usr/local/cuda/bin/nvcc<br />
--- Caffe2: CUDA toolkit directory: /usr/local/cuda<br />
--- Caffe2: Header version is: 12.1<br />
--- /usr/local/cuda/lib64/libnvrtc.so shorthash is b51b459d<br />
--- USE_CUDNN is set to 0. Compiling without cuDNN support<br />
--- USE_CUSPARSELT is set to 0. Compiling without cuSPARSELt support<br />
--- Autodetected CUDA architecture(s):  8.0 8.0 8.0 8.0 8.0 8.0 8.0 8.0<br />
--- Added CUDA NVCC flags for: -gencode;arch=compute_80,code=sm_80<br />
-CMake Warning at /home/atalman/miniconda3/envs/py310/lib/python3.10/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:22 (message):<br />
-  static library kineto_LIBRARY-NOTFOUND not found.<br />
-Call Stack (most recent call first):<br />
-  /home/atalman/miniconda3/envs/py310/lib/python3.10/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:127 (append_torchlib_if_found)<br />
-  CMakeLists.txt:4 (find_package)</p>
-<p>-- Found Torch: /home/atalman/miniconda3/envs/py310/lib/python3.10/site-packages/torch/lib/libtorch.so<br />
--- Configuring done<br />
--- Generating done<br />
--- Build files have been written to: /data/home/atalman/aot_ind/build<br />
-```</p>
-<p>However looking at the Wheel build log here:<br />
-https://github.com/pytorch/pytorch/actions/runs/8229185939/job/22499908747</p>
-<p>I do see we include kineto in the build:<br />
-<code>Configuring Kineto dependency:
-2024-03-11T07:42:39.8183621Z --   KINETO_SOURCE_DIR = /pytorch/third_party/kineto/libkineto
-2024-03-11T07:42:39.8184187Z --   KINETO_BUILD_TESTS = OFF
-2024-03-11T07:42:39.8184596Z --   KINETO_LIBRARY_TYPE = static</code></p>
-<p>Without the correct settings people won't be able to use profiling in CPP code. Our nightlies and release binaries should generate the correct settings.</p>
-<p>cc @seemethere @malfet @osalpekar @jbschlosser @chauhang </p>
-<h3>Versions</h3>
-<p>2.3.0</p>]]></description>
-      <pubDate>Mon, 11 Mar 2024 12:55:31 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121668</guid>
-    </item>
-    <item>
-      <title>[Inductor Cutlass backend] Tolerate dynamic shapes</title>
-      <link>https://github.com/pytorch/pytorch/pull/121497</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #121492<br />
-* #121734<br />
-* <strong>-&gt;</strong> #121497</p>
-<p>Previously, when the Cutlass backend was enabled, using dynamic shapes could lead to exceptions during JIT.</p>
-<p>With this change, there are guards in place to just disable the Cutlass backend if dynamic dimensions are involved.</p>
-<p>In addition, if no choices for a GEMM are available using the selected backends, then an ATen Kernel is used as fallback, even if the ATen backend is not enabled.</p>
-<p>Test:<br />
-CI<br />
-Additional unit test in test_cutlass_backend.py</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 08 Mar 2024 07:55:23 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121497</guid>
-    </item>
-    <item>
-      <title>[Inductor Cutlass backend] DO NOT REVIEW - to be split up</title>
-      <link>https://github.com/pytorch/pytorch/pull/121492</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #121492<br />
-* #121734<br />
-* #121497</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Fri, 08 Mar 2024 06:38:43 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121492</guid>
+<p>Latest stable</p>
+<p>cc @vincentqb @jbschlosser @albanD @janeyx99 @crcrpar @ezyang @bdhirsh @anijain2305 @zou3519 @chauhang @mlazos</p>]]></description>
+      <pubDate>Wed, 28 Feb 2024 11:24:18 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120814</guid>
     </item>
     <item>
       <title>[WIP][inductor] padding</title>
@@ -665,183 +620,15 @@ Additional unit test in test_cutlass_backend.py</p>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120758</guid>
     </item>
     <item>
-      <title>CUDA Memory leak w/ torch.compile in both stable and trunk</title>
-      <link>https://github.com/pytorch/pytorch/issues/119607</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>models traced with torch.compile don't seem to be freeing CUDA memory</p>
-<p>``` python<br />
-import torch<br />
-import gc</p>
-<p>def main():<br />
-    x = torch.randn(1000, 3000, device="cuda", requires_grad=True)<br />
-    model = torch.nn.Sequential(<br />
-        torch.nn.Linear(3000, 10000),<br />
-        torch.nn.ReLU(),<br />
-        torch.nn.Linear(10000, 50000),<br />
-        torch.nn.ReLU(),<br />
-        torch.nn.Linear(50000, 20000),<br />
-        torch.nn.ReLU(),<br />
-        torch.nn.Linear(20000, 1234),<br />
-    ).to("cuda")<br />
-    model = torch.compile(model, backend="eager")<br />
-    model(x)</p>
-<p>if <strong>name</strong> == "<strong>main</strong>":<br />
-    main()</p>
-<pre><code># tried clearing with a few ways
-torch.cuda.synchronize()
-torch.cuda.empty_cache()
-torch._C._cuda_clearCublasWorkspaces()
-gc.collect()
-
-print(f"{torch.cuda.memory_allocated()/1e9} GB!!")  # 6.219729408 GB!!
-</code></pre>
-<p>```</p>
-<p>one high priority use case to fix this is for compiled autograd, which calls torch.compile for compiled fw and once for compiled bw, leading to 2x memory use</p>
-<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @aakhundov @Chillee </p>
-<h3>Versions</h3>
-<p>2.2.0<br />
-trunk</p>]]></description>
-      <pubDate>Fri, 09 Feb 2024 15:35:12 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/119607</guid>
-    </item>
-    <item>
-      <title>[inductor][cpu]Background_Matting fP32 static default wrapper multiple threads performance regression</title>
-      <link>https://github.com/pytorch/pytorch/issues/119181</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>This issue is separated from https://github.com/pytorch/pytorch/issues/104952, verified with TORCHINDUCTOR_FREEZING=0</p>
-<p></table><table border="1" class="dataframe table"><br />
-<br />
-<thead>
-    <tr style="text-align: right;">
-      <th>name</th>
-      <th>batch_size_new</th>
-      <th>speed_up_new</th>
-      <th>inductor_new</th>
-      <th>eager_new</th>
-      <th>batch_size_old</th>
-      <th>speed_up_old</th>
-      <th>inductor_old</th>
-      <th>eager_old</th>
-      <th>Ratio Speedup(New/old)</th>
-      <th>Eager Ratio(old/new)</th>
-    </tr>
-  </thead></p>
-<tbody>
-    <tr>
-      <td>Background_Matting</td>
-      <td>1</td>
-      <td>0.782193</td>
-      <td>0.350721461</td>
-      <td>0.274331872</td>
-      <td>1</td>
-      <td>1.00737</td>
-      <td>0.279395653</td>
-      <td>0.281454799</td>
-      <td>0.78</td>
-      <td>1.03</td>
-    </tr>
-</tbody>
-
-</table>
-<p>The good  results come from 2023-07-06 nightly: https://github.com/pytorch/pytorch/commit/13763f58ad86fadf49ef7960d1836318e6480d36<br />
-The bad results come from 2024-01-29 nightly: https://github.com/pytorch/pytorch/commit/890d8e66925ff7bb1b765087ad921ebc1bdebf48</p>
-<h3>Versions</h3>
-<p></table><p>SW info</p><table border="1" class="dataframe table"><br />
-<br />
-<thead>
-    <tr style="text-align: right;">
-      <th>SW</th>
-      <th>Nightly commit</th>
-      <th>Main commit</th>
-    </tr>
-  </thead></p>
-<tbody>
-    <tr>
-      <td>Pytorch</td>
-      <td>890d8e6</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Torchbench</td>
-      <td>/</td>
-      <td>ff42d907</td>
-    </tr>
-    <tr>
-      <td>torchaudio</td>
-      <td>b2d9c3e</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>torchtext</td>
-      <td>b0ebddc</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>torchvision</td>
-      <td>315f315</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>torchdata</td>
-      <td>0790338</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>dynamo_benchmarks</td>
-      <td>nightly</td>
-      <td>/</td>
-    </tr>
-  </tbody>
-
-</table>
-<p>Repro:<br />
-<a href="https://github.com/chuanqi129/inductor-tools/blob/main/scripts/modelbench/inductor_single_run.sh">inductor_single_run.sh</a><br />
-bash inductor_single_run.sh multiple inference performance torchbench Background_Matting float32 first static default 0 off<br />
-Suspected guilty commit: https://github.com/pytorch/pytorch/commit/7c97c943fbba4f6a58698aaa4312fcf4123a36cc<br />
-<a href="https://github.com/pytorch/pytorch/files/14162854/torchbench-Background_Matting-inference-float32-static-default-performance-multiple-drop_guilty_commit.log">torchbench-Background_Matting-inference-float32-static-default-performance-multiple-drop_guilty_commit.log</a></p>
-<p>cc @WeizhuoZhang-intel @chuanqi129</p>]]></description>
-      <pubDate>Mon, 05 Feb 2024 01:03:35 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/119181</guid>
-    </item>
-    <item>
-      <title>inductor: fix for functional_collectives.wait() followed by view()</title>
-      <link>https://github.com/pytorch/pytorch/pull/118802</link>
-      <description><![CDATA[<p>Potential fix for https://github.com/pytorch/pytorch/issues/118759. See the issue linked for more diagnosis / explanation of this (tentative) fix. Feedback welcome!</p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #123349<br />
-* #123347<br />
-* #123350<br />
-* #123348<br />
-* #122751<br />
-* #122502<br />
-* <strong>-&gt;</strong> #118802</p>
-<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225 @chauhang @voznesenskym @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Wed, 31 Jan 2024 13:37:43 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/118802</guid>
-    </item>
-    <item>
-      <title>[inductor] Disable fp contraction and add option to use precise division</title>
-      <link>https://github.com/pytorch/pytorch/pull/115435</link>
+      <title>[HOP][inductor] Add higher order associative scan operator</title>
+      <link>https://github.com/pytorch/pytorch/pull/119430</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #122736<br />
-* #122915<br />
-* <strong>-&gt;</strong> #115435<br />
-* #123269<br />
-* #122518</p>
-<p>Fixes #122260</p>
-<p>In the issue we have something like:<br />
-<code>python
-(x / 1e-6) + (y / 1e-6)</code><br />
-which triton turns into<br />
-<code>python
-fma(x, 1e6, y * 1e6)</code></p>
-<p>Where we have one division calculated to float32 precision,<br />
-and the other calculated to infinite precision as part of the <code>fma</code>.<br />
-In the issue this leads to a bad normalization in softmax.</p>
-<p>Here we disallow the "fp fusion" optimization which generates these fma instructions.</p>
+* #122137<br />
+* <strong>-&gt;</strong> #119430</p>
+<p>Currently only supports single tensor scans, e.g. <code>cumsum</code>, <code>cumprod</code>, <code>logcumsumexp</code></p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
-      <pubDate>Fri, 08 Dec 2023 10:25:22 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/115435</guid>
+      <pubDate>Wed, 07 Feb 2024 17:00:55 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119430</guid>
     </item>
   </channel>
 </rss>
