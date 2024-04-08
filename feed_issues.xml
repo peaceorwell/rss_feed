@@ -5,13 +5,206 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>[inductor][cpp] expose config options via env vars</title>
-      <link>https://github.com/pytorch/pytorch/pull/123519</link>
+      <title>[inductor] easy: move mkldnn lowerings to its own file</title>
+      <link>https://github.com/pytorch/pytorch/pull/123556</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #123519</p>
+* <strong>-&gt;</strong> #123556</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sat, 06 Apr 2024 23:13:19 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123519</guid>
+      <pubDate>Mon, 08 Apr 2024 03:42:38 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123556</guid>
+    </item>
+    <item>
+      <title>[Compile FSDP2][3/n] Check all_gather_work is AsyncCollectiveTensor before calling .wait()</title>
+      <link>https://github.com/pytorch/pytorch/pull/123491</link>
+      <description><![CDATA[<p>In FSDP2, we have this:<br />
+<code>python
+if all_gather_work is not None:  # async op
+    all_gather_work.wait()</code></p>
+<p>In eager, there are only two possible values for <code>all_gather_work</code>:<br />
+1. <code>AsyncCollectiveTensor</code> object (when <code>async_op=True</code>)<br />
+2. <code>None</code> (when <code>async_op=False</code>)</p>
+<p>So the existing <code>if</code> statement is sufficient for eager mode.</p>
+<p>In compile, there is one additional possible value for <code>all_gather_work</code> which is <code>FakeTensor</code> object (not None), because we return regular tensor for collective call in compile mode. If we use the existing <code>if</code> statement as-is, we will always call <code>.wait()</code> on <code>all_gather_work</code>, which is not the same semantics as eager.</p>
+<p>There are a few ways to fix this:<br />
+Option 1: Properly support <code>AsyncCollectiveTensor</code> tensor subclass tracing - instead of returning regular tensor for collective call in compile mode, we return the AsyncCollectiveTensor tensor. Relevant code is https://github.com/pytorch/pytorch/blob/d9d25076fe6dda2bcc77ea7db0402a3007fef5ed/torch/distributed/_functional_collectives.py#L777 This is the best long-term fix but it will take much more time to make AsyncCollectiveTensor tensor subclass tracing work.</p>
+<p>Option 2: Allow calling <code>.wait()</code> on FakeTensor in compile mode (and just return None there) - this seems hacky because FakeTensor wouldn't normally have this method.</p>
+<p>Option 3: Check whether <code>all_gather_work</code> is <code>AsyncCollectiveTensor</code> before calling <code>.wait()</code> on it. <strong>&lt;-- This PR</strong></p>
+<p>Option 3 is chosen in this PR because it seems to also make the eager program semantics clearer (we don't need to think about whether <code>all_gather_work</code> can be <code>.wait()</code> on in all scenarios, as long as we know <code>AsyncCollectiveTensor</code> can be waited on).</p>
+<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @chauhang</p>]]></description>
+      <pubDate>Fri, 05 Apr 2024 16:45:50 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123491</guid>
+    </item>
+    <item>
+      <title>[aotinductor] Add test case for outputs with views</title>
+      <link>https://github.com/pytorch/pytorch/pull/123415</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123415</p>
+<p>Also test views instead of .contiguous() for outputs with multiple aliases.</p>
+<p><code>output_handles[0] = buf0.release();
+        output_handles[1] = output_handles[0];
+        output_handles[2] = wrap_with_raii_handle_if_needed(tmp_tensor_handle_0).release();</code></p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 19:08:38 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123415</guid>
+    </item>
+    <item>
+      <title>[inductor] Write generated files from parent process</title>
+      <link>https://github.com/pytorch/pytorch/pull/123409</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #123012<br />
+* #123011<br />
+* #122941<br />
+* <strong>-&gt;</strong> #123409</p>
+<p>Before this PR we would pass generated source code over a pipe to the compile worker then the compile worker would write out the file.  Doing it this way is faster and results in smaller messages to the workers (and lets us skip creating the workers in the warm start case).</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 16:38:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123409</guid>
+    </item>
+    <item>
+      <title>[inductor] Change OverridesData to take callables instead of strings</title>
+      <link>https://github.com/pytorch/pytorch/pull/123397</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123397</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 15:21:49 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123397</guid>
+    </item>
+    <item>
+      <title>[PT2][Inductor] Add decompose_mem_bound_mm to the customization pre and post grad passes</title>
+      <link>https://github.com/pytorch/pytorch/pull/123376</link>
+      <description><![CDATA[<p>Summary: Titled. It can give more flexibility to customize passes</p>
+<p>Test Plan:</p>
+<h1>unit test</h1>
+<p><code>buck2 test mode/dev-nosan //caffe2/test/inductor:decompose_mem_bound_mm</code></p>
+<h1>local reproduce</h1>
+<h3>with decompose</h3>
+<p><code>buck2 run mode/opt //scripts/jackiexu0313/pt2:local_model_with_pt2 -- --test_mode batch-split-decompose --model_type "cmf" --flow_id 540761965</code><br />
+optimus parameter sent to the scuba:<br />
+P1204802500<br />
+<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLxXNRNO6q8ixo4CAIn5QalwADlsbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GN8MQhmQrZaii4sFAJ37FLW-yjkobr0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GKYr2xa3vOkEKIQDAL5eKqkDWQAebr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GAjzORm9OYV951kBAF5WyqbckVY2br0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMpzQhbeucEI_BwDAOK0nUGoCsZkbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDJ2whaLisgDsYMDABd4ox_-2gp5br0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GJY4Pxkg0hntj9UCALgYP3xMdmMMbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GO1gCxfWSaDFqhIBABzCPhU827F7br0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GPzyNBaxHtNFJdADADH7AsWMwixBbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GBxaWAofHuojr0EBALKAINF-n_Ebbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GPTR_RZdqWhlGmwEADUfB1t_xKN-br0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 3615, 'pattern_matcher_count': 3231, 'normalization_pass': 825, 'remove_split_with_size_one_pass': 673, 'merge_splits_pass': 85, 'merge_getitem_cat_pass': 11, 'batch_aten_mul': 11, 'scmerge_split_sections_removed': 5, 'scmerge_split_removed': 4, 'scmerge_cat_removed': 4, 'decompose_mm': 4, 'decompose_mmt': 4, 'batch_aten_sub': 3, 'batch_sigmoid': 2, 'batch_linear': 2, 'batch_aten_add': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'batch_relu': 1, 'batch_linear_post_grad': 1}), 'PreGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GEp2SBdLi4Q9SfYCALG5AsLl-LJubr0LAAAz', 'BatchReLuPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMry_BbFwSc8epcBAP7-LFeL-aRbbr0LAAAz', 'BatchAddPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GKpamxaU2v4MlyANANGbWkDgUAQabr0LAAAz', 'BatchSubPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOMotxYcfE3jsWEBAFi0ABcmUboYbr0LAAAz', 'PostGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GC3yQRku3hY9VmkBAH3QvuAf5z8Cbr0LAAAz'}</code></p>
+<h3>without decompose</h3>
+<p>optimus parameter sent to the scuba:<br />
+P1204807273<br />
+<code>{'before_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GLDLYxbo4HnP1ssDAKDGl5fN9SUnbr0LAAAz', 'BatchLayernormFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOKrQBnK6dfZg3YDALrJX7r23dN8br0LAAAz', 'BatchSigmoidPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GER6ChcNzZ9NX94DAH6ZWJFFD5Uzbr0LAAAz', 'normalization_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNmRphbUGk2zvswAAJ3sOh3WWGBAbr0LAAAz', 'remove_split_with_size_one_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDYJJBQRWfOYB0wFAJpCr7RsFnsQbr0LAAAz', 'merge_getitem_cat_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GM2ABxPOewvvdm8FAMPnyXSb6Fwzbr0LAAAz', 'merge_splits_pass_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GOkqSBYgyv9G4tQCAFBtGCq1OUhkbr0LAAAz', 'after_recompile_pre_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GMdbSBeSWQGyOGkDANtexORtG0lMbr0LAAAz', 'before_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GF8rvghuhGGVZXMBAPKAC7WPIeUGbr0LAAAz', 'BatchMulPostGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDWyCheBejGMvq0FAApYMMDOu7Jwbr0LAAAz', 'after_recompile_post_grad': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GDRgqxE_qCrmMyIDAL5TQ977TQknbr0LAAAz', 'inductor': Counter({'pattern_matcher_nodes': 2323, 'pattern_matcher_count': 2071, 'normalization_pass': 825, 'remove_split_with_size_one_pass': 673, 'merge_splits_pass': 85, 'merge_getitem_cat_pass': 11, 'scmerge_split_sections_removed': 5, 'scmerge_split_removed': 4, 'scmerge_cat_removed': 4, 'batch_sigmoid': 2, 'batch_linear': 2, 'batch_layernorm': 1, 'scmerge_split_added': 1, 'scmerge_cat_added': 1, 'batch_aten_mul': 1, 'batch_relu': 1}), 'PreGradBatchLinearFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GNyUxRYGchkL_gMLAKk5mC-cbU9zbr0LAAAz', 'BatchReLuPreGradFusion': 'https://www.internalfb.com/intern/everpaste/?color=0&amp;handle=GD19_BZMbHm46BMNAE05wMFtvB9mbr0LAAAz'}</code></p>
+<h1>e2e</h1>
+<p>ads_dper3:7e4cfda95bb1b45d35d5057f0567a8a4<br />
+training_platform:ab49a1063522f415f3d3c16719b15eb5</p>
+<h3>with decompose</h3>
+<p>use old config<br />
+f547807297<br />
+{F1478026031}<br />
+add to the post grad fusion options<br />
+f547807915<br />
+{F1478026133}</p>
+<h3>without decompose</h3>
+<p>f547807676<br />
+ {F1478027534}</p>
+<h3>QPS &gt; 5%</h3>
+<p>{F1478024873}</p>
+<h3>NE</h3>
+<p>{F1478028259}</p>
+<p>Differential Revision: D55679277</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 04 Apr 2024 11:30:00 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123376</guid>
+    </item>
+    <item>
+      <title>compile creates FakeTensors with dynamic shapes even when dynamic=False when inputs are views</title>
+      <link>https://github.com/pytorch/pytorch/issues/123298</link>
+      <description><![CDATA[<p>Example:</p>
+<p>```<br />
+import torch<br />
+from torch.testing._internal.two_tensor import TwoTensor</p>
+<p>@torch.compile(backend="aot_eager", dynamic=False)<br />
+def f(x):<br />
+    if x.shape[0] &gt; 5:<br />
+        return x + 1<br />
+    else:<br />
+        return x + 2</p>
+<p>x_inner = torch.ones(4)<br />
+x = TwoTensor(x_inner, x_inner)<br />
+x_view = x.view(2, 2)<br />
+out = f(x_view)<br />
+```</p>
+<p>Running with <code>TORCH_LOGS="+dynamic"</code>, you can see a lot of symint compute going on. If you put a breakpoint <a href="https://github.com/pytorch/pytorch/blob/main/torch/_subclasses/meta_utils.py#L1278">here</a>, the returned FakeTensor has SymInts for its sizes, even though we compiled with <code>dynamic=False</code></p>
+<p>cc @eellison</p>]]></description>
+      <pubDate>Wed, 03 Apr 2024 14:11:11 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123298</guid>
+    </item>
+    <item>
+      <title>[inductor] update triton pin</title>
+      <link>https://github.com/pytorch/pytorch/pull/123077</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #123077</p>]]></description>
+      <pubDate>Sun, 31 Mar 2024 22:45:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123077</guid>
+    </item>
+    <item>
+      <title>[FSDP2][PT2D] _dynamo.config.skip_fsdp_hooks for torch.compile and nn.Module.compile</title>
+      <link>https://github.com/pytorch/pytorch/pull/123021</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122876<br />
+* <strong>-&gt;</strong> #123021</p>
+<p>This PR enables torch.compile to skip or trace into FSDP hooks by config. This should unblock FSDP2 CI (eager/skip hooks/full compile), and fp8 (FSDP extention in general). It helps debugging as well by comparing dynamo behavior between  <code>skip_fsdp_hooks = True/False</code></p>
+<p>```<br />
+torch._dynamo.config.skip_fsdp_hooks = True<br />
+torch.compile(model) </p>
+<h1>OR</h1>
+<h1>model.compile()</h1>
+<p>``` </p>
+<p><strong>what about setting @torch.dynamo.disable in FSDP2</strong>: <code>@torch.dynamo.disable</code> is applied at import time statically. We want a flexiable way to skip or trace into FSDP2 hooks, </p>
+<p><strong>what about existing ruls in trace_rules.py</strong>: FSDP hooks and TP/SP hooks all share DTensor code path. We want to skip FSDP hooks without skipping TP/SP hooks. Thus did not choose file or torch obj based rules</p>
+<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225 @chauhang @voznesenskym @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng</p>]]></description>
+      <pubDate>Fri, 29 Mar 2024 19:32:37 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123021</guid>
+    </item>
+    <item>
+      <title>[Inductor pattern] support int8 woq mm pattern matcher with freezing passe</title>
+      <link>https://github.com/pytorch/pytorch/pull/122955</link>
+      <description><![CDATA[<p>There exist some issues in the previous PR (https://github.com/pytorch/pytorch/pull/120985) of supporting int8 WOQ mm pattern matcher. This PR tends to further optimize it.</p>
+<ol>
+<li>
+<p>New patterns are added to match int8 woq mm in gpt-fast model, due to different input layouts.</p>
+</li>
+<li>
+<p>In constant folding, <code>int8_weight -&gt; dq -&gt; bf16_weight</code> should be kept for pattern match.</p>
+</li>
+<li>
+<p>Currently, GPT-Fast enables <code>coordinate_descent_tuning</code> for CPU. This flag is only useful for CUDA, but it could change the graph: from the non-decomposed fallback pass to the decomposed one. We will disable the flag in GPT-Fast script for CPU, in order to have neat patterns. @yanbing-j </p>
+</li>
+</ol>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Fri, 29 Mar 2024 00:27:56 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122955</guid>
+    </item>
+    <item>
+      <title>[FSDP2][PT2D] enable torch.compile for compute in CI</title>
+      <link>https://github.com/pytorch/pytorch/pull/122876</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #122876<br />
+* #123021</p>
+<p>34 tests are eligible for torch.compile (call forward) <br />
+* 70% passed<br />
+* 30% failed for 3 reasons</p>
+<p>failure on 2D<br />
+* test_fully_shard_init.py::test_meta_device_2d_init<br />
+* test_fully_shard_training.py::test_train_parity_2d_mlp<br />
+* test_fully_shard_training.py::test_train_parity_2d_transformer_checkpoint_resume<br />
+* test_fully_shard_clip_grad_norm_.py::test_clip_grad_norm_2d</p>
+<p>failure on composable AC<br />
+* test_fully_shard_training.py::test_train_parity_with_shared_params<br />
+* test_fully_shard_training.py::test_train_parity_with_activation_checkpointing<br />
+* test_fully_shard_comm.py::test_fully_shard_backward_prefetch<br />
+* test_fully_shard_frozen.py::test_train_mixed_requires_grad_per_group</p>
+<p>failure on numerics<br />
+* test_fully_shard_mixed_precision.py::test_compute_dtype<br />
+* test_fully_shard_mixed_precision.py::test_reduce_dtype</p>
+<p>following 2 tests called forward but did not count as eligible since memory and time are different in compiler mode<br />
+* test_fully_shard_memory.py::test_fully_shard_training_memory<br />
+* test_fully_shard_overlap.py::test_fully_shard_training_overlap</p>
+<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225 @chauhang</p>]]></description>
+      <pubDate>Wed, 27 Mar 2024 23:13:30 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122876</guid>
     </item>
     <item>
       <title>[inductor] Freeze the layout of the conv input to channels_last</title>
@@ -46,61 +239,323 @@ Modify the <code>output_stride</code> of <code>ConcatKernel</code>: If any input
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122760</guid>
     </item>
     <item>
-      <title>Add registration API for torch.compile-eager</title>
-      <link>https://github.com/pytorch/pytorch/pull/121387</link>
-      <description><![CDATA[<p>This PR is a follow-up of RFC https://github.com/pytorch/pytorch/issues/115545.</p>
-<p>In this PR, we intend to provide a registration API dedicated to eager-through-torch.compile. The major workflow of this API will be as follows.</p>
-<ul>
-<li>Load cache</li>
-<li>Check cache according to the input tensors</li>
-<li>Cache Hit: Run the cached kernel directly</li>
-<li>Cache Miss: Run the registered python kernel</li>
-</ul>
-<p>Currently, this PR always fallback to python kernel now and cache mechanism will be implemented in another PR.</p>
-<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #120595<br />
-* #116449<br />
-* #116368<br />
-* #121727<br />
-* <strong>-&gt;</strong> #121387<br />
-* #121296</p>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 06 Mar 2024 22:35:58 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121387</guid>
-    </item>
-    <item>
-      <title>Torch compile does not work on python 3.12</title>
-      <link>https://github.com/pytorch/pytorch/issues/120233</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>Currently torch, as of 2.2.0 does not support torch compile with python 3.12</p>
-<p>See following PR for example: https://github.com/pytorch/pytorch/pull/117853</p>
-<ol>
-<li>We need to be able to use python 3.12 with torch.compile feature. </li>
-<li>Include triton with Linux 3.12 wheel </li>
-<li>Enable Python 3.12 and torch.compile CI testsing</li>
-</ol>
-<p>cc: @albanD @malfet </p>
-<h3>Versions</h3>
-<p>2.2.0</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang</p>]]></description>
-      <pubDate>Tue, 20 Feb 2024 06:14:41 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/120233</guid>
-    </item>
-    <item>
-      <title>Back out "[pytorch][PR] [Inductor] GEMM shape padding improvements"</title>
-      <link>https://github.com/pytorch/pytorch/pull/119325</link>
-      <description><![CDATA[<p>Summary:<br />
-Original commit changeset: f89e75856523</p>
-<p>Original Phabricator Diff: D53227828</p>
-<p>S393407</p>
-<p>Test Plan:<br />
-local light: light_cli:5049854</p>
-<p>buck2 run mode/opt //minimal_viable_ai/models/blue_reels_vdd/tests:cogwheel_blue_reels_vdd_trunk_metrics_test-launcher --   --with-fbpkg light_cli:5049854 --with-fbpkg mvai_blue_reels_vdd:latest_contbuild --run-disabled --run-harness-in-tupperware</p>
-<p>Differential Revision: D53492220</p>
-<p>@diff-train-skip-merge</p>
+      <title>[Inductor] add contiguous layout optm for bmm input</title>
+      <link>https://github.com/pytorch/pytorch/pull/122599</link>
+      <description><![CDATA[<p>Fixes #117743.</p>
+<p>Add contiguous layout optimization for <code>bmm</code> input, to avoid additional copies.</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 06 Feb 2024 14:36:14 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119325</guid>
+      <pubDate>Mon, 25 Mar 2024 01:24:53 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122599</guid>
+    </item>
+    <item>
+      <title>[effects] Add inductor support for tokens</title>
+      <link>https://github.com/pytorch/pytorch/pull/122347</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122348<br />
+* <strong>-&gt;</strong> #122347</p>
+<p>Given the following code/dynamo graph:<br />
+<code>class GraphModule(torch.nn.Module):
+    def forward(self, L_x_ : torch.Tensor):
+        l_x_ = L_x_
+        _print = torch.ops.aten._print('moo')
+        res = l_x_ + l_x_;  l_x_ = None
+        _print_1 = torch.ops.aten._print('moo')
+        return (res,)</code></p>
+<p>AOTAutograd will trace the following program, threading tokens from the inputs, through the effectful operator calls (torch.ops.aten._print), and as an output:<br />
+<code>class &lt;lambda&gt;(torch.nn.Module):
+    def forward(self, arg0_1: "f32[0]", arg1_1: "f32[2, 3]"):
+        with_effects = torch._higher_order_ops.effects.with_effects(arg0_1, torch.ops.aten._print.default, 'moo');  arg0_1 = None
+        getitem: "f32[0]" = with_effects[0];  with_effects = None
+        add: "f32[2, 3]" = torch.ops.aten.add.Tensor(arg1_1, arg1_1);  arg1_1 = None
+        with_effects_1 = torch._higher_order_ops.effects.with_effects(getitem, torch.ops.aten._print.default, 'moo');  getitem = None
+        getitem_2: "f32[0]" = with_effects_1[0];  with_effects_1 = None
+        return (getitem_2, add)</code><br />
+However when we get to inductor, since we want the inductor generated code to not have any token inputs/outputs for better readability, we want to modify the aten graph by removing the tokens from inputs, and creating them through <code>torch.ops.aten._make_dep_token</code>, and sinking them through the <code>torch.ops.aten._sink_tokens</code> operators. <br />
+This has to be done <em>after</em> the partitioner, otherwise the partitioner will add the make_token/sink_token operators to the backwards graph. <br />
+<code>class &lt;lambda&gt;(torch.nn.Module):
+   def forward(self, arg1_1: "f32[2, 3]"):
+       _make_dep_token_default: "f32[0]" = torch.ops.aten._make_dep_token.default()
+       with_effects = torch._higher_order_ops.effects.with_effects(_make_dep_token_default, torch.ops.aten._print.default, 'moo');  _make_dep_token_default = None
+       getitem: "f32[0]" = with_effects[0];  with_effects = None
+       add: "f32[2, 3]" = torch.ops.aten.add.Tensor(arg1_1, arg1_1);  arg1_1 = None
+       with_effects_1 = torch._higher_order_ops.effects.with_effects(getitem, torch.ops.aten._print.default, 'moo');  getitem = None
+       getitem_2: "f32[0]" = with_effects_1[0];  with_effects_1 = None
+       _sink_tokens_default = torch.ops.aten._sink_tokens.default((getitem_2,));  getitem_2 = None
+       return (add,)</code><br />
+When doing inductor lowering, we convert <code>with_effects</code> calls to an <code>EffectfulKernel</code>, which just a <code>FallbackKernel</code> but with a pointer to previous effectful operator's call. During scheduling, we will create a <code>StarDep</code> between the EffectfulKernel and its previous EffectfulKernel so that they don't get reordered. The inductor generated python code looks like:<br />
+<code>def call(args):
+    arg1_1, = args
+    args.clear()
+    assert_size_stride(arg1_1, (2, 3), (3, 1))
+    # Source Nodes: [_print], Original ATen: []
+    buf2 = aten._print.default('moo')
+    # Source Nodes: [_print_1], Original ATen: []
+    buf3 = aten._print.default('moo')
+    buf4 = empty_strided_cpu((2, 3), (3, 1), torch.float32)
+    cpp_fused_add_0(arg1_1, buf4)
+    del arg1_1
+    return (buf4, )</code></p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Wed, 20 Mar 2024 14:10:17 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122347</guid>
+    </item>
+    <item>
+      <title>torch.compile + ring attention</title>
+      <link>https://github.com/pytorch/pytorch/issues/121386</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>I was trying to enable <a href="https://github.com/lucidrains/ring-attention-pytorch">ring attention</a> with torch.compile, here are the issues that I encountered:<br />
+* einx triggers "unhashable type: non-nested SymInt"<br />
+```<br />
+Traceback (most recent call last):<br />
+  File "/home/ybliang/local/pytorch/torch/multiprocessing/spawn.py", line 75, in _wrap<br />
+    fn(i, <em>args)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/assert.py", line 85, in start<br />
+    ring_out = ddp_ring_attention_net(seq)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(</em>args, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(*args, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/eval_frame.py", line 437, in _fn<br />
+    return fn(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/external_utils.py", line 36, in inner<br />
+    return fn(</em>args, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(*args, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1593, in forward<br />
+    else self._run_ddp_forward(</em>inputs, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1411, in _run_ddp_forward<br />
+    return self.module(*inputs, </strong>kwargs)  # type: ignore[index]<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(</em>args, <strong>kwargs)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 548, in forward<br />
+    (x, mask), batch_sizes, num_sharded_batches = sharded_batch_to_sharded_seq(x, mask, self.ring_seq_size)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 191, in sharded_batch_to_sharded_seq<br />
+    x, sizes = all_gather(x)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 194, in torch_dynamo_resume_in_sharded_batch_to_sharded_seq_at_191<br />
+    mask, _ = all_gather(mask)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 917, in catch_errors<br />
+    return hijacked_callback(frame, cache_entry, hooks, frame_state)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 786, in _convert_frame<br />
+    result = inner_convert(<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 400, in _convert_frame_assert<br />
+    return _compile(<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(*args, </strong>kwds)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 676, in _compile<br />
+    guarded_code = compile_inner(code, one_graph, hooks, transform)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 262, in time_wrapper<br />
+    r = func(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 535, in compile_inner<br />
+    out_code = transform_code_object(code, transform)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/bytecode_transformation.py", line 1033, in transform_code_object<br />
+    transformations(instructions, code_options)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 165, in _fn<br />
+    return fn(</em>args, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/convert_frame.py", line 500, in transform<br />
+    tracer.run()<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 2149, in run<br />
+    super().run()<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 810, in run<br />
+    and self.step()<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 773, in step<br />
+    getattr(self, inst.opname)(inst)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 489, in wrapper<br />
+    return inner_fn(self, inst)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 1272, in CALL_FUNCTION_KW<br />
+    self.call_function(fn, args, kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 674, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/variables/torch.py", line 664, in call_function<br />
+    tensor_variable = wrap_fx_proxy(<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/variables/builder.py", line 1325, in wrap_fx_proxy<br />
+    return wrap_fx_proxy_cls(target_cls=TensorVariable, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/variables/builder.py", line 1410, in wrap_fx_proxy_cls<br />
+    example_value = get_fake_value(proxy.node, tx, allow_non_graph_fake=True)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1714, in get_fake_value<br />
+    raise TorchRuntimeError(str(e)).with_traceback(e.<strong>traceback</strong>) from None<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1656, in get_fake_value<br />
+    ret_val = wrap_fake_exception(<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1190, in wrap_fake_exception<br />
+    return fn()<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1657, in <lambda><br />
+    lambda: run_node(tx.output, node, args, kwargs, nnmodule)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1782, in run_node<br />
+    raise RuntimeError(make_error_message(e)).with_traceback(<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/utils.py", line 1764, in run_node<br />
+    return node.target(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 70, in inner<br />
+    graph = construct_graph(</em>args, backend=backend, <strong>kwargs)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 20, in inner<br />
+    return func(*args, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/<strong>init</strong>.py", line 308, in <strong>hash</strong><br />
+    raise TypeError("unhashable type: non-nested SymInt")<br />
+torch._dynamo.exc.TorchRuntimeError: Failed running call_function <function rearrange at 0x7f7454380790>(<em>('(b s) n -&gt; b (s n)', FakeTensor(..., size=(16, 32), dtype=torch.int64)), </em>*{'s': 1}):<br />
+unhashable type: non-nested SymInt</p>
+<p>from user code:<br />
+   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 206, in torch_dynamo_resume_in_sharded_batch_to_sharded_seq_at_194<br />
+    x = rearrange('(b s) n -&gt; b (s n)', x, s = num_sharded_batches)<br />
+<code>* einx rearrange issue</code><br />
+Traceback (most recent call last):<br />
+  File "/home/ybliang/local/pytorch/torch/multiprocessing/spawn.py", line 75, in _wrap<br />
+    fn(i, <em>args)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/assert.py", line 85, in start<br />
+    ring_out = ddp_ring_attention_net(seq)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(</em>args, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(*args, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/eval_frame.py", line 437, in _fn<br />
+    return fn(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/_dynamo/external_utils.py", line 36, in inner<br />
+    return fn(</em>args, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(*args, </strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1593, in forward<br />
+    else self._run_ddp_forward(</em>inputs, <strong>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1411, in _run_ddp_forward<br />
+    return self.module(*inputs, </strong>kwargs)  # type: ignore[index]<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1527, in _wrapped_call_impl<br />
+    return self._call_impl(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+    return forward_call(</em>args, <strong>kwargs)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 548, in forward<br />
+    (x, mask), batch_sizes, num_sharded_batches = sharded_batch_to_sharded_seq(x, mask, self.ring_seq_size)<br />
+  File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 600, in torch_dynamo_resume_in_forward_at_548<br />
+    logits = rearrange('b (i j) d -&gt; b (j i) d', logits, j = self.bucket_size)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 66, in inner<br />
+    backend = einx.backend.get(input_tracer_values)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 70, in torch_dynamo_resume_in_inner_at_66<br />
+    graph = construct_graph(*args, backend=backend, </strong>kwargs)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 20, in inner<br />
+    return func(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 45, in construct_graph<br />
+    output_tracers = func(</em>args, <strong>kwargs, backend=einx.backend.tracer)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/op/rearrange.py", line 118, in rearrange<br />
+    exprs_in, exprs_out = parse(description, *[einx.param.get_shape(tensor) for tensor in tensors], cse=cse, </strong>parameters)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/lru_cache.py", line 20, in inner<br />
+    return func(<em>args, </em><em>kwargs)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/op/rearrange.py", line 56, in parse<br />
+    exprs = einx.expr.solve(<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/util.py", line 108, in solve<br />
+    exprs1, exprs2 = stage3.solve(exprs1, exprs2)<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 333, in solve<br />
+    exprs1 = [map(root) if not root is None else None for root in exprs1]<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 333, in <listcomp><br />
+    exprs1 = [map(root) if not root is None else None for root in exprs1]<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 324, in map<br />
+    return List([map(child) for child in expr.children])<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 324, in <listcomp><br />
+    return List([map(child) for child in expr.children])<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 330, in map<br />
+    return Composition.maybe(map(expr.inner))<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 324, in map<br />
+    return List([map(child) for child in expr.children])<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 65, in <strong>init</strong><br />
+    Expression.<strong>init</strong>(self, np.prod([c.value for c in children]).astype(int))<br />
+  File "/home/ybliang/local/miniconda3/envs/pt/lib/python3.10/site-packages/einx/expr/stage3.py", line 9, in <strong>init</strong><br />
+    raise TypeError(f"Expected int, got {type(value)}")<br />
+TypeError: Expected int, got <class 'numpy.ndarray'><br />
+<code>* torch.distributed related graph break 1:</code><br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks] Graph break: from user code at:<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/external_utils.py", line 36, in inner<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     return fn(</em>args, <strong>kwargs)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     return forward_call(*args, </strong>kwargs)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1589, in forward<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     inputs, kwargs = self._pre_forward(<em>inputs, </em><em>kwargs)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [<strong>graph_breaks]   File "/home/ybliang/local/pytorch/torch/nn/parallel/distributed.py", line 1464, in _pre_forward<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     self.reducer.prepare_for_forward()<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks] Traceback (most recent call last):<br />
+......<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 674, in call_function<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     self.push(fn.call_function(self, args, kwargs))<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/variables/user_defined.py", line 687, in call_function<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     return self.call_method(tx, "__call</strong>", args, kwargs)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [<strong>graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/variables/user_defined.py", line 579, in call_method<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     return super().call_method(tx, name, args, kwargs)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/variables/base.py", line 371, in call_method<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     raise unimplemented(f"call_method {self} {name} {args} {kwargs}")<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/exc.py", line 190, in unimplemented<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks]     raise Unsupported(msg)<br />
+[rank3]:V0306 22:17:59.702000 139967781041280 torch/_dynamo/symbolic_convert.py:516] [0/0] [__graph_breaks] torch._dynamo.exc.Unsupported: call_method UserDefinedObjectVariable(instancemethod) __call</strong> [] {}<br />
+<code>Graph break 2:</code><br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks] Graph break: from user code at:<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/ring_attention.py", line 228, in sharded_seq_to_sharded_batch<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     logits, _ = all_gather(logits)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/nn/modules/module.py", line 1536, in _call_impl<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     return forward_call(</em>args, **kwargs)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/distributed.py", line 85, in forward<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     return AllGatherFunction.apply(x, self.dim, sizes)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/distributed.py", line 68, in forward<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     x, batch_sizes = all_gather_variable_dim(x, dim = dim, sizes = sizes)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/distributed.py", line 42, in all_gather_variable_dim<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     sizes = gather_sizes(t, dim = dim)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/distributed.py", line 32, in gather_sizes<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     sizes = all_gather_same_dim(size)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/data/users/ybliang/debug/empathy/ring-attention-pytorch/ring_attention_pytorch/distributed.py", line 27, in all_gather_same_dim<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     dist.all_gather(gathered_tensors, t)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/distributed/_functional_collectives.py", line 1036, in all_gather_inplace<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     output = all_gather_tensor(tensor, 0, group, tag)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/distributed/_functional_collectives.py", line 227, in all_gather_tensor<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     group_name = _resolve_group_name(group, tag)<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/distributed/_functional_collectives.py", line 758, in _resolve_group_name<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks]     raise ValueError(f"Unsupported group type: {type(group)}, {group}")<br />
+[rank4]:V0306 22:18:13.253000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [32/0] [__graph_breaks] Traceback (most recent call last):<br />
+......<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 1219, in CALL_FUNCTION<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]     self.call_function(fn, args, {})<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/symbolic_convert.py", line 674, in call_function<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]     self.push(fn.call_function(self, args, kwargs))<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/variables/builtin.py", line 719, in call_function<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]     return super().call_function(tx, args, kwargs)<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/variables/base.py", line 352, in call_function<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]     unimplemented(f"call_function {self} {args} {kwargs}")<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]   File "/home/ybliang/local/pytorch/torch/_dynamo/exc.py", line 190, in unimplemented<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks]     raise Unsupported(msg)<br />
+[rank4]:V0306 22:17:59.812000 139785056863360 torch/_dynamo/symbolic_convert.py:516] [1/0] [__graph_breaks] torch._dynamo.exc.Unsupported: call_function BuiltinVariable(ValueError) [ConstantVariable(str: "Unsupported group type: <class 'NoneType'>, None")] {}<br />
+```</p>
+<h3>Versions</h3>
+<p>N/A</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @zou3519 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng</p>]]></description>
+      <pubDate>Wed, 06 Mar 2024 22:26:01 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/121386</guid>
+    </item>
+    <item>
+      <title>[WIP][inductor] padding</title>
+      <link>https://github.com/pytorch/pytorch/pull/120758</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #120758</p>
+<p>This is not fully ready for review yet. Sending it out in case people want to give early feedback. Also it can allow me run CI perf test earlier.</p>
+<p>By testing BlenderbotSmallForConditionalGeneration I already see 2.5ms speedup. I feel the solution can be further improved to get more speedup.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang @jansel @Chillee @eellison </p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames</p>]]></description>
+      <pubDate>Tue, 27 Feb 2024 17:00:19 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/120758</guid>
+    </item>
+    <item>
+      <title>[HOP][inductor] Add higher order associative scan operator</title>
+      <link>https://github.com/pytorch/pytorch/pull/119430</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122137<br />
+* <strong>-&gt;</strong> #119430</p>
+<p>Currently only supports single tensor scans, e.g. <code>cumsum</code>, <code>cumprod</code>, <code>logcumsumexp</code></p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
+      <pubDate>Wed, 07 Feb 2024 17:00:55 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119430</guid>
+    </item>
+    <item>
+      <title>Fix broken link compile custom backends link</title>
+      <link>https://github.com/pytorch/pytorch/pull/119274</link>
+      <description><![CDATA[<p>Fixes #119272</p>
+<p>The URL is a bit long, if you like I can change it to a hyperlink with shorter name</p>]]></description>
+      <pubDate>Tue, 06 Feb 2024 04:33:32 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/119274</guid>
     </item>
   </channel>
 </rss>

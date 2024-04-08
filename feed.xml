@@ -4,130 +4,174 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Use graph.find_nodes in inductor (#122256)</title><link>https://github.com/pytorch/pytorch/commit/f8465df9f0dd6e536ea5737383bc2fc413602760</link><description><![CDATA[<p>Use graph.find_nodes in inductor (#122256)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122256<br />
-Approved by: https://github.com/jansel<br />
-ghstack dependencies: #121565, #122255</p>]]></description><pubDate>Sun, 07 Apr 2024 10:51:14 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f8465df9f0dd6e536ea5737383bc2fc413602760</guid></item><item><title>Use graph.find_nodes in inductor/fx_passes (#122255)</title><link>https://github.com/pytorch/pytorch/commit/33783e43e9446db10946e2bb354618ded3d3f446</link><description><![CDATA[<p>Use graph.find_nodes in inductor/fx_passes (#122255)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/122255<br />
-Approved by: https://github.com/jansel<br />
-ghstack dependencies: #121565</p>]]></description><pubDate>Sun, 07 Apr 2024 10:51:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/33783e43e9446db10946e2bb354618ded3d3f446</guid></item><item><title>[Bug Fix] Fix Cuda 12.4 compilation - Refactor SFINAE boxing logic  (#123377)</title><link>https://github.com/pytorch/pytorch/commit/0355f6e9549d4ba383112732f349c15b40169075</link><description><![CDATA[<p>[Bug Fix] Fix Cuda 12.4 compilation - Refactor SFINAE boxing logic  (#123377)</p>
-<p>Summary:</p>
-<p>PyTorch fails to compile from source using CUDA 12.4. The relevant log is extracted below. This was a recurring issue, which would cause the compilation to fail again on further objects if the first offending object was skipped.</p>
-<p>While searching for whether others had experienced this issue before attempting a fix myself, I found this suggested fix by @christian-heusel in https://github.com/pytorch/pytorch/issues/122169#issuecomment-2008455468 written by @lahwaacz. The code written by @lahwaacz at https://gitlab.archlinux.org/archlinux/packaging/packages/python-pytorch/-/commit/bb1f1a4c546c9692fb56db57172f14d25b95e645 fixes the issue.</p>
-<p>The original issue (#122169) seems to have gone quiet, so I am submitting this PR. I made no substantive adjustments to @lahwaacz' code. My only adjustment was, for the sake of consistency, to remove the double underscores in the struct name, as double underscores are reserved to the implementation in C++ Standard. My change has no functional effect on the original code.</p>
-<p>The ArchLinux package from which the original code was committed is licensed under the BSD license. https://archlinux.org/packages/extra/x86_64/python-pytorch/</p>
-<p>```<br />
-[7900/8804] Building CUDA object caffe2/CMakeFiles/torch_cuda.dir/<strong>/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o<br />
-FAILED: caffe2/CMakeFiles/torch_cuda.dir/</strong>/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o<br />
-/usr/bin/ccache /usr/local/cuda-12.4/bin/nvcc -forward-unknown-to-host-compiler -DAT_PER_OPERATOR_HEADERS -DFLASHATTENTION_DISABLE_ALIBI -DHAVE_MALLOC_USABLE_SIZE=1 -DHAVE_MMAP=1 -DHAVE_SHM_OPEN=1 -DHAVE_SHM_UNLINK=1 -DIDEEP_USE_MKL -DMINIZ_DISABLE_ZIP_READER_CRC32_CHECKS -DONNXIFI_ENABLE_EXT=1 -DONNX_ML=1 -DONNX_NAMESPACE=onnx_torch -DTORCH_CUDA_BUILD_MAIN_LIB -DUSE_C10D_GLOO -DUSE_C10D_NCCL -DUSE_CUDA -DUSE_CUSPARSELT -DUSE_DISTRIBUTED -DUSE_EXTERNAL_MZCRC -DUSE_FLASH_ATTENTION -DUSE_MEM_EFF_ATTENTION -DUSE_NCCL -DUSE_RPC -DUSE_TENSORPIPE -D_FILE_OFFSET_BITS=64 -Dtorch_cuda_EXPORTS -I/home/elliot/compile_test-pytorch/build/aten/src -I/home/elliot/compile_test-pytorch/aten/src -I/home/elliot/compile_test-pytorch/build -I/home/elliot/compile_test-pytorch -I/home/elliot/compile_test-pytorch/cmake/../third_party/benchmark/include -I/home/elliot/compile_test-pytorch/third_party/onnx -I/home/elliot/compile_test-pytorch/build/third_party/onnx -I/home/elliot/compile_test-pytorch/third_party/foxi -I/home/elliot/compile_test-pytorch/build/third_party/foxi -I/home/elliot/compile_test-pytorch/aten/src/THC -I/home/elliot/compile_test-pytorch/aten/src/ATen/cuda -I/home/elliot/compile_test-pytorch/aten/src/ATen/../../../third_party/cutlass/include -I/home/elliot/compile_test-pytorch/build/caffe2/aten/src -I/home/elliot/compile_test-pytorch/aten/src/ATen/.. -I/home/elliot/compile_test-pytorch/build/nccl/include -I/home/elliot/compile_test-pytorch/c10/cuda/../.. -I/home/elliot/compile_test-pytorch/c10/.. -I/home/elliot/compile_test-pytorch/third_party/tensorpipe -I/home/elliot/compile_test-pytorch/build/third_party/tensorpipe -I/home/elliot/compile_test-pytorch/third_party/tensorpipe/third_party/libnop/include -I/home/elliot/compile_test-pytorch/torch/csrc/api -I/home/elliot/compile_test-pytorch/torch/csrc/api/include -isystem /home/elliot/compile_test-pytorch/build/third_party/gloo -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/gloo -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/tensorpipe/third_party/libuv/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/googletest/googlemock/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/googletest/googletest/include -isystem /home/elliot/compile_test-pytorch/third_party/protobuf/src -isystem /home/elliot/miniforge3/envs/torchtest/include -isystem /home/elliot/compile_test-pytorch/third_party/gemmlowp -isystem /home/elliot/compile_test-pytorch/third_party/neon2sse -isystem /home/elliot/compile_test-pytorch/third_party/XNNPACK/include -isystem /home/elliot/compile_test-pytorch/third_party/ittapi/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/eigen -isystem /usr/local/cuda-12.4/include -isystem /home/elliot/compile_test-pytorch/third_party/ideep/mkl-dnn/include/oneapi/dnnl -isystem /home/elliot/compile_test-pytorch/third_party/ideep/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/cudnn_frontend/include -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -D_GLIBCXX_USE_CXX11_ABI=1 -Xfatbin -compress-all -DONNX_NAMESPACE=onnx_torch -gencode arch=compute_86,code=sm_86 -Xcudafe --diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl --expt-relaxed-constexpr --expt-extended-lambda  -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -O3 -DNDEBUG -std=c++17 -Xcompiler=-fPIC -DMKL_HAS_SBGEMM -DMKL_HAS_SHGEMM -DTORCH_USE_LIBUV -DCAFFE2_USE_GLOO -Xcompiler=-Wall,-Wextra,-Wdeprecated,-Wno-unused-parameter,-Wno-unused-function,-Wno-missing-field-initializers,-Wno-unknown-pragmas,-Wno-type-limits,-Wno-array-bounds,-Wno-unknown-pragmas,-Wno-strict-overflow,-Wno-strict-aliasing,-Wno-maybe-uninitialized -Wno-deprecated-copy -MD -MT caffe2/CMakeFiles/torch_cuda.dir/<strong>/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o -MF caffe2/CMakeFiles/torch_cuda.dir/</strong>/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o.d -x cu -c /home/elliot/compile_test-pytorch/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu -o caffe2/CMakeFiles/torch_cuda.dir/__/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h: In static member function ‘static c10::detail::IListRefConstRef<at::OptionalTensorRef> c10::detail::IListRefTagImpl<c10::IListRefTag::Boxed, at::OptionalTensorRef>::iterator_get(const c10::List<std::optional\<at::Tensor> >::const_iterator&amp;)’:<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h:171:13: warning: possibly dangling reference to a temporary [-Wdangling-reference]<br />
-  171 |     const auto&amp; ivalue = (<em>it).get();<br />
-      |             ^~~~~~<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h:171:33: note: the temporary was destroyed at the end of the full expression ‘(&amp; it)-&gt;c10::impl::ListIterator<std::optional\<at::Tensor>, __gnu_cxx::__normal_iterator\<c10::IValue*, std::vector\<c10::IValue> > >::operator</em>().c10::impl::ListElementReference<std::optional\<at::Tensor>, __gnu_cxx::__normal_iterator\<c10::IValue*, std::vector\<c10::IValue> > >::get()’<br />
-  171 |     const auto&amp; ivalue = (<em>it).get();<br />
-      |                      ~~~~~~~~~~~^~<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h: At global scope:<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h:42:103: error: expected primary-expression before ‘&gt;’ token<br />
-   42 | struct has_ivalue_to<T, std::void_t\<decltype(std::declval\<IValue>().to\<T>())>><br />
-      |                                                                                                       ^<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h:42:106: error: expected primary-expression before ‘)’ token<br />
-   42 | struct has_ivalue_to<T, std::void_t\<decltype(std::declval\<IValue>().to\<T>())>><br />
-      |                                                                                                          ^<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h: In lambda function:<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h:154:24: warning: possibly dangling reference to a temporary [-Wdangling-reference]<br />
-  154 |         for (const at::Tensor&amp; tensor : ivalue.toTensorList()) {<br />
-      |                        ^~~~~~<br />
-/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h:154:53: note: the temporary was destroyed at the end of the full expression ‘__for_begin .c10::impl::ListIterator<at::Tensor, __gnu_cxx::__normal_iterator\<c10::IValue*, std::vector\<c10::IValue> > >::operator</em>().c10::impl::ListElementReference<at::Tensor, __gnu_cxx::__normal_iterator\<c10::IValue*, std::vector\<c10::IValue> > >::operator std::conditional_t<true, const at::Tensor&, at::Tensor>()’<br />
-  154 |         for (const at::Tensor&amp; tensor : ivalue.toTensorList()) {<br />
-      |                                                     ^<br />
-...</p>
-<p>ninja: build stopped: subcommand failed.<br />
-<code></code><br />
-PyTorch version: 2.4.0a0+git595613d<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 12.4<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 23.10 (x86_64)<br />
-GCC version: (Ubuntu 13.2.0-4ubuntu3) 13.2.0<br />
-Clang version: 16.0.6 (15)<br />
-CMake version: version 3.29.0<br />
-Libc version: glibc-2.38</p>
-<p>Python version: 3.11.8 | packaged by conda-forge | (main, Feb 16 2024, 20:53:32) [GCC 12.3.0] (64-bit runtime)<br />
-Python platform: Linux-6.5.0-26-generic-x86_64-with-glibc2.38<br />
-Is CUDA available: True<br />
-CUDA runtime version: 12.4.131<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA GeForce RTX 3090 Ti<br />
-Nvidia driver version: 550.67<br />
-cuDNN version: Probably one of the following:<br />
-/usr/lib/x86_64-linux-gnu/libcudnn.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.0.0<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.0.0<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Architecture:                       x86_64<br />
-CPU op-mode(s):                     32-bit, 64-bit<br />
-Address sizes:                      46 bits physical, 48 bits virtual<br />
-Byte Order:                         Little Endian<br />
-CPU(s):                             24<br />
-On-line CPU(s) list:                0-23<br />
-Vendor ID:                          GenuineIntel<br />
-Model name:                         13th Gen Intel(R) Core(TM) i7-13700K<br />
-CPU family:                         6<br />
-Model:                              183<br />
-Thread(s) per core:                 2<br />
-Core(s) per socket:                 16<br />
-Socket(s):                          1<br />
-Stepping:                           1<br />
-CPU(s) scaling MHz:                 19%<br />
-CPU max MHz:                        5400.0000<br />
-CPU min MHz:                        800.0000<br />
-BogoMIPS:                           6835.20<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq tme rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities<br />
-Virtualization:                     VT-x<br />
-L1d cache:                          640 KiB (16 instances)<br />
-L1i cache:                          768 KiB (16 instances)<br />
-L2 cache:                           24 MiB (10 instances)<br />
-L3 cache:                           30 MiB (1 instance)<br />
-NUMA node(s):                       1<br />
-NUMA node0 CPU(s):                  0-23<br />
-Vulnerability Gather data sampling: Not affected<br />
-Vulnerability Itlb multihit:        Not affected<br />
-Vulnerability L1tf:                 Not affected<br />
-Vulnerability Mds:                  Not affected<br />
-Vulnerability Meltdown:             Not affected<br />
-Vulnerability Mmio stale data:      Not affected<br />
-Vulnerability Retbleed:             Not affected<br />
-Vulnerability Spec rstack overflow: Not affected<br />
-Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl<br />
-Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; Enhanced / Automatic IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
-Vulnerability Srbds:                Not affected<br />
-Vulnerability Tsx async abort:      Not affected</p>
-<p>Versions of relevant libraries:<br />
-[pip3] numpy==1.26.4<br />
-[pip3] optree==0.11.0<br />
-[pip3] pytorch-triton==3.0.0+989adb9a29<br />
-[pip3] torch==2.4.0a0+git595613d<br />
-[conda] magma-cuda124             2.6.1                         1    pytorch<br />
-[conda] mkl-include               2024.1.0              intel_691    intel<br />
-[conda] mkl-static                2024.1.0              intel_691    intel<br />
-[conda] numpy                     1.26.4          py311h64a7726_0    conda-forge<br />
-[conda] optree                    0.11.0          py311h9547e67_0    conda-forge<br />
-[conda] pytorch-triton            3.0.0+989adb9a29          pypi_0    pypi<br />
-[conda] torch                     2.4.0a0+git595613d          pypi_0    pypi<br />
-```</p>
-<p>Tagging @colesbury per https://github.com/pytorch/pytorch/issues/122169#issuecomment-2008232619</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123377<br />
-Approved by: https://github.com/cyyever, https://github.com/malfet</p>]]></description><pubDate>Sun, 07 Apr 2024 10:37:47 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0355f6e9549d4ba383112732f349c15b40169075</guid></item><item><title>profile pt2 compile time with strobelight (#123311)</title><link>https://github.com/pytorch/pytorch/commit/caed7f67271e975fc429fb46bef977095942296f</link><description>&lt;p&gt;profile pt2 compile time with strobelight (#123311)&lt;/p&gt;
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)</title><link>https://github.com/pytorch/pytorch/commit/e4e5449dfc46e0d90fd1980f3ee748da8edc983c</link><description><![CDATA[<p>[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)</p>
+<p>After we codegen a triton kernel in the triton codegen backend,<br />
+we cache the generated triton source code in the wrapper to avoid<br />
+producing multiple triton kernels with the same content.</p>
+<p>In AOTI compilation flow, this caching mechanism imposes a strong requirement<br />
+on the codegen that we must generate the same triton source code<br />
+for the same schedule node in both python and cpp codegen phases.<br />
+Otherwise, we would end up with a mismatch between the kernel name<br />
+formed in the cpp codegen and the cuda kernel key produced from<br />
+the python codegen. Consequently, we would hit an missing-cuda-kernel<br />
+error.</p>
+<p>The precomputed symbol replacements saved in V.graph.sizevars<br />
+can cause such source-code inconsistency related to the code for indexing<br />
+tensors. For example, let's say in the python codegen phase,<br />
+we produce "ks2*48" as part of indexing an input for schedule<br />
+node A while yielding a replacement pair "ks0 -&gt; ks2*48" in<br />
+the precomputed replacements. In the second cpp codegen phase,<br />
+we would produce "ks0" for the same indexing code of schedule<br />
+node A due to the "ks0 -&gt; ks2*48" replacement pair.</p>
+<p>This PR fixed the issue by clearing precomputed_replacements<br />
+and inv_precomputed_replacements before cpp wrapper codegen.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123136<br />
+Approved by: https://github.com/desertfire</p>]]></description><pubDate>Mon, 08 Apr 2024 08:51:43 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e4e5449dfc46e0d90fd1980f3ee748da8edc983c</guid></item><item><title>[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)</title><link>https://github.com/pytorch/pytorch/commit/e4e5449dfc46e0d90fd1980f3ee748da8edc983c</link><description><![CDATA[<p>[aoti][reland] clear precomputed symbol replacements before cpp wrapper compilation (#123136)</p>
+<p>After we codegen a triton kernel in the triton codegen backend,<br />
+we cache the generated triton source code in the wrapper to avoid<br />
+producing multiple triton kernels with the same content.</p>
+<p>In AOTI compilation flow, this caching mechanism imposes a strong requirement<br />
+on the codegen that we must generate the same triton source code<br />
+for the same schedule node in both python and cpp codegen phases.<br />
+Otherwise, we would end up with a mismatch between the kernel name<br />
+formed in the cpp codegen and the cuda kernel key produced from<br />
+the python codegen. Consequently, we would hit an missing-cuda-kernel<br />
+error.</p>
+<p>The precomputed symbol replacements saved in V.graph.sizevars<br />
+can cause such source-code inconsistency related to the code for indexing<br />
+tensors. For example, let's say in the python codegen phase,<br />
+we produce "ks2*48" as part of indexing an input for schedule<br />
+node A while yielding a replacement pair "ks0 -&gt; ks2*48" in<br />
+the precomputed replacements. In the second cpp codegen phase,<br />
+we would produce "ks0" for the same indexing code of schedule<br />
+node A due to the "ks0 -&gt; ks2*48" replacement pair.</p>
+<p>This PR fixed the issue by clearing precomputed_replacements<br />
+and inv_precomputed_replacements before cpp wrapper codegen.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123136<br />
+Approved by: https://github.com/desertfire</p>]]></description><pubDate>Mon, 08 Apr 2024 08:51:43 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e4e5449dfc46e0d90fd1980f3ee748da8edc983c</guid></item><item><title>Use graph.find_nodes in inductor (#122256)</title><link>https://github.com/pytorch/pytorch/commit/f8465df9f0dd6e536ea5737383bc2fc413602760</link><description>&lt;p&gt;Use graph.find_nodes in inductor (#122256)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122256&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #121565, #122255&lt;/p&gt;</description><pubDate>Sun, 07 Apr 2024 10:51:14 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f8465df9f0dd6e536ea5737383bc2fc413602760</guid></item><item><title>Use graph.find_nodes in inductor/fx_passes (#122255)</title><link>https://github.com/pytorch/pytorch/commit/33783e43e9446db10946e2bb354618ded3d3f446</link><description>&lt;p&gt;Use graph.find_nodes in inductor/fx_passes (#122255)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/122255&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #121565&lt;/p&gt;</description><pubDate>Sun, 07 Apr 2024 10:51:09 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/33783e43e9446db10946e2bb354618ded3d3f446</guid></item><item><title>[Bug Fix] Fix Cuda 12.4 compilation - Refactor SFINAE boxing logic  (#123377)</title><link>https://github.com/pytorch/pytorch/commit/0355f6e9549d4ba383112732f349c15b40169075</link><description>&lt;p&gt;[Bug Fix] Fix Cuda 12.4 compilation - Refactor SFINAE boxing logic  (#123377)&lt;/p&gt;
+&lt;p&gt;Summary:&lt;/p&gt;
+&lt;p&gt;PyTorch fails to compile from source using CUDA 12.4. The relevant log is extracted below. This was a recurring issue, which would cause the compilation to fail again on further objects if the first offending object was skipped.&lt;/p&gt;
+&lt;p&gt;While searching for whether others had experienced this issue before attempting a fix myself, I found this suggested fix by @christian-heusel in https://github.com/pytorch/pytorch/issues/122169#issuecomment-2008455468 written by @lahwaacz. The code written by @lahwaacz at https://gitlab.archlinux.org/archlinux/packaging/packages/python-pytorch/-/commit/bb1f1a4c546c9692fb56db57172f14d25b95e645 fixes the issue.&lt;/p&gt;
+&lt;p&gt;The original issue (#122169) seems to have gone quiet, so I am submitting this PR. I made no substantive adjustments to @lahwaacz' code. My only adjustment was, for the sake of consistency, to remove the double underscores in the struct name, as double underscores are reserved to the implementation in C++ Standard. My change has no functional effect on the original code.&lt;/p&gt;
+&lt;p&gt;The ArchLinux package from which the original code was committed is licensed under the BSD license. https://archlinux.org/packages/extra/x86_64/python-pytorch/&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+[7900/8804] Building CUDA object caffe2/CMakeFiles/torch_cuda.dir/&lt;strong&gt;/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o&lt;br /&gt;
+FAILED: caffe2/CMakeFiles/torch_cuda.dir/&lt;/strong&gt;/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o&lt;br /&gt;
+/usr/bin/ccache /usr/local/cuda-12.4/bin/nvcc -forward-unknown-to-host-compiler -DAT_PER_OPERATOR_HEADERS -DFLASHATTENTION_DISABLE_ALIBI -DHAVE_MALLOC_USABLE_SIZE=1 -DHAVE_MMAP=1 -DHAVE_SHM_OPEN=1 -DHAVE_SHM_UNLINK=1 -DIDEEP_USE_MKL -DMINIZ_DISABLE_ZIP_READER_CRC32_CHECKS -DONNXIFI_ENABLE_EXT=1 -DONNX_ML=1 -DONNX_NAMESPACE=onnx_torch -DTORCH_CUDA_BUILD_MAIN_LIB -DUSE_C10D_GLOO -DUSE_C10D_NCCL -DUSE_CUDA -DUSE_CUSPARSELT -DUSE_DISTRIBUTED -DUSE_EXTERNAL_MZCRC -DUSE_FLASH_ATTENTION -DUSE_MEM_EFF_ATTENTION -DUSE_NCCL -DUSE_RPC -DUSE_TENSORPIPE -D_FILE_OFFSET_BITS=64 -Dtorch_cuda_EXPORTS -I/home/elliot/compile_test-pytorch/build/aten/src -I/home/elliot/compile_test-pytorch/aten/src -I/home/elliot/compile_test-pytorch/build -I/home/elliot/compile_test-pytorch -I/home/elliot/compile_test-pytorch/cmake/../third_party/benchmark/include -I/home/elliot/compile_test-pytorch/third_party/onnx -I/home/elliot/compile_test-pytorch/build/third_party/onnx -I/home/elliot/compile_test-pytorch/third_party/foxi -I/home/elliot/compile_test-pytorch/build/third_party/foxi -I/home/elliot/compile_test-pytorch/aten/src/THC -I/home/elliot/compile_test-pytorch/aten/src/ATen/cuda -I/home/elliot/compile_test-pytorch/aten/src/ATen/../../../third_party/cutlass/include -I/home/elliot/compile_test-pytorch/build/caffe2/aten/src -I/home/elliot/compile_test-pytorch/aten/src/ATen/.. -I/home/elliot/compile_test-pytorch/build/nccl/include -I/home/elliot/compile_test-pytorch/c10/cuda/../.. -I/home/elliot/compile_test-pytorch/c10/.. -I/home/elliot/compile_test-pytorch/third_party/tensorpipe -I/home/elliot/compile_test-pytorch/build/third_party/tensorpipe -I/home/elliot/compile_test-pytorch/third_party/tensorpipe/third_party/libnop/include -I/home/elliot/compile_test-pytorch/torch/csrc/api -I/home/elliot/compile_test-pytorch/torch/csrc/api/include -isystem /home/elliot/compile_test-pytorch/build/third_party/gloo -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/gloo -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/tensorpipe/third_party/libuv/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/googletest/googlemock/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/googletest/googletest/include -isystem /home/elliot/compile_test-pytorch/third_party/protobuf/src -isystem /home/elliot/miniforge3/envs/torchtest/include -isystem /home/elliot/compile_test-pytorch/third_party/gemmlowp -isystem /home/elliot/compile_test-pytorch/third_party/neon2sse -isystem /home/elliot/compile_test-pytorch/third_party/XNNPACK/include -isystem /home/elliot/compile_test-pytorch/third_party/ittapi/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/eigen -isystem /usr/local/cuda-12.4/include -isystem /home/elliot/compile_test-pytorch/third_party/ideep/mkl-dnn/include/oneapi/dnnl -isystem /home/elliot/compile_test-pytorch/third_party/ideep/include -isystem /home/elliot/compile_test-pytorch/cmake/../third_party/cudnn_frontend/include -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -D_GLIBCXX_USE_CXX11_ABI=1 -Xfatbin -compress-all -DONNX_NAMESPACE=onnx_torch -gencode arch=compute_86,code=sm_86 -Xcudafe --diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl --expt-relaxed-constexpr --expt-extended-lambda  -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -O3 -DNDEBUG -std=c++17 -Xcompiler=-fPIC -DMKL_HAS_SBGEMM -DMKL_HAS_SHGEMM -DTORCH_USE_LIBUV -DCAFFE2_USE_GLOO -Xcompiler=-Wall,-Wextra,-Wdeprecated,-Wno-unused-parameter,-Wno-unused-function,-Wno-missing-field-initializers,-Wno-unknown-pragmas,-Wno-type-limits,-Wno-array-bounds,-Wno-unknown-pragmas,-Wno-strict-overflow,-Wno-strict-aliasing,-Wno-maybe-uninitialized -Wno-deprecated-copy -MD -MT caffe2/CMakeFiles/torch_cuda.dir/&lt;strong&gt;/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o -MF caffe2/CMakeFiles/torch_cuda.dir/&lt;/strong&gt;/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o.d -x cu -c /home/elliot/compile_test-pytorch/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu -o caffe2/CMakeFiles/torch_cuda.dir/__/torch/csrc/distributed/c10d/quantization/quantization_gpu.cu.o&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h: In static member function ‘static c10::detail::IListRefConstRef&lt;at::OptionalTensorRef&gt; c10::detail::IListRefTagImpl&lt;c10::IListRefTag::Boxed, at::OptionalTensorRef&gt;::iterator_get(const c10::List&lt;std::optional\&lt;at::Tensor&gt; &gt;::const_iterator&amp;amp;)’:&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h:171:13: warning: possibly dangling reference to a temporary [-Wdangling-reference]&lt;br /&gt;
+  171 |     const auto&amp;amp; ivalue = (&lt;em&gt;it).get();&lt;br /&gt;
+      |             ^~~~~~&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/IListRef_inl.h:171:33: note: the temporary was destroyed at the end of the full expression ‘(&amp;amp; it)-&amp;gt;c10::impl::ListIterator&lt;std::optional\&lt;at::Tensor&gt;, __gnu_cxx::__normal_iterator\&lt;c10::IValue*, std::vector\&lt;c10::IValue&gt; &gt; &gt;::operator&lt;/em&gt;().c10::impl::ListElementReference&lt;std::optional\&lt;at::Tensor&gt;, __gnu_cxx::__normal_iterator\&lt;c10::IValue*, std::vector\&lt;c10::IValue&gt; &gt; &gt;::get()’&lt;br /&gt;
+  171 |     const auto&amp;amp; ivalue = (&lt;em&gt;it).get();&lt;br /&gt;
+      |                      ~~~~~~~~~~~^~&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h: At global scope:&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h:42:103: error: expected primary-expression before ‘&amp;gt;’ token&lt;br /&gt;
+   42 | struct has_ivalue_to&lt;T, std::void_t\&lt;decltype(std::declval\&lt;IValue&gt;().to\&lt;T&gt;())&gt;&gt;&lt;br /&gt;
+      |                                                                                                       ^&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/boxing/impl/boxing.h:42:106: error: expected primary-expression before ‘)’ token&lt;br /&gt;
+   42 | struct has_ivalue_to&lt;T, std::void_t\&lt;decltype(std::declval\&lt;IValue&gt;().to\&lt;T&gt;())&gt;&gt;&lt;br /&gt;
+      |                                                                                                          ^&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h: In lambda function:&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h:154:24: warning: possibly dangling reference to a temporary [-Wdangling-reference]&lt;br /&gt;
+  154 |         for (const at::Tensor&amp;amp; tensor : ivalue.toTensorList()) {&lt;br /&gt;
+      |                        ^~~~~~&lt;br /&gt;
+/home/elliot/compile_test-pytorch/aten/src/ATen/core/dispatch/DispatchKeyExtractor.h:154:53: note: the temporary was destroyed at the end of the full expression ‘__for_begin .c10::impl::ListIterator&lt;at::Tensor, __gnu_cxx::__normal_iterator\&lt;c10::IValue*, std::vector\&lt;c10::IValue&gt; &gt; &gt;::operator&lt;/em&gt;().c10::impl::ListElementReference&lt;at::Tensor, __gnu_cxx::__normal_iterator\&lt;c10::IValue*, std::vector\&lt;c10::IValue&gt; &gt; &gt;::operator std::conditional_t&lt;true, const at::Tensor&amp;, at::Tensor&gt;()’&lt;br /&gt;
+  154 |         for (const at::Tensor&amp;amp; tensor : ivalue.toTensorList()) {&lt;br /&gt;
+      |                                                     ^&lt;br /&gt;
+...&lt;/p&gt;
+&lt;p&gt;ninja: build stopped: subcommand failed.&lt;br /&gt;
+&lt;code&gt;&lt;/code&gt;&lt;br /&gt;
+PyTorch version: 2.4.0a0+git595613d&lt;br /&gt;
+Is debug build: False&lt;br /&gt;
+CUDA used to build PyTorch: 12.4&lt;br /&gt;
+ROCM used to build PyTorch: N/A&lt;/p&gt;
+&lt;p&gt;OS: Ubuntu 23.10 (x86_64)&lt;br /&gt;
+GCC version: (Ubuntu 13.2.0-4ubuntu3) 13.2.0&lt;br /&gt;
+Clang version: 16.0.6 (15)&lt;br /&gt;
+CMake version: version 3.29.0&lt;br /&gt;
+Libc version: glibc-2.38&lt;/p&gt;
+&lt;p&gt;Python version: 3.11.8 | packaged by conda-forge | (main, Feb 16 2024, 20:53:32) [GCC 12.3.0] (64-bit runtime)&lt;br /&gt;
+Python platform: Linux-6.5.0-26-generic-x86_64-with-glibc2.38&lt;br /&gt;
+Is CUDA available: True&lt;br /&gt;
+CUDA runtime version: 12.4.131&lt;br /&gt;
+CUDA_MODULE_LOADING set to: LAZY&lt;br /&gt;
+GPU models and configuration: GPU 0: NVIDIA GeForce RTX 3090 Ti&lt;br /&gt;
+Nvidia driver version: 550.67&lt;br /&gt;
+cuDNN version: Probably one of the following:&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.0.0&lt;br /&gt;
+/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.0.0&lt;br /&gt;
+HIP runtime version: N/A&lt;br /&gt;
+MIOpen runtime version: N/A&lt;br /&gt;
+Is XNNPACK available: True&lt;/p&gt;
+&lt;p&gt;CPU:&lt;br /&gt;
+Architecture:                       x86_64&lt;br /&gt;
+CPU op-mode(s):                     32-bit, 64-bit&lt;br /&gt;
+Address sizes:                      46 bits physical, 48 bits virtual&lt;br /&gt;
+Byte Order:                         Little Endian&lt;br /&gt;
+CPU(s):                             24&lt;br /&gt;
+On-line CPU(s) list:                0-23&lt;br /&gt;
+Vendor ID:                          GenuineIntel&lt;br /&gt;
+Model name:                         13th Gen Intel(R) Core(TM) i7-13700K&lt;br /&gt;
+CPU family:                         6&lt;br /&gt;
+Model:                              183&lt;br /&gt;
+Thread(s) per core:                 2&lt;br /&gt;
+Core(s) per socket:                 16&lt;br /&gt;
+Socket(s):                          1&lt;br /&gt;
+Stepping:                           1&lt;br /&gt;
+CPU(s) scaling MHz:                 19%&lt;br /&gt;
+CPU max MHz:                        5400.0000&lt;br /&gt;
+CPU min MHz:                        800.0000&lt;br /&gt;
+BogoMIPS:                           6835.20&lt;br /&gt;
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq tme rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities&lt;br /&gt;
+Virtualization:                     VT-x&lt;br /&gt;
+L1d cache:                          640 KiB (16 instances)&lt;br /&gt;
+L1i cache:                          768 KiB (16 instances)&lt;br /&gt;
+L2 cache:                           24 MiB (10 instances)&lt;br /&gt;
+L3 cache:                           30 MiB (1 instance)&lt;br /&gt;
+NUMA node(s):                       1&lt;br /&gt;
+NUMA node0 CPU(s):                  0-23&lt;br /&gt;
+Vulnerability Gather data sampling: Not affected&lt;br /&gt;
+Vulnerability Itlb multihit:        Not affected&lt;br /&gt;
+Vulnerability L1tf:                 Not affected&lt;br /&gt;
+Vulnerability Mds:                  Not affected&lt;br /&gt;
+Vulnerability Meltdown:             Not affected&lt;br /&gt;
+Vulnerability Mmio stale data:      Not affected&lt;br /&gt;
+Vulnerability Retbleed:             Not affected&lt;br /&gt;
+Vulnerability Spec rstack overflow: Not affected&lt;br /&gt;
+Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl&lt;br /&gt;
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization&lt;br /&gt;
+Vulnerability Spectre v2:           Mitigation; Enhanced / Automatic IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence&lt;br /&gt;
+Vulnerability Srbds:                Not affected&lt;br /&gt;
+Vulnerability Tsx async abort:      Not affected&lt;/p&gt;
+&lt;p&gt;Versions of relevant libraries:&lt;br /&gt;
+[pip3] numpy==1.26.4&lt;br /&gt;
+[pip3] optree==0.11.0&lt;br /&gt;
+[pip3] pytorch-triton==3.0.0+989adb9a29&lt;br /&gt;
+[pip3] torch==2.4.0a0+git595613d&lt;br /&gt;
+[conda] magma-cuda124             2.6.1                         1    pytorch&lt;br /&gt;
+[conda] mkl-include               2024.1.0              intel_691    intel&lt;br /&gt;
+[conda] mkl-static                2024.1.0              intel_691    intel&lt;br /&gt;
+[conda] numpy                     1.26.4          py311h64a7726_0    conda-forge&lt;br /&gt;
+[conda] optree                    0.11.0          py311h9547e67_0    conda-forge&lt;br /&gt;
+[conda] pytorch-triton            3.0.0+989adb9a29          pypi_0    pypi&lt;br /&gt;
+[conda] torch                     2.4.0a0+git595613d          pypi_0    pypi&lt;br /&gt;
+```&lt;/p&gt;
+&lt;p&gt;Tagging @colesbury per https://github.com/pytorch/pytorch/issues/122169#issuecomment-2008232619&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/123377&lt;br /&gt;
+Approved by: https://github.com/cyyever, https://github.com/malfet&lt;/p&gt;</description><pubDate>Sun, 07 Apr 2024 10:37:47 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0355f6e9549d4ba383112732f349c15b40169075</guid></item><item><title>profile pt2 compile time with strobelight (#123311)</title><link>https://github.com/pytorch/pytorch/commit/caed7f67271e975fc429fb46bef977095942296f</link><description>&lt;p&gt;profile pt2 compile time with strobelight (#123311)&lt;/p&gt;
 &lt;p&gt;For oss this diff adds a decorator @profile_sb_fbcode that is a nop for non meta workload.&lt;/p&gt;
 &lt;p&gt;Facebook:&lt;br /&gt;
 With this diff someone can generate a strobelight profile for pt2 compilation.&lt;br /&gt;
