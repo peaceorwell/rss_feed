@@ -5,12 +5,106 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
+      <title>[inductor] Remove config check for 3D tiling</title>
+      <link>https://github.com/pytorch/pytorch/pull/124569</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122941<br />
+* #124561<br />
+* <strong>-&gt;</strong> #124569<br />
+* #124560<br />
+* #124559<br />
+* #124557<br />
+* #124553<br />
+* #124552</p>
+<p>This makes the check per-kernel (if 3D tiling is used), rather than<br />
+global config.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sun, 21 Apr 2024 09:58:01 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124569</guid>
+    </item>
+    <item>
+      <title>[inductor] Use compile time config values in runtime</title>
+      <link>https://github.com/pytorch/pytorch/pull/124561</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122941<br />
+* <strong>-&gt;</strong> #124561<br />
+* #124569<br />
+* #124560<br />
+* #124559<br />
+* #124557<br />
+* #124553<br />
+* #124552</p>
+<p>This removes usage of torch._inductor.config from <code>torch._inductor.runtime</code>.  Fixing two issues:<br />
+1) If configs change we should really use the compile time ones<br />
+2) In compile workers, we want to use the parent process config</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sat, 20 Apr 2024 16:30:49 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124561</guid>
+    </item>
+    <item>
+      <title>[inductor] Refactor runtime files into torch._inductor.runtime (part 5)</title>
+      <link>https://github.com/pytorch/pytorch/pull/124560</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122941<br />
+* #124561<br />
+* #124569<br />
+* <strong>-&gt;</strong> #124560<br />
+* #124559<br />
+* #124557<br />
+* #124553<br />
+* #124552</p>
+<p>I am planning to make the compile_worker process not import torch so it can start up much faster.  This stack is prep for that.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sat, 20 Apr 2024 14:48:23 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124560</guid>
+    </item>
+    <item>
+      <title>[inductor] Refactor runtime files into torch._inductor.runtime (part 4)</title>
+      <link>https://github.com/pytorch/pytorch/pull/124559</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122941<br />
+* #124561<br />
+* #124569<br />
+* #124560<br />
+* <strong>-&gt;</strong> #124559<br />
+* #124557<br />
+* #124553<br />
+* #124552</p>
+<p>I am planning to make the compile_worker process not import torch so it can start up much faster.  This stack is prep for that.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sat, 20 Apr 2024 14:48:18 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124559</guid>
+    </item>
+    <item>
+      <title>[inductor] Refactor runtime files into torch._inductor.runtime (part 3)</title>
+      <link>https://github.com/pytorch/pytorch/pull/124557</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #122941<br />
+* #124561<br />
+* #124569<br />
+* #124560<br />
+* #124559<br />
+* <strong>-&gt;</strong> #124557<br />
+* #124553<br />
+* #124552</p>
+<p>I am planning to make the compile_worker process not import torch so it can start up much faster.  This stack is prep for that.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Sat, 20 Apr 2024 12:09:37 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124557</guid>
+    </item>
+    <item>
       <title>[inductor] Refactor runtime files into torch._inductor.runtime (part 2)</title>
       <link>https://github.com/pytorch/pytorch/pull/124553</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * #122941<br />
+* #124561<br />
+* #124569<br />
+* #124560<br />
+* #124559<br />
+* #124557<br />
 * <strong>-&gt;</strong> #124553<br />
 * #124552</p>
+<p>I am planning to make the compile_worker process not import torch so it can start up much faster.  This stack is prep for that.</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Sat, 20 Apr 2024 10:59:58 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124553</guid>
@@ -20,79 +114,174 @@
       <link>https://github.com/pytorch/pytorch/pull/124552</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * #122941<br />
+* #124561<br />
+* #124569<br />
+* #124560<br />
+* #124559<br />
+* #124557<br />
 * #124553<br />
 * <strong>-&gt;</strong> #124552</p>
+<p>I am planning to make the compile_worker process not import torch so it can start up much faster.  This stack is prep for that.</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Sat, 20 Apr 2024 10:59:53 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124552</guid>
     </item>
     <item>
-      <title>[inductor] for UserDefinedTritonKernels don't mark all inputs as mutating</title>
-      <link>https://github.com/pytorch/pytorch/pull/124425</link>
+      <title>[feature request] allow torch.compile calls with compiler options, but without modifying global dynamo options</title>
+      <link>https://github.com/pytorch/pytorch/issues/124505</link>
+      <description><![CDATA[<h3>🚀 The feature, motivation and pitch</h3>
+<p>Originally discussed in: https://github.com/pytorch/pytorch/issues/106614</p>
+<p>As I understood, any torch.compile call with passed options will modify global compiler options (and thus require <code>torch._dynamo.reset()</code> or sth like this). I suggest to introduce a "local mode" which applies passed options but only to a given function. Or maybe also introduce a "compile options context" - this would be a "semi-local" mode</p>
+<h3>Alternatives</h3>
+<p><em>No response</em></p>
+<h3>Additional context</h3>
+<p><em>No response</em></p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
+      <pubDate>Fri, 19 Apr 2024 09:42:12 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124505</guid>
+    </item>
+    <item>
+      <title>DISABLED test_isolated_node (__main__.TestAutogradWithCompiledAutograd)</title>
+      <link>https://github.com/pytorch/pytorch/issues/124460</link>
+      <description><![CDATA[<p>Platforms: linux, rocm, asan, slow</p>
+<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_isolated_node&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/24005337184">workflow logs</a>.</p>
+<p>Over the past 3 hours, it has been determined flaky in 7 workflow(s) with 21 failures and 7 successes.</p>
+<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
+DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
+To find relevant log snippets:<br />
+1. Click on the workflow logs linked above<br />
+2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
+3. Grep for <code>test_isolated_node</code><br />
+4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
+<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
+<p>ResponseTimeoutError: Response timeout for 5000ms, GET https://raw.githubusercontent.com/pytorch/pytorch/main/test/inductor/test_compiled_autograd.py -1 (connected: true, keepalive socket: false, socketHandledRequests: 1, socketHandledResponses: 0)<br />
+headers: {}</p>
+<p>cc @clee2000 @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
+      <pubDate>Thu, 18 Apr 2024 22:40:19 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124460</guid>
+    </item>
+    <item>
+      <title>Reimplement unbacked symbol bindings in Inductor</title>
+      <link>https://github.com/pytorch/pytorch/pull/124394</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124425</p>
-<p>Take this example:<br />
-```<br />
-def _mul2(x):<br />
-    y = torch.empty_like(x)<br />
-    mul2_kernel<a href="in_ptr0=x, out_ptr=y,
-        n_elements=x.numel(), BLOCK_SIZE=1,">(10,)</a><br />
-    return y</p>
-<p>def f(x):<br />
-    for _ in range(4):<br />
-        x = _mul2(x)<br />
-    return x + 1<br />
-```</p>
-<p>Currently, the codegen will show up like this. Notice, how we allocate 5 buffers of the same size.<br />
-```</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation], Original ATen: []</h1>
-<p>buf0 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=arg0_1, out_ptr=reinterpret_tensor(buf0, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_1], Original ATen: []</h1>
-<p>buf4 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf0, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf4, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_2], Original ATen: []</h1>
-<p>buf8 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf4, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf8, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_3], Original ATen: []</h1>
-<p>buf12 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf8, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf12, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [add], Original ATen: [aten.add]</h1>
-<p>buf16 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-triton_poi_fused_add_0.run(buf12, buf16, 10, grid=grid(10), stream=stream0)...)<br />
-return (buf16, )<br />
-```</p>
-<p>With this PR, we want to see this. Notice, how we only allocate 2 buffers this time. The other 3 buffers are re-used.<br />
-```</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation], Original ATen: []</h1>
-<p>buf0 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=arg0_1, out_ptr=reinterpret_tensor(buf0, (10, ), (1, ), 0), ...)<br />
-del arg0_1</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_1], Original ATen: []</h1>
-<p>buf2 = empty_strided_cuda((10, ), (1, ), torch.float32)<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf0, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf2, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_2], Original ATen: []</h1>
-<p>buf4 = buf0; del buf0  # reuse<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf2, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf4, (10, ), (1, ), 0) ...)</p>
-<h1>Source Nodes: [triton_kernel_wrapper_mutation_3], Original ATen: []</h1>
-<p>buf6 = buf2; del buf2  # reuse<br />
-mul2_kernel_0.run(in_ptr0=reinterpret_tensor(buf4, (10, ), (1, ), 0), out_ptr=reinterpret_tensor(buf6, (10, ), (1, ), 0) ...)<br />
-del buf4</p>
-<h1>Source Nodes: [add], Original ATen: [aten.add]</h1>
-<p>buf8 = buf6; del buf6  # reuse<br />
-triton_poi_fused_add_0.run(buf8, 10, grid=grid(10), stream=stream0)<br />
-return (buf8, )<br />
-```</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @amjames @desertfire @chauhang</p>
-<p>Differential Revision: <a href="https://our.internmc.facebook.com/intern/diff/D56379307">D56379307</a></p>]]></description>
-      <pubDate>Thu, 18 Apr 2024 11:54:58 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124425</guid>
+* #124567<br />
+* <strong>-&gt;</strong> #124394<br />
+* #124316<br />
+* #124314<br />
+* #124310<br />
+* #124297<br />
+* #124290<br />
+* #124284<br />
+* #124283</p>
+<p>This PR has a lot of "draw the rest of the fucking owl" energy. Here's how to break it down.</p>
+<ol>
+<li><strong>torch/_inductor/graph.py</strong> - We start by tightening unbacked symbol invariants. Specifically, as we lower FX nodes, we check whether or not every unbacked_binding recorded on the FX node meta, actually ends up getting bound (according to get_unbacked_symbol_defs) in all the buffers generated by the lowering. Hopefully this invariant is self evident. This leads to a lot of failures.</li>
+<li><strong>torch/_inductor/ir.py</strong> - Problem 1: There is softness in how Inductor computes defs of unbacked symbols in IR node. Previously, we tried to infer it by looking at the output sizes/strides/etc and see if new unbacked symbols popped up that we hadn't seen in the inputs. I don't know exactly what was buggy about the old code, but sometimes we would fail to notice an unbacked symbol had been bound, or rebind an unbacked symbol multiple times. Fortunately, thanks to the earlier PRs in our stack, we now have a nice list of unbacked symbol bindings from FX, so we now just store it directly on ExternKernel and use it directly to report defs. This has to be done twice: once for FallbackKernel (e.g., nonzero) and once for DynamicScalar (e.g., item) (see also <strong>torch/_inductor/lowering.py</strong>, <strong>torch/_inductor/codegen/wrapper.py</strong> and  <strong>torch/_inductor/codegen/cpp_wrapper_cpu.py</strong> for the lowering and codegen changes for item)</li>
+<li><strong>process_kernel</strong> - Sidequest! It turns out that Inductor lowering can reallocate unbacked symbols. This happens specifically when we repropagate fake tensors through the operator in <code>process_kernel</code>. This repropagation process is necessary because Inductor may have changed the strides of input tensors, and it must now recompute the strides so that it can continue to appropriately plan the rest of the lowering process. This is fine: we just make sure we do the rebind unbacked + compute_unbacked_bindings dance we've been doing previously in the PR stack. But instead of putting unbacked_bindings on a new FX node, they go straight into our unbacked_bindings on the Inductor IR node.<ul>
+<li><strong>codegen_unbacked_symbol_defs</strong> - Sidequest! FallbackKernel lowering is done in two steps. First, you emit the FallbackKernel buffer. Then, you emit MultiOutput buffers which actually give access to the individual outputs of FallbackKernel, which may have been multi-output. There is a design decision here: does the FallbackKernel bind the unbacked symbols, or the MultiOutput buffer? Historically, we put the binding on MultiOutput buffer, because it's more convenient: the FallbackKernel buffer is fake, in fact, it doesn't even get a name in C++ codegen. But it's kind of inconsistent with the keypath model that we've been tracking unbacked bindings with: if you have a multi-output node, you'd expect a keypath like <code>[0].size()[0]</code> representing the first output's first dimension size. That suggests that it's the FallbackKernel that should define the things. So that was my first implementation. Unfortunately, the C++ codegen is too cursed and I could not understand how to make it work in that case. So now we just unsoundly assume you cannot have multi-output data dependent output, and do the codegen in MultiOutput. There are some comments explaining exactly what we are improperly assuming.</li>
+</ul>
+</li>
+<li><strong>_rename_unbacked_to</strong> in <strong>torch/fx/experimental/symbolic_shapes.py</strong> - Previously, when we renamed unbacked symbols, we clobbered any facts we previously knew about them. So for example, if we had a replacement <code>u0 -&gt; s0</code> but then we renamed u0 to u1, we would now setup the replacement <code>u0 -&gt; u1</code>, clobbering the old replacement. This apparently didn't matter in earlier PRs in the stack, but with Inductor now on the ball, there were some tests that indicated this was a problem. The solution is easy: if u0 had a preexisting replacement, reapply it to u1. However...<ul>
+<li><strong>torch/_functorch/_aot_autograd/collect_metadata_analysis.py</strong> - When we run forward analysis, this triggers fake tensor repropagation and fresh allocations. Previously, we just cleared out the pending symbols when finished the analysis. But with the change above, this would also migrate replacements to the new symbols... which are now dead. So now we explicitly suppress generation of these symbols with <code>ignore_fresh_unbacked_symbols</code> so that no rebinding happens at all.</li>
+<li><strong>torch/_dynamo/eval_frame.py</strong> - same deal; I just searched for all sites we called clear() on pending</li>
+</ul>
+</li>
+<li>The last step is fixing the long tail of extra problems that show up, now that unbacked_bindings are load bearing into Inductor<ul>
+<li><strong>torch/_dynamo/eval_frame.py</strong> - Some of the exports are making copies of nodes without repropagating fake tensors, so in this case, it is important to also copy the <code>unbacked_bindings</code> (apparently this didn't matter before without the Inductor changes)</li>
+<li><strong>torch/_export/pass_base.py</strong> - I discover that this is doing fake tensor repropagation via a test suite failure. Do the same playbook as AOTAutograd: PropagateUnbackedSymInts too!  Actually, they also have implemented their own tracer as well, so do the same playbook as proxy_tensor: record unbacked_bindings on the newly traced nodes. UGH code duplication.</li>
+<li><strong>torch/_subclasses/fake_tensor.py</strong>, <strong>torch/_subclasses/fake_impls.py</strong> (with call site updates at  <strong>torch/_functorch/_aot_autograd/traced_function_transforms.py</strong> and <strong>torch/fx/passes/fake_tensor_prop.py</strong>) - What's this new epoch thing? I noticed that sometimes I would be retracing, call nonzero() on a fake tensor, and not allocate a new unbacked symbol. This is actually bad, because if I don't get a new unbacked symbol, I don't know there's a binding site, and <code>unbacked_bindings</code> is now missing a binding. The reason for this is memoization: if I reuse the exact same fake tensor on my retrace, it will already have an unbacked symint memoized on it and we will short circuit allocation. Well, that's no good. So I associate the memos with a fake tensor epoch, and every time you start a new fake tensor propagation from scratch, you bump the epoch so that I clear all the memos.</li>
+<li><strong>torch/_inductor/scheduler.py</strong> - I notice in unit tests that V.current_node is not always set when we call process_kernel. So I save it into the IR node and restore it when we are running <code>get_estimated_runtime</code>.</li>
+<li><strong>torch/fx/experimental/symbolic_shapes.py</strong> - A few things</li>
+<li><strong>rebind_unbacked</strong> (re <strong>_tensor_version</strong>). Ordinarily, when you have an unbacked SymInt, you persistently hvae it all the way to the end of the program. <code>_tensor_version</code> violates this: this generates an unbacked SymInt (for reasons I don't quite understand?) and then gets rid of it later. This triggered an assert violation. I think this op is kind of misusing unbacked SymInt, but I didn't know how to refactor it, so it gets a special case.</li>
+<li><strong>rebind_unbacked</strong> (re <strong>Simplify SymBool binding</strong>). Ugh, SymBool, what a pain in the butt. I have an assert that you can only rebind unbacked symbol to another unbacked symbol. This assert fails when a boolean is involved, because the result of running keypath on the result is not <code>u1</code>, it's <code>sympy.Piecewise(... sympy.Eq(u1, 1) ...)</code>. This is actually just <code>u1</code>, but Sympy doesn't know it because it doesn't know that <code>u1</code> value range is <code>[0, 1]</code>. So we manually implement the simplification needed to get the assert to pass.</li>
+<li><strong>compute_unbacked_bindings</strong> (re <strong>This is pretty fragile</strong>). There is a really funny disaster involving memoization and Inductor process kernel. Ordinarily when I retrace, if there was a memo hit in the old trace, there will be a memo hit in the new trace. However, Inductor process kernel breaks this, because it recreates fake tensor inputs to the operator call from scratch (since they might have different strides), and obviously these tensor inputs don't have the memo from the old one. I tried a little bit to try to manually transplant the memo to the new fake tensor but it seemed hopeless, so I just let the fresh symbol ride, allocating a new unbacked symbol. However, in one of our tests, we rely on knowing that the first nonzero call is equal to the second (memoized) nonzero call. The equality test looked pretty easy to discharge, so I just went ahead and added a deferred runtime assert to this effect and it worked.</li>
+</ul>
+</li>
+</ol>
+<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Thu, 18 Apr 2024 06:23:36 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124394</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] Disable epilogue fusions</title>
+      <link>https://github.com/pytorch/pytorch/pull/124107</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121492<br />
+* <strong>-&gt;</strong> #124107<br />
+* #121734<br />
+* #123932<br />
+* #123930<br />
+* #121497</p>
+<p>This diff disables Cutlass backend EVT epilogue fusions. It does not yet contain the removal of most of the underlying implementation. </p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Mon, 15 Apr 2024 13:23:01 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124107</guid>
+    </item>
+    <item>
+      <title>[Inductor max autotune] Make autotuning robust against very slow Kernels</title>
+      <link>https://github.com/pytorch/pytorch/pull/123932</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121492<br />
+* #124107<br />
+* #121734<br />
+* <strong>-&gt;</strong> #123932<br />
+* #123930<br />
+* #121497</p>
+<p>If a Kernel does not return in a reasonable amount of time during autotuning, it can delay inductor compilation a lot. This change introduces soft / hard kill timeouts and a mechanism to kill Kernels being profiled in subprocesses if they take too long.</p>
+<p>Correspondingly, a few new config options are introduced within _inductor/config.py - all of them with inline docs.</p>
+<p>Test Plan:<br />
+Existing tests within test_max_autotune.py and test_cutlass_backend.py ) cover the new codepaths.</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Fri, 12 Apr 2024 03:51:15 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123932</guid>
+    </item>
+    <item>
+      <title>[Inductor cutlass backend] Fix tests: skipIfROCm always skips when using as class annotation</title>
+      <link>https://github.com/pytorch/pytorch/pull/123930</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121492<br />
+* #124107<br />
+* #121734<br />
+* #123932<br />
+* <strong>-&gt;</strong> #123930<br />
+* #121497</p>
+<p>I previously added @skipIfRocm as a class annotation within test/inductor/test_cutlass_backend.py - turns out this annotation always skips if applied at class level, so I need to skip Cutlass tests on ROCm differently..</p>]]></description>
+      <pubDate>Fri, 12 Apr 2024 03:30:21 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/123930</guid>
+    </item>
+    <item>
+      <title>Cannot process/load 2.3 produced aot-inductor shared library file with 2.4-dev</title>
+      <link>https://github.com/pytorch/pytorch/issues/123745</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>We are compiling with the compatible option, in 2.3.</p>
+<p><code>os.environ["TORCHINDUCTOR_ABI_COMPATIBLE"] = "1"</code></p>
+<p>However when we load that with a dev snapshot of 2.4, we get this error. To me this is not expected, if I understand the design of aot inductor (compile once, and rely on the ABI compatibility in future versions of pytorch, to make sure they can load 'old' files. Or did something break/changed drastically in 2.4 ? </p>
+<p><code>Error in dlopen: foo.so: undefined symbol: _ZN5torch12aot_inductor31tensor_handle_to_tensor_pointerEP16AtenTensorOpaque
+Exception raised from DynamicLibrary at ../aten/src/ATen/DynamicLibrary.cpp:36 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x57 (0x72924e086177 in /path/_deps/pytorch-src/torch/lib/libc10.so)
+frame #1: &lt;unknown function&gt; + 0x10d8324 (0x7292376d8324 in /path/_deps/pytorch-src/torch/lib/libtorch_cpu.so)
+frame #2: torch::inductor::AOTIModelContainerRunner::AOTIModelContainerRunner(std::string const&amp;, unsigned long, std::string const&amp;, std::string const&amp;) + 0xbd (0x72923b7d39cd in /path/build/_deps/pytorch-src/torch/lib/libtorch_cpu.so)</code></p>
+<p>This is what this symbol is:<br />
+<code>$ c++filt 
+_ZN5torch12aot_inductor31tensor_handle_to_tensor_pointerEP16AtenTensorOpaque
+torch::aot_inductor::tensor_handle_to_tensor_pointer(AtenTensorOpaque*)</code></p>
+<h3>Versions</h3>
+<p>2.3 + 2.4 ... sorry a bit complicated but everything is in the title.</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @desertfire @chenyang78</p>]]></description>
+      <pubDate>Wed, 10 Apr 2024 10:32:38 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/123745</guid>
     </item>
     <item>
       <title>[inductor] Move compile workers to a subprocess</title>
       <link>https://github.com/pytorch/pytorch/pull/122941</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * <strong>-&gt;</strong> #122941<br />
+* #124561<br />
+* #124569<br />
+* #124560<br />
+* #124559<br />
+* #124557<br />
 * #124553<br />
 * #124552</p>
 <p>In many environments using fork-based parallelism causes issues because user processes are not fork-safe.  This moves our parallel compile work pool into a subprocess that we control (that should be fork safe).</p>
@@ -100,6 +289,58 @@ return (buf8, )<br />
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Thu, 28 Mar 2024 20:34:51 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/122941</guid>
+    </item>
+    <item>
+      <title>[Inductor cutlass backend] Add bmm support</title>
+      <link>https://github.com/pytorch/pytorch/pull/121734</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121492<br />
+* #124107<br />
+* <strong>-&gt;</strong> #121734<br />
+* #123932<br />
+* #123930<br />
+* #121497</p>
+<p>Add support for bmm ( batch matrix multiply ) op through the Cutlass backend.</p>
+<p>Test Plan:<br />
+ * CI<br />
+ * Added test in test_cutlass_backend.py</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Tue, 12 Mar 2024 09:23:08 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121734</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] Tolerate dynamic shapes</title>
+      <link>https://github.com/pytorch/pytorch/pull/121497</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #121492<br />
+* #124107<br />
+* #121734<br />
+* #123932<br />
+* #123930<br />
+* <strong>-&gt;</strong> #121497</p>
+<p>Previously, when the Cutlass backend was enabled, using dynamic shapes could lead to exceptions during JIT.</p>
+<p>With this change, there are guards in place to just disable the Cutlass backend if dynamic dimensions are involved.</p>
+<p>In addition, if no choices for a GEMM are available using the selected backends, then an ATen Kernel is used as fallback, even if the ATen backend is not enabled.</p>
+<p>Test:<br />
+CI<br />
+Additional unit test in test_cutlass_backend.py</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Fri, 08 Mar 2024 07:55:23 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121497</guid>
+    </item>
+    <item>
+      <title>[Inductor Cutlass backend] DO NOT REVIEW - to be split up</title>
+      <link>https://github.com/pytorch/pytorch/pull/121492</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* <strong>-&gt;</strong> #121492<br />
+* #124107<br />
+* #121734<br />
+* #123932<br />
+* #123930<br />
+* #121497</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Fri, 08 Mar 2024 06:38:43 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/121492</guid>
     </item>
   </channel>
 </rss>
