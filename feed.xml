@@ -4,95 +4,130 @@
     <title>GitHub Commits Feed</title>
     <link>https://github.com/username/repo/commits</link>
     <description>Recent commits from GitHub repo</description>
-    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>Add support for capturing tensors with score_mod (#124444)</title><link>https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</link><description><![CDATA[<p>Add support for capturing tensors with score_mod (#124444)</p>
-<p>```<br />
-import torch<br />
-from torch import nn<br />
-import torch.nn.functional as F<br />
-import torch._inductor.config as config</p>
-<h1>torch.set_default_device('cuda')</h1>
-<p>import torch<br />
-from torch.nn.attention._templated_attention import _templated_attention as templated_attention<br />
-from triton.testing import do_bench<br />
-from torch.nn.attention import SDPBackend, sdpa_kernel</p>
-<p>index = torch.ops.aten<br />
-torch.manual_seed(0)</p>
-<p>B = 16<br />
-H = 16<br />
-S = 2048<br />
-D = 64</p>
-<p>head_scale = torch.randn(H, device='cuda')<br />
-def alibi(score, batch, head, token_q, token_kv):<br />
-    return score + torch.ops.aten.index(head_scale, [head]) * (token_q - token_kv)<br />
-bias = torch.randn(H, S, S, dtype=torch.float16, device='cuda')</p>
-<p>query = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)<br />
-key = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)<br />
-value = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)</p>
-<p>compiled = torch.compile(templated_attention)<br />
-out = compiled(query, key, value, score_mod=alibi)<br />
-out2 = templated_attention(query, key, value,score_mod=alibi)<br />
-print((out - out2).abs().mean())<br />
-assert (out - out2).abs().mean() &lt; 1e-3<br />
-print("Flash (no mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value)))<br />
-print("Flash (mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value, attn_mask=bias)))<br />
-print("flexattention: ", do_bench(lambda: compiled(query, key, value, score_mod=alibi)))<br />
-```<br />
-<img width="324" alt="image" src="https://github.com/pytorch/pytorch/assets/6355099/18c175d0-2720-4dfd-8747-85b8a8f609f5"></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124444<br />
-Approved by: https://github.com/jansel, https://github.com/drisspg</p>]]></description><pubDate>Tue, 23 Apr 2024 09:54:08 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</guid></item><item><title>Add support for capturing tensors with score_mod (#124444)</title><link>https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</link><description><![CDATA[<p>Add support for capturing tensors with score_mod (#124444)</p>
-<p>```<br />
-import torch<br />
-from torch import nn<br />
-import torch.nn.functional as F<br />
-import torch._inductor.config as config</p>
-<h1>torch.set_default_device('cuda')</h1>
-<p>import torch<br />
-from torch.nn.attention._templated_attention import _templated_attention as templated_attention<br />
-from triton.testing import do_bench<br />
-from torch.nn.attention import SDPBackend, sdpa_kernel</p>
-<p>index = torch.ops.aten<br />
-torch.manual_seed(0)</p>
-<p>B = 16<br />
-H = 16<br />
-S = 2048<br />
-D = 64</p>
-<p>head_scale = torch.randn(H, device='cuda')<br />
-def alibi(score, batch, head, token_q, token_kv):<br />
-    return score + torch.ops.aten.index(head_scale, [head]) * (token_q - token_kv)<br />
-bias = torch.randn(H, S, S, dtype=torch.float16, device='cuda')</p>
-<p>query = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)<br />
-key = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)<br />
-value = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)</p>
-<p>compiled = torch.compile(templated_attention)<br />
-out = compiled(query, key, value, score_mod=alibi)<br />
-out2 = templated_attention(query, key, value,score_mod=alibi)<br />
-print((out - out2).abs().mean())<br />
-assert (out - out2).abs().mean() &lt; 1e-3<br />
-print("Flash (no mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value)))<br />
-print("Flash (mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value, attn_mask=bias)))<br />
-print("flexattention: ", do_bench(lambda: compiled(query, key, value, score_mod=alibi)))<br />
-```<br />
-<img width="324" alt="image" src="https://github.com/pytorch/pytorch/assets/6355099/18c175d0-2720-4dfd-8747-85b8a8f609f5"></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124444<br />
-Approved by: https://github.com/jansel, https://github.com/drisspg</p>]]></description><pubDate>Tue, 23 Apr 2024 09:54:08 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</guid></item><item><title>[dynamo] Refactor into torch/_inductor/runtime/compile_tasks.py (#124681)</title><link>https://github.com/pytorch/pytorch/commit/0792ceab4b6a61c6c217f65c3fecf51d75e65a9f</link><description><![CDATA[<p>[dynamo] Refactor into torch/_inductor/runtime/compile_tasks.py (#124681)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124681<br />
-Approved by: https://github.com/masnesral<br />
-ghstack dependencies: #124592</p>]]></description><pubDate>Tue, 23 Apr 2024 09:51:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0792ceab4b6a61c6c217f65c3fecf51d75e65a9f</guid></item><item><title>[inductor] Remove usage of device_interface from _inductor.runtime (#124592)</title><link>https://github.com/pytorch/pytorch/commit/5d45eb77f1aeb57f13391990215b518a607b3c7e</link><description><![CDATA[<p>[inductor] Remove usage of device_interface from _inductor.runtime (#124592)</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124592<br />
-Approved by: https://github.com/masnesral</p>]]></description><pubDate>Tue, 23 Apr 2024 09:51:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5d45eb77f1aeb57f13391990215b518a607b3c7e</guid></item><item><title>[AOTI] Add more ABI-compatiblity unit test (#123900)</title><link>https://github.com/pytorch/pytorch/commit/b2fd224f270ecf12f33d4273131f5b3b73d4e2b7</link><description><![CDATA[<p>[AOTI] Add more ABI-compatiblity unit test (#123900)</p>
-<p>Summary: Follow https://github.com/pytorch/pytorch/pull/123848, and test more c10 util functions.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123900<br />
-Approved by: https://github.com/chenyang78</p>]]></description><pubDate>Tue, 23 Apr 2024 08:06:40 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b2fd224f270ecf12f33d4273131f5b3b73d4e2b7</guid></item><item><title>[HOP][inductor] Add higher order associative scan operator (#119430)</title><link>https://github.com/pytorch/pytorch/commit/7ecbbc40c367aff0643aa13eb60e0d5e9ac81d75</link><description><![CDATA[<p>[HOP][inductor] Add higher order associative scan operator (#119430)</p>
-<p>Currently only supports single tensor scans, e.g. <code>cumsum</code>, <code>cumprod</code>, <code>logcumsumexp</code></p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/119430<br />
-Approved by: https://github.com/Chillee</p>]]></description><pubDate>Tue, 23 Apr 2024 06:40:13 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7ecbbc40c367aff0643aa13eb60e0d5e9ac81d75</guid></item><item><title>[Inductor max autotune] Make autotuning robust against very slow Kernels (#123932)</title><link>https://github.com/pytorch/pytorch/commit/f8f6c460cdf8b9ce9afd07aadf468e2b3bb9a174</link><description><![CDATA[<p>[Inductor max autotune] Make autotuning robust against very slow Kernels (#123932)</p>
-<p>If a Kernel does not return in a reasonable amount of time during autotuning, it can delay inductor compilation a lot. This change introduces soft / hard kill timeouts and a mechanism to kill Kernels being profiled in subprocesses if they take too long.</p>
-<p>Correspondingly, a few new config options are introduced within _inductor/config.py - all of them with inline docs.</p>
+    <title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><title>GitHub Commits Feed</title><link>https://github.com/username/repo/commits</link><description>Recent commits from GitHub repo</description><item><title>OSS: Capture triton kernel in ET (#124775)</title><link>https://github.com/pytorch/pytorch/commit/c55309e58f88dd37e41e80425fd84a71d4b51548</link><description><![CDATA[<p>OSS: Capture triton kernel in ET (#124775)</p>
+<p>This DIFF is to capture triton kernels in execution trace</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124775<br />
+Approved by: https://github.com/briancoutinho</p>]]></description><pubDate>Wed, 24 Apr 2024 11:39:37 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/c55309e58f88dd37e41e80425fd84a71d4b51548</guid></item><item><title>[ROCm] Triton upstream AMD backend integration (#121801)</title><link>https://github.com/pytorch/pytorch/commit/9888d7495ece6b6df3b7334fc7c2a9d869359250</link><description><![CDATA[<p>[ROCm] Triton upstream AMD backend integration (#121801)</p>
+<p>Update ROCm-triton to use the AMD backend from https://github.com/openai/triton</p>
+<p>Note: <code>test__int_mm</code> can be enabled after https://github.com/pytorch/pytorch/pull/122431 is landed</p>
+<p>Co-authored-by: Pruthvi Madugundu <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#114;&#117;&#116;&#104;&#118;&#105;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#112;&#114;&#117;&#116;&#104;&#118;&#105;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a><br />
+Co-authored-by: Nikita Shulga <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;">&#50;&#52;&#53;&#51;&#53;&#50;&#52;&#43;&#109;&#97;&#108;&#102;&#101;&#116;&#64;&#117;&#115;&#101;&#114;&#115;&#46;&#110;&#111;&#114;&#101;&#112;&#108;&#121;&#46;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#109;</a><br />
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/121801<br />
+Approved by: https://github.com/nmacchioni, https://github.com/malfet</p>]]></description><pubDate>Wed, 24 Apr 2024 09:28:12 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/9888d7495ece6b6df3b7334fc7c2a9d869359250</guid></item><item><title>[Inductor Cutlass backend] clean up CUTLASSGemmTemplate.add_cutlass_gemm_choices (#124575)</title><link>https://github.com/pytorch/pytorch/commit/7d94f52a8a2eafebd1ab5231699e1f9e19a674af</link><description><![CDATA[<p>[Inductor Cutlass backend] clean up CUTLASSGemmTemplate.add_cutlass_gemm_choices (#124575)</p>
+<p>Clean up CUTLASSGemmTemplate.add_cutlass_gemm_choices, removing code that became unneccessary by removing EVT-based epilogue fusion.</p>
 <p>Test Plan:<br />
-Existing tests within test_max_autotune.py and test_cutlass_backend.py ) cover the new codepaths.</p>
-<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/123932<br />
+Already covered by test_cutlass_backend.py</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124575<br />
 Approved by: https://github.com/jansel<br />
-ghstack dependencies: #121497, #123930</p>]]></description><pubDate>Tue, 23 Apr 2024 03:56:15 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f8f6c460cdf8b9ce9afd07aadf468e2b3bb9a174</guid></item><item><title>Add AOTInductor generated cpp code to TORCH_TRACE (#124617)</title><link>https://github.com/pytorch/pytorch/commit/0bbbc754dd166edc0c83bb44288682f71aae2275</link><description>&lt;p&gt;Add AOTInductor generated cpp code to TORCH_TRACE (#124617)&lt;/p&gt;
+ghstack dependencies: #121497, #123930, #123932, #121734, #124107, #124574</p>]]></description><pubDate>Wed, 24 Apr 2024 06:00:12 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7d94f52a8a2eafebd1ab5231699e1f9e19a674af</guid></item><item><title>[Inductor Cutlass backend] Set INDUCTOR_TEST_DISABLE_FRESH_CACHE in test setup (#124574)</title><link>https://github.com/pytorch/pytorch/commit/a47f4253ab9c9be89293be13c89a2455e3f58385</link><description><![CDATA[<p>[Inductor Cutlass backend] Set INDUCTOR_TEST_DISABLE_FRESH_CACHE in test setup (#124574)</p>
+<p>The diff https://github.com/pytorch/pytorch/pull/122661 introduces a new automatic cache refresh mechanism during all inductor-derived test cases.</p>
+<p>But this refresh mechanism seems not to work properly across process boundaries, specifically when using  autotune_in_subproc, which many tests in test_cutlass_backend.py rely on.</p>
+<p>Solution: Set the env var INDUCTOR_TEST_DISABLE_FRESH_CACHE=1<br />
+early during test setup within test_cutlass_backend.py</p>
+<p>Test Plan:<br />
+This is a change to unit tests only.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124574<br />
+Approved by: https://github.com/aakhundov<br />
+ghstack dependencies: #121497, #123930, #123932, #121734, #124107</p>]]></description><pubDate>Wed, 24 Apr 2024 05:58:29 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/a47f4253ab9c9be89293be13c89a2455e3f58385</guid></item><item><title>[Inductor Cutlass backend] Disable epilogue fusions (#124107)</title><link>https://github.com/pytorch/pytorch/commit/e76b5e3cc8b7a9085c39f25111e852cf668f7d1b</link><description><![CDATA[<p>[Inductor Cutlass backend] Disable epilogue fusions (#124107)</p>
+<p>This diff disables Cutlass backend EVT epilogue fusions. It does not yet contain the removal of most of the underlying implementation.</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/124107<br />
+Approved by: https://github.com/jansel<br />
+ghstack dependencies: #121497, #123930, #123932, #121734</p>]]></description><pubDate>Wed, 24 Apr 2024 05:56:44 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/e76b5e3cc8b7a9085c39f25111e852cf668f7d1b</guid></item><item><title>[Inductor cutlass backend] Add bmm support (#121734)</title><link>https://github.com/pytorch/pytorch/commit/537aebc99fbc02cde91a8cdad8471cb82b44a525</link><description><![CDATA[<p>[Inductor cutlass backend] Add bmm support (#121734)</p>
+<p>Add support for bmm ( batch matrix multiply ) op through the Cutlass backend.</p>
+<p>Test Plan:<br />
+ * CI<br />
+ * Added test in test_cutlass_backend.py</p>
+<p>Pull Request resolved: https://github.com/pytorch/pytorch/pull/121734<br />
+Approved by: https://github.com/eellison<br />
+ghstack dependencies: #121497, #123930, #123932</p>]]></description><pubDate>Wed, 24 Apr 2024 05:54:54 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/537aebc99fbc02cde91a8cdad8471cb82b44a525</guid></item><item><title>Add support for capturing tensors with score_mod (#124444)</title><link>https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</link><description>&lt;p&gt;Add support for capturing tensors with score_mod (#124444)&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+import torch&lt;br /&gt;
+from torch import nn&lt;br /&gt;
+import torch.nn.functional as F&lt;br /&gt;
+import torch._inductor.config as config&lt;/p&gt;
+&lt;h1&gt;torch.set_default_device('cuda')&lt;/h1&gt;
+&lt;p&gt;import torch&lt;br /&gt;
+from torch.nn.attention._templated_attention import _templated_attention as templated_attention&lt;br /&gt;
+from triton.testing import do_bench&lt;br /&gt;
+from torch.nn.attention import SDPBackend, sdpa_kernel&lt;/p&gt;
+&lt;p&gt;index = torch.ops.aten&lt;br /&gt;
+torch.manual_seed(0)&lt;/p&gt;
+&lt;p&gt;B = 16&lt;br /&gt;
+H = 16&lt;br /&gt;
+S = 2048&lt;br /&gt;
+D = 64&lt;/p&gt;
+&lt;p&gt;head_scale = torch.randn(H, device='cuda')&lt;br /&gt;
+def alibi(score, batch, head, token_q, token_kv):&lt;br /&gt;
+    return score + torch.ops.aten.index(head_scale, [head]) * (token_q - token_kv)&lt;br /&gt;
+bias = torch.randn(H, S, S, dtype=torch.float16, device='cuda')&lt;/p&gt;
+&lt;p&gt;query = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;br /&gt;
+key = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;br /&gt;
+value = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;/p&gt;
+&lt;p&gt;compiled = torch.compile(templated_attention)&lt;br /&gt;
+out = compiled(query, key, value, score_mod=alibi)&lt;br /&gt;
+out2 = templated_attention(query, key, value,score_mod=alibi)&lt;br /&gt;
+print((out - out2).abs().mean())&lt;br /&gt;
+assert (out - out2).abs().mean() &amp;lt; 1e-3&lt;br /&gt;
+print("Flash (no mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value)))&lt;br /&gt;
+print("Flash (mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value, attn_mask=bias)))&lt;br /&gt;
+print("flexattention: ", do_bench(lambda: compiled(query, key, value, score_mod=alibi)))&lt;br /&gt;
+```&lt;br /&gt;
+&lt;img width="324" alt="image" src="https://github.com/pytorch/pytorch/assets/6355099/18c175d0-2720-4dfd-8747-85b8a8f609f5"&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/124444&lt;br /&gt;
+Approved by: https://github.com/jansel, https://github.com/drisspg&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 09:54:08 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</guid></item><item><title>Add support for capturing tensors with score_mod (#124444)</title><link>https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</link><description>&lt;p&gt;Add support for capturing tensors with score_mod (#124444)&lt;/p&gt;
+&lt;p&gt;```&lt;br /&gt;
+import torch&lt;br /&gt;
+from torch import nn&lt;br /&gt;
+import torch.nn.functional as F&lt;br /&gt;
+import torch._inductor.config as config&lt;/p&gt;
+&lt;h1&gt;torch.set_default_device('cuda')&lt;/h1&gt;
+&lt;p&gt;import torch&lt;br /&gt;
+from torch.nn.attention._templated_attention import _templated_attention as templated_attention&lt;br /&gt;
+from triton.testing import do_bench&lt;br /&gt;
+from torch.nn.attention import SDPBackend, sdpa_kernel&lt;/p&gt;
+&lt;p&gt;index = torch.ops.aten&lt;br /&gt;
+torch.manual_seed(0)&lt;/p&gt;
+&lt;p&gt;B = 16&lt;br /&gt;
+H = 16&lt;br /&gt;
+S = 2048&lt;br /&gt;
+D = 64&lt;/p&gt;
+&lt;p&gt;head_scale = torch.randn(H, device='cuda')&lt;br /&gt;
+def alibi(score, batch, head, token_q, token_kv):&lt;br /&gt;
+    return score + torch.ops.aten.index(head_scale, [head]) * (token_q - token_kv)&lt;br /&gt;
+bias = torch.randn(H, S, S, dtype=torch.float16, device='cuda')&lt;/p&gt;
+&lt;p&gt;query = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;br /&gt;
+key = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;br /&gt;
+value = torch.randn(B, H, S, D, device="cuda", dtype=torch.float16)&lt;/p&gt;
+&lt;p&gt;compiled = torch.compile(templated_attention)&lt;br /&gt;
+out = compiled(query, key, value, score_mod=alibi)&lt;br /&gt;
+out2 = templated_attention(query, key, value,score_mod=alibi)&lt;br /&gt;
+print((out - out2).abs().mean())&lt;br /&gt;
+assert (out - out2).abs().mean() &amp;lt; 1e-3&lt;br /&gt;
+print("Flash (no mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value)))&lt;br /&gt;
+print("Flash (mask): ", do_bench(lambda: F.scaled_dot_product_attention(query, key, value, attn_mask=bias)))&lt;br /&gt;
+print("flexattention: ", do_bench(lambda: compiled(query, key, value, score_mod=alibi)))&lt;br /&gt;
+```&lt;br /&gt;
+&lt;img width="324" alt="image" src="https://github.com/pytorch/pytorch/assets/6355099/18c175d0-2720-4dfd-8747-85b8a8f609f5"&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/124444&lt;br /&gt;
+Approved by: https://github.com/jansel, https://github.com/drisspg&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 09:54:08 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7c253a777641791247f7fcc19fe5c60f24be32b9</guid></item><item><title>[dynamo] Refactor into torch/_inductor/runtime/compile_tasks.py (#124681)</title><link>https://github.com/pytorch/pytorch/commit/0792ceab4b6a61c6c217f65c3fecf51d75e65a9f</link><description>&lt;p&gt;[dynamo] Refactor into torch/_inductor/runtime/compile_tasks.py (#124681)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/124681&lt;br /&gt;
+Approved by: https://github.com/masnesral&lt;br /&gt;
+ghstack dependencies: #124592&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 09:51:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0792ceab4b6a61c6c217f65c3fecf51d75e65a9f</guid></item><item><title>[inductor] Remove usage of device_interface from _inductor.runtime (#124592)</title><link>https://github.com/pytorch/pytorch/commit/5d45eb77f1aeb57f13391990215b518a607b3c7e</link><description>&lt;p&gt;[inductor] Remove usage of device_interface from _inductor.runtime (#124592)&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/124592&lt;br /&gt;
+Approved by: https://github.com/masnesral&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 09:51:25 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/5d45eb77f1aeb57f13391990215b518a607b3c7e</guid></item><item><title>[AOTI] Add more ABI-compatiblity unit test (#123900)</title><link>https://github.com/pytorch/pytorch/commit/b2fd224f270ecf12f33d4273131f5b3b73d4e2b7</link><description>&lt;p&gt;[AOTI] Add more ABI-compatiblity unit test (#123900)&lt;/p&gt;
+&lt;p&gt;Summary: Follow https://github.com/pytorch/pytorch/pull/123848, and test more c10 util functions.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/123900&lt;br /&gt;
+Approved by: https://github.com/chenyang78&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 08:06:40 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/b2fd224f270ecf12f33d4273131f5b3b73d4e2b7</guid></item><item><title>[HOP][inductor] Add higher order associative scan operator (#119430)</title><link>https://github.com/pytorch/pytorch/commit/7ecbbc40c367aff0643aa13eb60e0d5e9ac81d75</link><description>&lt;p&gt;[HOP][inductor] Add higher order associative scan operator (#119430)&lt;/p&gt;
+&lt;p&gt;Currently only supports single tensor scans, e.g. &lt;code&gt;cumsum&lt;/code&gt;, &lt;code&gt;cumprod&lt;/code&gt;, &lt;code&gt;logcumsumexp&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/119430&lt;br /&gt;
+Approved by: https://github.com/Chillee&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 06:40:13 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/7ecbbc40c367aff0643aa13eb60e0d5e9ac81d75</guid></item><item><title>[Inductor max autotune] Make autotuning robust against very slow Kernels (#123932)</title><link>https://github.com/pytorch/pytorch/commit/f8f6c460cdf8b9ce9afd07aadf468e2b3bb9a174</link><description>&lt;p&gt;[Inductor max autotune] Make autotuning robust against very slow Kernels (#123932)&lt;/p&gt;
+&lt;p&gt;If a Kernel does not return in a reasonable amount of time during autotuning, it can delay inductor compilation a lot. This change introduces soft / hard kill timeouts and a mechanism to kill Kernels being profiled in subprocesses if they take too long.&lt;/p&gt;
+&lt;p&gt;Correspondingly, a few new config options are introduced within _inductor/config.py - all of them with inline docs.&lt;/p&gt;
+&lt;p&gt;Test Plan:&lt;br /&gt;
+Existing tests within test_max_autotune.py and test_cutlass_backend.py ) cover the new codepaths.&lt;/p&gt;
+&lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/123932&lt;br /&gt;
+Approved by: https://github.com/jansel&lt;br /&gt;
+ghstack dependencies: #121497, #123930&lt;/p&gt;</description><pubDate>Tue, 23 Apr 2024 03:56:15 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/f8f6c460cdf8b9ce9afd07aadf468e2b3bb9a174</guid></item><item><title>Add AOTInductor generated cpp code to TORCH_TRACE (#124617)</title><link>https://github.com/pytorch/pytorch/commit/0bbbc754dd166edc0c83bb44288682f71aae2275</link><description>&lt;p&gt;Add AOTInductor generated cpp code to TORCH_TRACE (#124617)&lt;/p&gt;
 &lt;p&gt;Signed-off-by: Edward Z. Yang &lt;a href="&amp;#109;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#58;&amp;#101;&amp;#122;&amp;#121;&amp;#97;&amp;#110;&amp;#103;&amp;#64;&amp;#109;&amp;#101;&amp;#116;&amp;#97;&amp;#46;&amp;#99;&amp;#111;&amp;#109;"&gt;&amp;#101;&amp;#122;&amp;#121;&amp;#97;&amp;#110;&amp;#103;&amp;#64;&amp;#109;&amp;#101;&amp;#116;&amp;#97;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Pull Request resolved: https://github.com/pytorch/pytorch/pull/124617&lt;br /&gt;
 Approved by: https://github.com/albanD&lt;/p&gt;</description><pubDate>Mon, 22 Apr 2024 11:25:20 GMT</pubDate><guid isPermaLink="true">https://github.com/pytorch/pytorch/commit/0bbbc754dd166edc0c83bb44288682f71aae2275</guid></item><item><title>Add AOTInductor generated cpp code to TORCH_TRACE (#124617)</title><link>https://github.com/pytorch/pytorch/commit/0bbbc754dd166edc0c83bb44288682f71aae2275</link><description>&lt;p&gt;Add AOTInductor generated cpp code to TORCH_TRACE (#124617)&lt;/p&gt;
