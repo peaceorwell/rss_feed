@@ -5,16 +5,328 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>doc link failure of `torch.compile`</title>
-      <link>https://github.com/pytorch/pytorch/issues/125123</link>
-      <description><![CDATA[<h3>📚 The doc issue</h3>
-<p>In document: <a href="https://pytorch.org/docs/stable/generated/torch.compile.html#torch.compile">https://pytorch.org/docs/stable/generated/torch.compile.html#torch.compile</a><br />
-The below link is missing <a href="https://pytorch.org/docs/main/compile/custom-backends.html">https://pytorch.org/docs/main/compile/custom-backends.html</a></p>
-<p><img alt="image" src="https://github.com/pytorch/pytorch/assets/100203773/585bdbff-a2fe-41fd-b58d-c3ad7b7a5ba5" /></p>
-<h3>Suggest a potential alternative/fix</h3>
-<p><em>No response</em></p>]]></description>
-      <pubDate>Sun, 28 Apr 2024 05:36:11 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125123</guid>
+      <title>[inductor] autotune benchmark support for cpu</title>
+      <link>https://github.com/pytorch/pytorch/pull/125159</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #124021<br />
+* <strong>-&gt;</strong> #125159<br />
+* #125152</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Mon, 29 Apr 2024 06:57:31 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125159</guid>
+    </item>
+    <item>
+      <title>[inductor][cpp] move some common cpp utils to cpp_utils.py</title>
+      <link>https://github.com/pytorch/pytorch/pull/125152</link>
+      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
+* #124021<br />
+* #125159<br />
+* <strong>-&gt;</strong> #125152</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Mon, 29 Apr 2024 05:28:14 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125152</guid>
+    </item>
+    <item>
+      <title>DISABLED test_comprehensive_special_bessel_y1_cuda_float32 (__main__.TestInductorOpInfoCUDA)</title>
+      <link>https://github.com/pytorch/pytorch/issues/125151</link>
+      <description><![CDATA[<p>Platforms: inductor</p>
+<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_comprehensive_special_bessel_y1_cuda_float32&amp;suite=TestInductorOpInfoCUDA&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/24363927490">workflow logs</a>.</p>
+<p>Over the past 3 hours, it has been determined flaky in 2 workflow(s) with 2 failures and 2 successes.</p>
+<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
+DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
+To find relevant log snippets:<br />
+1. Click on the workflow logs linked above<br />
+2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
+3. Grep for <code>test_comprehensive_special_bessel_y1_cuda_float32</code><br />
+4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
+<details><summary>Sample error message</summary>
+
+```
+Traceback (most recent call last):
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 970, in test_wrapper
+    return test(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 1202, in only_fn
+    return fn(self, *args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 1937, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 1027, in dep_fn
+    return fn(slf, *args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 1027, in dep_fn
+    return fn(slf, *args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 1358, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 1307, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/unittest/mock.py", line 1325, in patched
+    return func(*newargs, **newkeywargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/contextlib.py", line 75, in inner
+    return func(*args, **kwds)
+  File "inductor/test_torchinductor_opinfo.py", line 456, in inner
+    raise e
+  File "inductor/test_torchinductor_opinfo.py", line 448, in inner
+    fn(self, device, dtype, op)
+  File "inductor/test_torchinductor_opinfo.py", line 689, in test_comprehensive
+    raise e
+  File "inductor/test_torchinductor_opinfo.py", line 649, in test_comprehensive
+    self.check_model_gpu(
+  File "/opt/conda/envs/py_3.8/lib/python3.8/contextlib.py", line 75, in inner
+    return func(*args, **kwds)
+  File "/var/lib/jenkins/pytorch/test/inductor/test_torchinductor.py", line 596, in check_model_gpu
+    check_model(
+  File "/var/lib/jenkins/pytorch/test/inductor/test_torchinductor.py", line 484, in check_model
+    self.assertEqual(
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 3640, in assertEqual
+    raise error_metas.pop()[0].to_error(
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 0 / 20 (0.0%)
+Greatest absolute difference: 0.0 at index (0,) (up to 0.0001 allowed)
+Greatest relative difference: 0.0 at index (0,) (up to 1.3e-05 allowed)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 2757, in wrapper
+    method(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 2757, in wrapper
+    method(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 419, in instantiated_test
+    result = test(self, **param_kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_utils.py", line 1358, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.8/lib/python3.8/site-packages/torch/testing/_internal/common_device_type.py", line 976, in test_wrapper
+    raise Exception(  # noqa: TRY002
+Exception: Caused by sample input at index 0: SampleInput(input=Tensor[size=(20,), device="cuda:0", dtype=torch.float32], args=(), kwargs={}, broadcasts_input=False, name='')
+
+To execute this test, run the following from the base repo dir:
+    PYTORCH_TEST_WITH_ROCM=1 python test_torchinductor_opinfo.py -k test_comprehensive_special_bessel_y1_cuda_float32
+
+This message can be suppressed by setting PYTORCH_PRINT_REPRO_ON_FAILURE=0
+```
+
+</details>
+
+<p>Test file path: <code>inductor/test_torchinductor_opinfo.py</code></p>
+<p>cc @jeffdaily @sunway513 @jithunnair-amd @pruthvistony @ROCmSupport @dllehr-amd @jataylo @hongxiayang @clee2000 @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Mon, 29 Apr 2024 04:45:02 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125151</guid>
+    </item>
+    <item>
+      <title>DISABLED test_slice_expanded_v (__main__.TestAutogradWithCompiledAutograd)</title>
+      <link>https://github.com/pytorch/pytorch/issues/125149</link>
+      <description><![CDATA[<p>Platforms: asan, linux, slow, rocm</p>
+<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_slice_expanded_v&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/24361496035">workflow logs</a>.</p>
+<p>Over the past 3 hours, it has been determined flaky in 14 workflow(s) with 42 failures and 14 successes.</p>
+<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
+DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
+To find relevant log snippets:<br />
+1. Click on the workflow logs linked above<br />
+2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
+3. Grep for <code>test_slice_expanded_v</code><br />
+4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
+<details><summary>Sample error message</summary>
+
+```
+Traceback (most recent call last):
+  File "/var/lib/jenkins/workspace/test/test_autograd.py", line 3314, in test_slice_expanded_v
+    (result,) = torch.autograd.grad(a[3:5], a, v_expanded)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/autograd/__init__.py", line 412, in grad
+    result = _engine_run_backward(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/autograd/graph.py", line 767, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 403, in _fn
+    return fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/fx/graph_module.py", line 735, in call_wrapped
+    return self._wrapped_call(self, *args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/fx/graph_module.py", line 315, in __call__
+    raise e
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/fx/graph_module.py", line 302, in __call__
+    return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 977, in catch_errors
+    return callback(frame, cache_entry, hooks, frame_state, skip=1)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 411, in _convert_frame_assert
+    return _compile(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_utils_internal.py", line 70, in wrapper_function
+    return function(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 700, in _compile
+    guarded_code = compile_inner(code, one_graph, hooks, transform)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 568, in compile_inner
+    out_code = transform_code_object(code, transform)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/bytecode_transformation.py", line 1116, in transform_code_object
+    transformations(instructions, code_options)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 173, in _fn
+    return fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 515, in transform
+    tracer.run()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2230, in run
+    super().run()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 880, in run
+    while self.step():
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 795, in step
+    self.dispatch_table[inst.opcode](self, inst)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2387, in RETURN_VALUE
+    self._return(inst)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2372, in _return
+    self.output.compile_subgraph(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1093, in compile_subgraph
+    self.compile_and_call_fx_graph(tx, pass2.graph_output_vars(), root)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1285, in compile_and_call_fx_graph
+    compiled_fn = self.call_user_compiler(gm)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1376, in call_user_compiler
+    raise BackendCompilerFailed(self.compiler_fn, e).with_traceback(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1357, in call_user_compiler
+    compiled_fn = compiler_fn(gm, self.example_inputs())
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/repro/after_dynamo.py", line 127, in debug_wrapper
+    compiled_gm = compiler_fn(gm, example_inputs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/repro/after_dynamo.py", line 127, in debug_wrapper
+    compiled_gm = compiler_fn(gm, example_inputs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/__init__.py", line 1784, in __call__
+    return self.compiler_fn(model_, inputs_, **self.kwargs)
+  File "/var/lib/jenkins/workspace/test/inductor/test_compiled_autograd.py", line 28, in inner_compiler
+    return inductor.compile(gm_, example_inputs_)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/__init__.py", line 28, in compile
+    return compile_fx(gm, example_inputs, config_patches=options)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 1276, in compile_fx
+    return flatten_graph_inputs(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 2669, in flatten_graph_inputs
+    compiled_fn = compile_gm(GmWrapper(gm, spec), inputs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 1454, in compile_fx
+    return aot_autograd(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/backends/common.py", line 65, in compiler_fn
+    cg = aot_module_simplified(gm, example_inputs, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_functorch/aot_autograd.py", line 958, in aot_module_simplified
+    compiled_fn = create_aot_dispatcher_function(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_functorch/aot_autograd.py", line 685, in create_aot_dispatcher_function
+    compiled_fn = compiler_fn(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 470, in aot_wrapper_dedupe
+    return compiler_fn(flat_fn, leaf_flat_args, aot_config, fw_metadata=fw_metadata)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 672, in aot_wrapper_synthetic_base
+    return compiler_fn(flat_fn, flat_args, aot_config, fw_metadata=fw_metadata)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/jit_compile_runtime_wrappers.py", line 156, in aot_dispatch_base
+    compiled_fw = compiler(fw_module, updated_flat_args)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 1358, in fw_compiler_base
+    return inner_compile(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/repro/after_aot.py", line 83, in debug_wrapper
+    inner_compiled_fn = compiler_fn(gm, example_inputs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/debug.py", line 304, in inner
+    return fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 483, in compile_fx_inner
+    compiled_graph = fx_codegen_and_compile(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 779, in fx_codegen_and_compile
+    compiled_fn = graph.compile_to_fn()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/graph.py", line 1623, in compile_to_fn
+    return self.compile_to_module().call
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/graph.py", line 1570, in compile_to_module
+    mod = PyCodeCache.load_by_key_path(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2456, in load_by_key_path
+    exec(code, mod.__dict__, mod.__dict__)
+  File "/tmp/torchinductor_jenkins/qv/cqv4g3tgqerdxjubxvscha5u4xyoj3wz6ehuireazcngtfprjaab.py", line 69, in <module>
+    async_compile.wait(globals())
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 3058, in wait
+    scope[key] = result.result()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2867, in result
+    return self.result_fn()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2336, in future
+    result = get_result()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2164, in load_fn
+    future.result()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/concurrent/futures/_base.py", line 458, in result
+    return self.__get_result()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+    raise self._exception
+  File "/opt/conda/envs/py_3.10/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2189, in _worker_compile_cpp
+    compile_file(input_path, output_path, shlex.split(cmd))
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 2060, in compile_file
+    raise exc.CppCompileError(cmd, output) from e
+torch._dynamo.exc.BackendCompilerFailed: backend='inner_compiler' raised:
+CppCompileError: C++ compile error
+
+Command:
+g++ /tmp/torchinductor_jenkins/a5/ca5v7ydklw2krydec224bcqoj6oj2rpyh2t3xesebkeliwx4uhac.cpp -shared -fPIC -Wall -std=c++17 -Wno-unused-variable -Wno-unknown-pragmas -D_GLIBCXX_USE_CXX11_ABI=1 -I/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/include -I/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/include/torch/csrc/api/include -I/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/include/TH -I/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/include/THC -I/opt/conda/envs/py_3.10/include/python3.10 -L/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/lib -L/opt/conda/envs/py_3.10/lib -L/opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/lib -ltorch -ltorch_cpu -lgomp -ltorch_python -lc10 -mavx512f -mavx512dq -mavx512vl -mavx512bw -mfma -DCPU_CAPABILITY_AVX512 -O3 -DNDEBUG -ffast-math -fno-finite-math-only -fno-unsafe-math-optimizations -ffp-contract=off -march=native -fopenmp -D C10_USING_CUSTOM_GENERATED_MACROS -o /tmp/torchinductor_jenkins/a5/ca5v7ydklw2krydec224bcqoj6oj2rpyh2t3xesebkeliwx4uhac.so
+
+Output:
+/tmp/torchinductor_jenkins/a5/ca5v7ydklw2krydec224bcqoj6oj2rpyh2t3xesebkeliwx4uhac.cpp:2:10: fatal error: /tmp/tmpzbsef_9v/ub/cub6x5nmhqhp7xapkb3dlgjxef3t2bnkx7y7n4z2f4z5obnecxpy.h: No such file or directory
+    2 | #include "/tmp/tmpzbsef_9v/ub/cub6x5nmhqhp7xapkb3dlgjxef3t2bnkx7y7n4z2f4z5obnecxpy.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+
+Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+
+You can suppress this exception and fall back to eager by setting:
+    import torch._dynamo
+    torch._dynamo.config.suppress_errors = True
+
+
+To execute this test, run the following from the base repo dir:
+     python test/test_autograd.py -k test_slice_expanded_v
+
+This message can be suppressed by setting PYTORCH_PRINT_REPRO_ON_FAILURE=0
+```
+
+</details>
+
+<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
+<p>cc @clee2000 @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Mon, 29 Apr 2024 01:40:41 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125149</guid>
+    </item>
+    <item>
+      <title>Fix typo in `compile` docstring regarding default `cache_size_limit`</title>
+      <link>https://github.com/pytorch/pytorch/pull/125145</link>
+      <description><![CDATA[<p>Docstring of <code>torch.compile</code> specifies that default <code>torch._dynamo.config.cache_size_limit</code> equals to <code>64</code>, while the value is <code>8</code> in the corresponding py file.</p>]]></description>
+      <pubDate>Mon, 29 Apr 2024 00:49:40 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125145</guid>
+    </item>
+    <item>
+      <title>[inductor] Remove usage of device_interface from _inductor.runtime</title>
+      <link>https://github.com/pytorch/pytorch/pull/125137</link>
+      <description><![CDATA[<p>Summary: Redo of https://github.com/pytorch/pytorch/pull/124592, but with necessary internal changes</p>
+<p>Test Plan: CI</p>
+<p>Reviewed By: jansel</p>
+<p>Differential Revision: D56642231</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Sun, 28 Apr 2024 19:42:57 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125137</guid>
     </item>
     <item>
       <title>[inductor] Check if n is the input tensor of conv_pointwise</title>
@@ -27,27 +339,1103 @@ The below link is missing <a href="https://pytorch.org/docs/main/compile/custom-
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125119</guid>
     </item>
     <item>
-      <title>Codegen runtime asserts in Inductor</title>
-      <link>https://github.com/pytorch/pytorch/pull/124874</link>
+      <title>`torch.compile` fails with `jacfwd` when multiplying/dividing float and tensor</title>
+      <link>https://github.com/pytorch/pytorch/issues/125078</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>The following minimal example fails<br />
+```python<br />
+import torch<br />
+from torch.func import jacfwd</p>
+<p>def func(x):<br />
+    two = 2.0<br />
+    return two * x</p>
+<p>def jac_func(x):<br />
+    return jacfwd(func, argnums=(0,))(x)</p>
+<p>compiled_jac_func = torch.compile(jac_func)<br />
+compiled_jac_func(torch.ones((3,), dtype=torch.float64))<br />
+<code>with following last few lines in the error message (longer error log below).</code><br />
+torch._dynamo.exc.TorchRuntimeError: Failed running call_function <built-in function mul>(<em>(2.0, GradTrackingTensor(lvl=2, value=<br />
+    FakeTensor(..., size=(3,), dtype=torch.float64)<br />
+)), </em>*{}):<br />
+aten::alias() Expected a value of type 'Tensor' for argument 'self' but instead found type 'float'.<br />
+Position: 0<br />
+Value: 2.0<br />
+Declaration: aten::alias(Tensor(a) self) -&gt; Tensor(a)<br />
+Cast error details: Unable to cast 2.0 to Tensor</p>
+<p>from user code:<br />
+   File "/home/cwtan/florch/tests/test.py", line 10, in jac_func<br />
+    return jacfwd(func, argnums=(0,))(x)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1312, in wrapper_fn<br />
+    results = vmap(push_jvp, randomness=randomness)(basis)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/apis.py", line 200, in wrapped<br />
+    return vmap_impl(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 331, in vmap_impl<br />
+    return _flat_vmap(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 48, in fn<br />
+    return f(<em>args, </em><em>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 480, in _flat_vmap<br />
+    batched_outputs = func(</em>batched_inputs, <strong>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1301, in push_jvp<br />
+    output = _jvp_with_argnums(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 48, in fn<br />
+    return f(*args, </strong>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1141, in _jvp_with_argnums<br />
+    result_duals = func(*duals)<br />
+  File "/home/cwtan/florch/tests/test.py", line 6, in func<br />
+    return two * x</p>
+<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
+<p>You can suppress this exception and fall back to eager by setting:<br />
+    import torch._dynamo<br />
+    torch._dynamo.config.suppress_errors = True<br />
+<code>Similar error if it's `return x / two`. Trying instead</code><br />
+import torch<br />
+from torch.func import jacfwd</p>
+<p>def func(x):<br />
+    two = torch.tensor([2.0], dtype=x.dtype, device=x.device)<br />
+    return two * x</p>
+<p>def jac_func(x):<br />
+    return jacfwd(func, argnums=(0,))(x)</p>
+<p>compiled_jac_func = torch.compile(jac_func)<br />
+compiled_jac_func(torch.ones((3,), dtype=torch.float64))<br />
+<code>also fails with a different `NotImplementedError` (full error below).</code><br />
+torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:<br />
+NotImplementedError: Cannot access storage of TensorWrapper<br />
+```</p>
+<h3>Error logs</h3>
+<p>For the first example where <code>two = 2.0</code>.<br />
+```<br />
+refreshing <module 'torch.ops.quantized_decomposed' from 'torch.ops'> quantize_per_tensor<br />
+refreshing <module 'torch.ops.quantized_decomposed' from 'torch.ops'> quantize_per_tensor<br />
+refreshing <module 'torch.ops.quantized_decomposed' from 'torch.ops'> dequantize_per_tensor<br />
+refreshing <module 'torch.ops.quantized_decomposed' from 'torch.ops'> dequantize_per_tensor<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] failed while attempting to run meta for aten.alias.default<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] Traceback (most recent call last):<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0]   File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_subclasses/fake_tensor.py", line 1493, in _dispatch_impl<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0]     r = func(<em>args, </em><em>kwargs)<br />
+E0426 18:03:00.287000 140386476729408 torch/<em>subclasses/fake_tensor.py:1497] [0/0]         ^^^^^^^^^^^^^^^^^^^^^<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0]   File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_ops.py", line 630, in <strong>call</strong><br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0]     return self</em>._op(</em>args, <strong>kwargs)<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0]            ^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] RuntimeError: aten::alias() Expected a value of type 'Tensor' for argument 'self' but instead found type 'float'.<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] Position: 0<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] Value: 2.0<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] Declaration: aten::alias(Tensor(a) self) -&gt; Tensor(a)<br />
+E0426 18:03:00.287000 140386476729408 torch/_subclasses/fake_tensor.py:1497] [0/0] Cast error details: Unable to cast 2.0 to Tensor<br />
+Traceback (most recent call last):<br />
+  File "/home/cwtan/florch/tests/test.py", line 14, in <module><br />
+    compiled_jac_func(torch.ones((3,), dtype=torch.float64))<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py", line 403, in _fn<br />
+    return fn(*args, </strong>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 977, in catch_errors<br />
+    return callback(frame, cache_entry, hooks, frame_state, skip=1)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 818, in _convert_frame<br />
+    result = inner_convert(<br />
+             ^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 411, in _convert_frame_assert<br />
+    return _compile(<br />
+           ^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_utils_internal.py", line 70, in wrapper_function<br />
+    return function(<em>args, </em><em>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/contextlib.py", line 81, in inner<br />
+    return func(</em>args, <strong>kwds)<br />
+           ^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 700, in _compile<br />
+    guarded_code = compile_inner(code, one_graph, hooks, transform)<br />
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(*args, </strong>kwargs)<br />
+        ^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 568, in compile_inner<br />
+    out_code = transform_code_object(code, transform)<br />
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/bytecode_transformation.py", line 1116, in transform_code_object<br />
+    transformations(instructions, code_options)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 173, in _fn<br />
+    return fn(<em>args, </em><em>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 515, in transform<br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2237, in run<br />
+    super().run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1848, in CALL<br />
+    self.call_function(fn, args, kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1848, in CALL<br />
+    self.call_function(fn, args, kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/higher_order_ops.py", line 1202, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1848, in CALL<br />
+    self.call_function(fn, args, kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 492, in wrapper<br />
+    return inner_fn(self, inst)<br />
+           ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1301, in CALL_FUNCTION_EX<br />
+    self.call_function(fn, argsvars.items, kwargsvars)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 730, in call_function<br />
+    self.push(fn.call_function(self, args, kwargs))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 293, in call_function<br />
+    return super().call_function(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/functions.py", line 90, in call_function<br />
+    return tx.inline_user_function_return(self, [</em>self.self_args(), <em>args], kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 736, in inline_user_function_return<br />
+    return InliningInstructionTranslator.inline_call(self, fn, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2418, in inline_call<br />
+    return cls.inline_call</em>(parent, func, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>dynamo/symbolic_convert.py", line 2534, in inline_call</em><br />
+    tracer.run()<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+          ^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 1812, in BINARY_OP<br />
+    return _binary_op_lookup<a href="self, inst">inst.arg</a><br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 229, in impl<br />
+    self.push(fn_var.call_function(self, self.popn(nargs), {}))<br />
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/builtin.py", line 946, in call_function<br />
+    return handler(tx, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/builtin.py", line 925, in _handle_insert_op_in_graph<br />
+    return wrap_fx_proxy(tx, proxy)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/builder.py", line 1434, in wrap_fx_proxy<br />
+    return wrap_fx_proxy_cls(target_cls=TensorVariable, </em><em>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/variables/builder.py", line 1519, in wrap_fx_proxy_cls<br />
+    example_value = get_fake_value(proxy.node, tx, allow_non_graph_fake=True)<br />
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1821, in get_fake_value<br />
+    raise TorchRuntimeError(str(e)).with_traceback(e.<strong>traceback</strong>) from None<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1753, in get_fake_value<br />
+    ret_val = wrap_fake_exception(<br />
+              ^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1268, in wrap_fake_exception<br />
+    return fn()<br />
+           ^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1754, in <lambda><br />
+    lambda: run_node(tx.output, node, args, kwargs, nnmodule)<br />
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1889, in run_node<br />
+    raise RuntimeError(make_error_message(e)).with_traceback(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 1871, in run_node<br />
+    return node.target(</em>args, <strong>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/utils/_stats.py", line 20, in wrapper<br />
+    return fn(*args, </strong>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_subclasses/fake_tensor.py", line 904, in <strong>torch_dispatch</strong><br />
+    return self.dispatch(func, types, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_subclasses/fake_tensor.py", line 1262, in dispatch<br />
+    return self._cached_dispatch_impl(func, types, args, kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_subclasses/fake_tensor.py", line 987, in _cached_dispatch_impl<br />
+    output = self._dispatch_impl(func, types, args, kwargs)<br />
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_subclasses/fake_tensor.py", line 1493, in _dispatch_impl<br />
+    r = func(<em>args, </em><em>kwargs)<br />
+        ^^^^^^^^^^^^^^^^^^^^^<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/<em>ops.py", line 630, in <strong>call</strong><br />
+    return self</em>._op(</em>args, <strong>kwargs)<br />
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^<br />
+torch._dynamo.exc.TorchRuntimeError: Failed running call_function <built-in function mul>(*(2.0, GradTrackingTensor(lvl=2, value=<br />
+    FakeTensor(..., size=(3,), dtype=torch.float64)<br />
+)), </strong>{}):<br />
+aten::alias() Expected a value of type 'Tensor' for argument 'self' but instead found type 'float'.<br />
+Position: 0<br />
+Value: 2.0<br />
+Declaration: aten::alias(Tensor(a) self) -&gt; Tensor(a)<br />
+Cast error details: Unable to cast 2.0 to Tensor</p>
+<p>from user code:<br />
+   File "/home/cwtan/florch/tests/test.py", line 10, in jac_func<br />
+    return jacfwd(func, argnums=(0,))(x)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1312, in wrapper_fn<br />
+    results = vmap(push_jvp, randomness=randomness)(basis)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/apis.py", line 200, in wrapped<br />
+    return vmap_impl(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 331, in vmap_impl<br />
+    return _flat_vmap(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 48, in fn<br />
+    return f(<em>args, </em><em>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 480, in _flat_vmap<br />
+    batched_outputs = func(</em>batched_inputs, <strong>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1301, in push_jvp<br />
+    output = _jvp_with_argnums(<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/vmap.py", line 48, in fn<br />
+    return f(*args, </strong>kwargs)<br />
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/eager_transforms.py", line 1141, in _jvp_with_argnums<br />
+    result_duals = func(*duals)<br />
+  File "/home/cwtan/florch/tests/test.py", line 6, in func<br />
+    return two * x</p>
+<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
+<p>You can suppress this exception and fall back to eager by setting:<br />
+    import torch._dynamo<br />
+    torch._dynamo.config.suppress_errors = True<br />
+```</p>
+<p>For the second example where <code>two = torch.tensor([2.0], dtype=x.dtype, device=x.device)</code>.<br />
+<code>Traceback (most recent call last):
+  File "/home/cwtan/florch/tests/test.py", line 14, in &lt;module&gt;
+    compiled_jac_func(torch.ones((3,), dtype=torch.float64))
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py", line 403, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 977, in catch_errors
+    return callback(frame, cache_entry, hooks, frame_state, skip=1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 818, in _convert_frame
+    result = inner_convert(
+             ^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 411, in _convert_frame_assert
+    return _compile(
+           ^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_utils_internal.py", line 70, in wrapper_function
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 700, in _compile
+    guarded_code = compile_inner(code, one_graph, hooks, transform)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 568, in compile_inner
+    out_code = transform_code_object(code, transform)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/bytecode_transformation.py", line 1116, in transform_code_object
+    transformations(instructions, code_options)
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 173, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/convert_frame.py", line 515, in transform
+    tracer.run()
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2237, in run
+    super().run()
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run
+    while self.step():
+          ^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step
+    self.dispatch_table[inst.opcode](self, inst)
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2394, in RETURN_VALUE
+    self._return(inst)
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/symbolic_convert.py", line 2379, in _return
+    self.output.compile_subgraph(
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/output_graph.py", line 1091, in compile_subgraph
+    self.compile_and_call_fx_graph(tx, pass2.graph_output_vars(), root)
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/output_graph.py", line 1283, in compile_and_call_fx_graph
+    compiled_fn = self.call_user_compiler(gm)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/output_graph.py", line 1374, in call_user_compiler
+    raise BackendCompilerFailed(self.compiler_fn, e).with_traceback(
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/output_graph.py", line 1355, in call_user_compiler
+    compiled_fn = compiler_fn(gm, self.example_inputs())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/repro/after_dynamo.py", line 127, in debug_wrapper
+    compiled_gm = compiler_fn(gm, example_inputs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/__init__.py", line 1744, in __call__
+    return compile_fx(model_, inputs_, config_patches=self.config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_inductor/compile_fx.py", line 1434, in compile_fx
+    return aot_autograd(
+           ^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/backends/common.py", line 65, in compiler_fn
+    cg = aot_module_simplified(gm, example_inputs, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/aot_autograd.py", line 958, in aot_module_simplified
+    compiled_fn = create_aot_dispatcher_function(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper
+    r = func(*args, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/aot_autograd.py", line 558, in create_aot_dispatcher_function
+    fw_metadata = run_functionalized_fw_and_collect_metadata(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cwtan/anaconda3/envs/florch/lib/python3.11/site-packages/torch/_functorch/_aot_autograd/collect_metadata_analysis.py", line 262, in inner
+    curr_storage = StorageWeakRef(o.untyped_storage())
+                                  ^^^^^^^^^^^^^^^^^^^
+torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+NotImplementedError: Cannot access storage of TensorWrapper</code></p>
+<h3>Minified repro</h3>
+<p><em>No response</em></p>
+<h3>Versions</h3>
+<p>```<br />
+Collecting environment information...<br />
+PyTorch version: 2.4.0.dev20240425+cu121<br />
+Is debug build: False<br />
+CUDA used to build PyTorch: 12.1<br />
+ROCM used to build PyTorch: N/A</p>
+<p>OS: Ubuntu 22.04.2 LTS (x86_64)<br />
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
+Clang version: Could not collect<br />
+CMake version: Could not collect<br />
+Libc version: glibc-2.35</p>
+<p>Python version: 3.11.9 (main, Apr 19 2024, 16:48:06) [GCC 11.2.0] (64-bit runtime)<br />
+Python platform: Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35<br />
+Is CUDA available: True<br />
+CUDA runtime version: Could not collect<br />
+CUDA_MODULE_LOADING set to: LAZY<br />
+GPU models and configuration: GPU 0: NVIDIA RTX A1000 6GB Laptop GPU<br />
+Nvidia driver version: 537.77<br />
+cuDNN version: Could not collect<br />
+HIP runtime version: N/A<br />
+MIOpen runtime version: N/A<br />
+Is XNNPACK available: True</p>
+<p>CPU:<br />
+Architecture:                       x86_64<br />
+CPU op-mode(s):                     32-bit, 64-bit<br />
+Address sizes:                      46 bits physical, 48 bits virtual<br />
+Byte Order:                         Little Endian<br />
+CPU(s):                             20<br />
+On-line CPU(s) list:                0-19<br />
+Vendor ID:                          GenuineIntel<br />
+Model name:                         13th Gen Intel(R) Core(TM) i7-13800H<br />
+CPU family:                         6<br />
+Model:                              186<br />
+Thread(s) per core:                 2<br />
+Core(s) per socket:                 10<br />
+Socket(s):                          1<br />
+Stepping:                           2<br />
+BogoMIPS:                           5836.80<br />
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid pni pclmulqdq vmx ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves avx_vnni umip waitpkg gfni vaes vpclmulqdq rdpid movdiri movdir64b fsrm md_clear serialize flush_l1d arch_capabilities<br />
+Virtualization:                     VT-x<br />
+Hypervisor vendor:                  Microsoft<br />
+Virtualization type:                full<br />
+L1d cache:                          480 KiB (10 instances)<br />
+L1i cache:                          320 KiB (10 instances)<br />
+L2 cache:                           12.5 MiB (10 instances)<br />
+L3 cache:                           24 MiB (1 instance)<br />
+Vulnerability Gather data sampling: Not affected<br />
+Vulnerability Itlb multihit:        Not affected<br />
+Vulnerability L1tf:                 Not affected<br />
+Vulnerability Mds:                  Not affected<br />
+Vulnerability Meltdown:             Not affected<br />
+Vulnerability Mmio stale data:      Not affected<br />
+Vulnerability Retbleed:             Mitigation; Enhanced IBRS<br />
+Vulnerability Spec rstack overflow: Not affected<br />
+Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
+Vulnerability Spectre v2:           Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
+Vulnerability Srbds:                Not affected<br />
+Vulnerability Tsx async abort:      Not affected</p>
+<p>Versions of relevant libraries:<br />
+[pip3] flake8==7.0.0<br />
+[pip3] mypy-extensions==1.0.0<br />
+[pip3] numpy==1.26.4<br />
+[pip3] pytorch-triton==3.0.0+45fff310c8<br />
+[pip3] torch==2.4.0.dev20240425+cu121<br />
+[pip3] torch-nl==0.3<br />
+[conda] numpy                     1.26.4                   pypi_0    pypi<br />
+[conda] pytorch-triton            3.0.0+45fff310c8          pypi_0    pypi<br />
+[conda] torch                     2.4.0.dev20240425+cu121          pypi_0    pypi<br />
+[conda] torch-nl                  0.3                      pypi_0    pypi<br />
+```</p>
+<p>cc @zou3519 @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng</p>]]></description>
+      <pubDate>Fri, 26 Apr 2024 14:12:45 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125078</guid>
+    </item>
+    <item>
+      <title>[Inductor] Generate triton block pointers for discontiguous strided tensors</title>
+      <link>https://github.com/pytorch/pytorch/issues/125077</link>
+      <description><![CDATA[<h3>🚀 The feature, motivation and pitch</h3>
+<p>I ran the following program to test what triton code is generated from a discontiguous tensor:<br />
+```<br />
+import sys<br />
+import os<br />
+import logging<br />
+import torch<br />
+from torch._inductor import config as inductor_config</p>
+<h1>Enable debug logging</h1>
+<p>os.environ["TORCH_COMPILE_DEBUG"] = "1"<br />
+torch._logging.set_logs(inductor=logging.DEBUG)</p>
+<h1>Log to stdout</h1>
+<p>handler = logging.StreamHandler(sys.stdout)<br />
+for logger in torch._dynamo.logging.get_loggers():<br />
+   logger.addHandler(handler)</p>
+<p>inductor_config.triton.use_block_ptr = True</p>
+<p>def foo(x, y):<br />
+    return x + y</p>
+<p>device = torch.device('cuda')<br />
+orig_size = (32, 32)<br />
+view_size = (32, 8)<br />
+orig = torch.randn(orig_size).to(device)<br />
+view = torch.as_strided(orig, view_size, orig.stride())</p>
+<p>compiled_foo = torch.compile(foo, backend="inductor")<br />
+compiled_foo(view, view)<br />
+<code>The generated kernel was:</code><br />
+@triton.jit<br />
+def triton_(in_ptr0, out_ptr0, xnumel, XBLOCK : tl.constexpr):<br />
+    xnumel = 256<br />
+    xoffset = tl.program_id(0) * XBLOCK<br />
+    xindex = xoffset + tl.arange(0, XBLOCK)[:]<br />
+    xmask = xindex &lt; xnumel<br />
+    x0 = xindex % 8<br />
+    x1 = (xindex // 8)<br />
+    tmp0 = tl.load(in_ptr0 + (x0 + (32*x1)), xmask)<br />
+    tmp1 = tmp0 + tmp0<br />
+    tl.store(tl.make_block_ptr(out_ptr0, shape=[256], strides=[1], block_shape=[XBLOCK], order=[0], offsets=[xoffset]), tl.broadcast_to(tmp1, [XBLOCK]).to(tl.float32), boundary_check=[0])<br />
+<code>``
+It seems like Inductor generates a block pointer for the output, but reverts back to standard pointers for the input. Whereas if I don't call</code>torch.as_strided` on the input, I see block pointers for both.</p>
+<p>I am wondering if it's possible for inductor to generate something like this instead:<br />
+<code>@triton.jit
+def triton_(in_ptr0, out_ptr0, xnumel, XBLOCK : tl.constexpr):
+    xoffset = tl.program_id(0) * XBLOCK
+    tmp0 = tl.load(tl.make_block_ptr(in_ptr0, shape=[32,8], strides=[32,1], block_shape=[32,XBLOCK], order=[0], offsets=[0,xoffset])).to(tl.float32), boundary_check=[0])
+    tmp1 = tmp0 + tmp0
+    tl.store(tl.make_block_ptr(out_ptr0, shape=[32,8], strides=[32,1], block_shape=[32,XBLOCK], order=[0], offsets=[0,xoffset]), tl.broadcast_to(tmp1, [32,XBLOCK]).to(tl.float32), boundary_check=[0])</code></p>
+<p>This would use the <code>strides</code> argument to <code>tl.make_block_ptr</code> to express that the input tensor is discontiguous. On GPUs, this could avoid the address calculation using division and modulo, which might yield some performance benefit. There is probably a much bigger win for accelerators like MTIA with simpler memory systems, where this code maps very naturally to DMA engines. Without this, simpler accelerators might have a tough time handling padding between the rows of a tensor.</p>
+<p>Is this feature feasible? The main change I see is that here <code>XBLOCK</code> would refer the columns of the input matrix, as opposed to the linear index. It would also be possible to block on rows.</p>
+<h3>Alternatives</h3>
+<p>In principle, it's possible for the triton compiler to recognize this pattern under the hood. But it seems like that would require reading a whole number of rows, i.e. <code>XBLOCK</code> must be a multiple of the row length. Also, the analysis could get complex when division and modulo are involved. I'm wondering if makes more sense to handle this in Inductor.</p>
+<p>Instead of block pointers, it's also possible to simplify the address calculation for standard pointers, such as<br />
+<code>x0 = tl.broadcast_to(tl.expand_dims(tl.arange(xoffset, xoffset + XBLOCK), axis=0), [32,XBLOCK])
+x1 = tl.broadcast_to(tl.expand_dims(tl.arange(32), axis=1), [32,XBLOCK])
+tl.load(in_ptr0 + x0 + x1 * 32)</code></p>
+<p>which could more easily be converted to a block representation inside the triton compiler.</p>
+<h3>Additional context</h3>
+<p><em>No response</em></p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>
+<p>cc @shunting314 based on offline conversations. We were hoping for input from @jansel .</p>]]></description>
+      <pubDate>Fri, 26 Apr 2024 14:12:30 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125077</guid>
+    </item>
+    <item>
+      <title>Inductor can not fuse cat with a pointwise</title>
+      <link>https://github.com/pytorch/pytorch/issues/125075</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>Check this example</p>
+<p>```<br />
+    def test_concat_and_downcast(self):<br />
+        M = 30522<br />
+        N = 768<br />
+        PAD = 6</p>
+<pre><code>    @torch.compile
+    def f(x):
+        z = torch.cat([x, torch.zeros([PAD, N])], dim=0)
+        return z, x.to(torch.float16)
+
+    x = torch.randn(M, N)
+    f(x)
+</code></pre>
+<p>```<br />
+The cat and the downcast can not be fused right now. But in principal we should be able to fuse them and save one whole load of tensor 'x'.</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @jansel @Chillee @eellison as a FYI.</p>
+<h3>Error logs</h3>
+<p><em>No response</em></p>
+<h3>Minified repro</h3>
+<p><em>No response</em></p>
+<h3>Versions</h3>
+<p>.</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
+      <pubDate>Fri, 26 Apr 2024 13:41:16 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125075</guid>
+    </item>
+    <item>
+      <title>Support exporting the compute graph JiT compiled by inductor?</title>
+      <link>https://github.com/pytorch/pytorch/issues/125007</link>
+      <description><![CDATA[<h3>🚀 The feature, motivation and pitch</h3>
+<p>Great work on inductor! In some graphs that I tested, there is a 10x difference between before and after the compile.</p>
+<p>However in order to deploy the service, we had to compile the graph on every instance of deployment, although the compute environment (cpu, ram, gpu specs) are exactly the same. This significantly slowed down the boot up speed and is a waste of expensive GPU time and make on-demand task scheduling more challenging. </p>
+<p>I would love to compile it once then reuse the compiled graph everywhere.</p>
+<p>Any suggestions on how to pickle the compiled graph so that it can be loaded on other instances? All deployment is having exactly the same environment, running inside Docker. Presumably the memory address are the same as well. Any pointer would be appreciated! Happy to hack around. </p>
+<p>Thx</p>
+<h3>Alternatives</h3>
+<p><em>No response</em></p>
+<h3>Additional context</h3>
+<p><em>No response</em></p>
+<p>cc @avikchaudhuri @gmagogsfm @zhxchen17 @tugsbayasgalan @angelayi @suo @ydwu4</p>]]></description>
+      <pubDate>Fri, 26 Apr 2024 00:10:42 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125007</guid>
+    </item>
+    <item>
+      <title>Remove Inductor IRs for legacy functional collectives</title>
+      <link>https://github.com/pytorch/pytorch/pull/124992</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #125034<br />
-* <strong>-&gt;</strong> #124874<br />
-* #124864</p>
-<p>This completely subsumes https://github.com/pytorch/pytorch/pull/120816</p>
-<p>This makes use of the unbacked binding machinery to teach Inductor how to generate deferred runtime asserts directly. There is some back story about why I did it this way, let me explain.</p>
-<p>Previously, our strategy for generating runtime asserts was that Dynamo would insert them into the FX graph after finishing tracing, and we would attempt to code generate them based on the FX graph. This is a good strategy for export, where we immediately export the graph. However, this strategy was afflicted by problems in eager, where we reuse the same ShapeEnv as before. In particular, on subsequent graph passes, we would immediately turn all of these assertions into noops, because when we evaluated their expressions, we would see that because we had a deferred runtime assert in the ShapeEnv, we know "oh, of course this expression is True" already. Oops!</p>
-<p>So, with this PR, we take the attitude that as long as the ShapeEnv sticks around, the ShapeEnv's list of deferred runtime asserts is the source of truth, and we don't put anything in the graph. So we just need to decide when to actually generate asserts, and the place I picked was Inductor lowering, since we already have an AssertScalar buffer concept, and so I just need to insert them at this point. AssertScalar also uses raw sympy.Expr rather than SymInt/Bool, so it is easier to prevent unrestricted simplification at this point.</p>
-<p>There are a few things jumbled together in this PR. I can split them if you want, but some of the changes are before I changed my strategy, but they're useful changes anyway.</p>
-<p><strong>torch/_dynamo/output_graph.py</strong> and <strong>torch/_inductor/lowering.py</strong> - Here, we stop putting deferred runtime asserts in the graph. I also have to make sure we don't DCE unused symbol arguments; we're going to get some goofy graph arguments this way, will be good to restore that optimization eventually. We also just disable codegen for <code>_assert_scalar</code>  entirely; we assume that ShapeEnv will be good enough to capture all of these. </p>
-<p><strong>torch/_inductor/codegen/wrapper.py</strong> and <strong>torch/_inductor/ir.py</strong> - Add a way to codegen sizevars without forcing simplification</p>
-<p><strong>torch/_inductor/graph.py</strong> - The main logic. Our strategy is to interpose in the same place we are testing that unbacked SymInts are properly showing up in lowered code. The logic is directly analogous to the logic in the existing insert deferred runtime asserts FX pass, but it's simpler because sympy expressions can be directly stored on inductor IR nodes.</p>
-<p><strong>torch/fx/experimental/symbolic_shapes.py</strong> - For extra safety, we have a way of freezing runtime asserts, so that if you try to add more we error. This prevents us from adding runtime asserts after we've done lowering. There's a funny interaction with backwards which there's a comment for in graph.py</p>
-<p><strong>torch/fx/passes/runtime_assert.py</strong> - This is not really needed in this PR, but I rewrote the runtime assert logic to use unbacked_bindings rather than inferring it by looking for unbacked SymInts. Now, keypaths are translated into FX node acessors. Unfortunately, I couldn't delete the old inference code, because you still need it to find backed SymInts from arguments (as this pass may be used on graphs which don't explicitly bind all their shape variables as argments). There are some new tests exercising this.</p>
-<p>TODO: I think we need to generate asserts for replacements too. This is a preexisting problem that the old FX pass had too.</p>
-<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 24 Apr 2024 11:47:07 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124874</guid>
+* <strong>-&gt;</strong> #124992</p>
+<p>This PR completely removes the Inductor IR for legacy functional collectives:<br />
+- Removed the <code>CollectiveKernel</code> hiearchy and <code>Wait</code>, as well as the corresponding lowerings. These IRs are target (i.e. Python) specific and don't model node dependencies propoerly (e.g. they rely on <code>never_reuse_buffers</code> for correct behavior). They've been superceded by <code>ir._CollectiveKernel</code>.<br />
+- Removed <code>InPlaceHint</code> and the scheduler logic for handling it. <code>InPlaceHint</code> is a codegen-time buffer reuse mechanism controlled by the IR's codegen. It's a bit hacky and overlaps with the default buffer reuse mechanism. Removing it since it is only used by legacy functional collectives.<br />
+- Removed <code>OutputBuffer</code> and <code>MultiOutputNoSizeAssert</code> which are designed for and only used by legacy functional collectives.</p>
+<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225 @chauhang @d4l3k @voznesenskym @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
+      <pubDate>Thu, 25 Apr 2024 17:06:59 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124992</guid>
+    </item>
+    <item>
+      <title>AOTInductor error: Unsupported reduction type from torch.float32 to torch.int64 </title>
+      <link>https://github.com/pytorch/pytorch/issues/124821</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>when trying the following code, it will throw an error. I think it's related to int64, when I change the input type int float32, there is no such a problem.<br />
+```<br />
+import numpy as np<br />
+import torch</p>
+<h1>Model definition</h1>
+<p>class M(torch.nn.Module):<br />
+    def <strong>init</strong>(self):<br />
+        super().<strong>init</strong>()<br />
+        self.v2_0 = torch.nn.Parameter(torch.empty([1, 22, 51], dtype=torch.int64), requires_grad=False)</p>
+<pre><code>def forward(self, _args):
+    v2_0 = self.v2_0
+    getitem = _args
+    max_1 = getitem.max(0)
+    getattr_1 = max_1.values
+    max_2 = torch.max(getitem, v2_0)
+    return (getattr_1, max_2)
+</code></pre>
+<p>m = M()</p>
+<p>inp =  torch.from_numpy(np.zeros((22, 51),dtype=np.int64))<br />
+m(inp) # this line is OK<br />
+opt = torch.compile(m, fullgraph=True, backend='inductor', mode=None)<br />
+opt(inp) # this line will crash<br />
+```</p>
+<h3>Error logs</h3>
+<p>C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0] Error in codegen for ComputedBuffer(name='buf0', layout=FixedLayout('cpu', torch.int64, size=[51], stride=[1]), data=Reduction(<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   'cpu',<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   torch.int64,<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   def inner_fn(index, rindex):<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]       i0 = index<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]       r0 = rindex<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]       tmp0 = ops.load(arg1_1, i0 + 51 * r0)<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]       return tmp0<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   ,<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   ranges=[51],<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   reduction_ranges=[22],<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   reduction_type=max,<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   origin_node=getitem,<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0]   origins={max_1}<br />
+C0424 14:47:08.387000 139979197380416 torch/_inductor/scheduler.py:789] [0/0] ))<br />
+W0424 14:47:08.389000 139979197380416 torch/_dynamo/repro/after_dynamo.py:108] [0/0] Compiled Fx GraphModule failed. Creating script to minify the error.<br />
+W0424 14:47:08.390000 139979197380416 torch/_dynamo/debug_utils.py:276] [0/0] Writing minified repro to:<br />
+W0424 14:47:08.390000 139979197380416 torch/_dynamo/debug_utils.py:276] [0/0] /home/zhangzihan/nnsmith/torch_compile_debug/run_2024_04_24_14_47_08_390122-pid_1824613/minifier/minifier_launcher.py<br />
+W0424 14:47:08.390000 139979197380416 torch/_dynamo/repro/after_dynamo.py:108] [0/0] Compiled Fx GraphModule failed. Creating script to minify the error.<br />
+W0424 14:47:08.391000 139979197380416 torch/_dynamo/debug_utils.py:276] [0/0] Writing minified repro to:<br />
+W0424 14:47:08.391000 139979197380416 torch/_dynamo/debug_utils.py:276] [0/0] /home/zhangzihan/nnsmith/torch_compile_debug/run_2024_04_24_14_47_08_390122-pid_1824613/minifier/minifier_launcher.py<br />
+Traceback (most recent call last):<br />
+  File "/home/zhangzihan/nnsmith/./bug_1.py", line 26, in <module><br />
+    opt(inp) # this line will crash<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl<br />
+    return self._call_impl(<em>args, </em><em>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl<br />
+    return forward_call(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 403, in _fn<br />
+    return fn(*args, </strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl<br />
+    return self._call_impl(<em>args, </em><em>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl<br />
+    return forward_call(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 977, in catch_errors<br />
+    return callback(frame, cache_entry, hooks, frame_state, skip=1)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 411, in _convert_frame_assert<br />
+    return _compile(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_utils_internal.py", line 70, in wrapper_function<br />
+    return function(*args, </strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(<em>args, </em><em>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 700, in _compile<br />
+    guarded_code = compile_inner(code, one_graph, hooks, transform)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 568, in compile_inner<br />
+    out_code = transform_code_object(code, transform)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/bytecode_transformation.py", line 1116, in transform_code_object<br />
+    transformations(instructions, code_options)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 173, in _fn<br />
+    return fn(*args, </strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 515, in transform<br />
+    tracer.run()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2237, in run<br />
+    super().run()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 875, in run<br />
+    while self.step():<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 790, in step<br />
+    self.dispatch_table<a href="self, inst">inst.opcode</a><br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2394, in RETURN_VALUE<br />
+    self._return(inst)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 2379, in _return<br />
+    self.output.compile_subgraph(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1082, in compile_subgraph<br />
+    self.compile_and_call_fx_graph(tx, pass2.graph_output_vars(), root)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(<em>args, </em><em>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1274, in compile_and_call_fx_graph<br />
+    compiled_fn = self.call_user_compiler(gm)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/<em>dynamo/output_graph.py", line 1365, in call_user_compiler<br />
+    raise BackendCompilerFailed(self.compiler_fn, e).with_traceback(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/output_graph.py", line 1346, in call_user_compiler<br />
+    compiled_fn = compiler_fn(gm, self.example_inputs())<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/repro/after_dynamo.py", line 105, in debug_wrapper<br />
+    compiled_gm = compiler_fn(copy.deepcopy(gm), example_inputs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/repro/after_dynamo.py", line 105, in debug_wrapper<br />
+    compiled_gm = compiler_fn(copy.deepcopy(gm), example_inputs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/<strong>init</strong>.py", line 1742, in <strong>call</strong><br />
+    return compile_fx(model</em>, inputs_, config_patches=self.config)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(*args, </strong>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 1416, in compile_fx<br />
+    return aot_autograd(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/backends/common.py", line 65, in compiler_fn<br />
+    cg = aot_module_simplified(gm, example_inputs, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_functorch/aot_autograd.py", line 958, in aot_module_simplified<br />
+    compiled_fn = create_aot_dispatcher_function(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(*args, </strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_functorch/aot_autograd.py", line 685, in create_aot_dispatcher_function<br />
+    compiled_fn = compiler_fn(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 470, in aot_wrapper_dedupe<br />
+    return compiler_fn(flat_fn, leaf_flat_args, aot_config, fw_metadata=fw_metadata)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 672, in aot_wrapper_synthetic_base<br />
+    return compiler_fn(flat_fn, flat_args, aot_config, fw_metadata=fw_metadata)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/jit_compile_runtime_wrappers.py", line 149, in aot_dispatch_base<br />
+    compiled_fw = compiler(fw_module, updated_flat_args)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(<em>args, </em><em>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 1320, in fw_compiler_base<br />
+    return inner_compile(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/repro/after_aot.py", line 83, in debug_wrapper<br />
+    inner_compiled_fn = compiler_fn(gm, example_inputs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/debug.py", line 304, in inner<br />
+    return fn(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(*args, </strong>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(<em>args, </em><em>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 477, in compile_fx_inner<br />
+    compiled_graph = fx_codegen_and_compile(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/contextlib.py", line 79, in inner<br />
+    return func(*args, </strong>kwds)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 752, in fx_codegen_and_compile<br />
+    compiled_fn = graph.compile_to_fn()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/graph.py", line 1541, in compile_to_fn<br />
+    return self.compile_to_module().call<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(<em>args, </em><em>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/graph.py", line 1484, in compile_to_module<br />
+    self.codegen_with_cpp_wrapper() if self.cpp_wrapper else self.codegen()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/graph.py", line 1440, in codegen<br />
+    self.scheduler.codegen()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 268, in time_wrapper<br />
+    r = func(</em>args, <strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/scheduler.py", line 2485, in codegen<br />
+    self.get_backend(device).codegen_node(node)  # type: ignore[possibly-undefined]<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/cpp.py", line 3865, in codegen_node<br />
+    cpp_kernel_proxy.codegen_nodes(nodes)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/cpp.py", line 3517, in codegen_nodes<br />
+    vec_kernel = codegen_kernel(<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/cpp.py", line 3411, in codegen_kernel<br />
+    run(kernel)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/cpp.py", line 3423, in run<br />
+    node.run(vars, reduction_vars)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/scheduler.py", line 765, in run<br />
+    self.codegen(index_vars)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/scheduler.py", line 787, in codegen<br />
+    self._body(<em>index_vars)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/ir.py", line 7760, in <strong>call</strong><br />
+    result = self.root_block()<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/ir.py", line 7917, in <strong>call</strong><br />
+    return InterpreterShim(graph, submodules).run(V.get_ops_handler())<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/ir.py", line 7662, in run<br />
+    return super().run(</em>args, </strong>kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/fx/interpreter.py", line 145, in run<br />
+    self.env[node] = self.run_node(node)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/ir.py", line 7658, in run_node<br />
+    return super().run_node(n)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/fx/interpreter.py", line 202, in run_node<br />
+    return getattr(self, n.op)(n.target, args, kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/fx/interpreter.py", line 296, in call_method<br />
+    return getattr(self_obj, target)(<em>args_tail, </em>*kwargs)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/sizevars.py", line 641, in store_reduction<br />
+    return self._inner.store_reduction(name, self._simplify(index), value)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/common.py", line 1570, in store_reduction<br />
+    return self.store_reduction(name, index, value)<br />
+  File "/home/zhangzihan/micromamba/envs/nnsmith-nightly/lib/python3.10/site-packages/torch/_inductor/codegen/cpp.py", line 2585, in store_reduction<br />
+    raise AssertionError(<br />
+torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:<br />
+AssertionError: Unsupported reduction type from torch.float32 to torch.int64</p>
+<p>Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information</p>
+<p>Minifier script written to /home/zhangzihan/nnsmith/torch_compile_debug/run_2024_04_24_14_47_08_390122-pid_1824613/minifier/minifier_launcher.py. Run this script to find the smallest traced graph which reproduces this error.</p>
+<p>You can suppress this exception and fall back to eager by setting:<br />
+    import torch._dynamo<br />
+    torch._dynamo.config.suppress_errors = True</p>
+<h3>Minified repro</h3>
+<p>from math import inf<br />
+import torch<br />
+from torch import tensor, device<br />
+import torch.fx as fx<br />
+import torch._dynamo<br />
+from torch._dynamo.testing import rand_strided<br />
+from torch._dynamo.debug_utils import run_fwd_maybe_bwd</p>
+<p>import torch._dynamo.config<br />
+import torch._inductor.config<br />
+import torch._functorch.config<br />
+import torch.fx.experimental._config</p>
+<p>from torch.nn import *<br />
+class Repro(torch.nn.Module):<br />
+    def <strong>init</strong>(self):<br />
+        super().<strong>init</strong>()<br />
+        self.L__self___v2_0 = torch.nn.Parameter(torch.randn([1, 22, 51], dtype=torch.int64))</p>
+<pre><code>def forward(self, L_args_ : torch.Tensor):
+    l_args_ = L_args_
+    v2_0 = self.L__self___v2_0
+    max_1 = l_args_.max(0)
+    getattr_1 = max_1[0];  max_1 = None
+    max_2 = torch.max(l_args_, v2_0);  l_args_ = v2_0 = None
+    return (getattr_1, max_2)
+</code></pre>
+<p>mod = Repro()</p>
+<p>def load_args(reader):<br />
+    buf0 = reader.storage('fdc2a09f82bac0b6462614f84f565597f805bdca', 8976, dtype_hint=torch.int64)<br />
+    reader.tensor(buf0, (22, 51), dtype=torch.int64, is_leaf=True)  # L_args_<br />
+load_args._version = 0</p>
+<p>if <strong>name</strong> == '<strong>main</strong>':<br />
+    from torch._dynamo.repro.after_dynamo import run_repro<br />
+    run_repro(mod, load_args, accuracy=False, command='minify',<br />
+        save_dir='/home/zhangzihan/nnsmith/torch_compile_debug/run_2024_04_24_14_47_08_390122-pid_1824613/minifier/checkpoints', autocast=False, backend=None)</p>
+<h3>Versions</h3>
+<p>Collecting environment information...<br />
+PyTorch version: 2.4.0.dev20240422+cu118<br />
+Is debug build: False<br />
+CUDA used to build PyTorch: 11.8<br />
+ROCM used to build PyTorch: N/A</p>
+<p>OS: Ubuntu 22.04.3 LTS (x86_64)<br />
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0<br />
+Clang version: 14.0.0-1ubuntu1.1<br />
+CMake version: version 3.29.2<br />
+Libc version: glibc-2.35</p>
+<p>Python version: 3.10.14 | packaged by conda-forge | (main, Mar 20 2024, 12:45:18) [GCC 12.3.0] (64-bit runtime)<br />
+Python platform: Linux-6.5.0-15-generic-x86_64-with-glibc2.35<br />
+Is CUDA available: True<br />
+CUDA runtime version: 11.5.119<br />
+CUDA_MODULE_LOADING set to: LAZY<br />
+GPU models and configuration: <br />
+GPU 0: NVIDIA GeForce RTX 4090<br />
+GPU 1: NVIDIA GeForce RTX 4090</p>
+<p>Nvidia driver version: 525.147.05<br />
+cuDNN version: Could not collect<br />
+HIP runtime version: N/A<br />
+MIOpen runtime version: N/A<br />
+Is XNNPACK available: True</p>
+<p>CPU:<br />
+Architecture:                       x86_64<br />
+CPU op-mode(s):                     32-bit, 64-bit<br />
+Address sizes:                      46 bits physical, 48 bits virtual<br />
+Byte Order:                         Little Endian<br />
+CPU(s):                             32<br />
+On-line CPU(s) list:                0-31<br />
+Vendor ID:                          GenuineIntel<br />
+Model name:                         13th Gen Intel(R) Core(TM) i9-13900K<br />
+CPU family:                         6<br />
+Model:                              183<br />
+Thread(s) per core:                 2<br />
+Core(s) per socket:                 24<br />
+Socket(s):                          1<br />
+Stepping:                           1<br />
+CPU max MHz:                        5800.0000<br />
+CPU min MHz:                        800.0000<br />
+BogoMIPS:                           5990.40<br />
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq tme rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities<br />
+Virtualization:                     VT-x<br />
+L1d cache:                          896 KiB (24 instances)<br />
+L1i cache:                          1.3 MiB (24 instances)<br />
+L2 cache:                           32 MiB (12 instances)<br />
+L3 cache:                           36 MiB (1 instance)<br />
+NUMA node(s):                       1<br />
+NUMA node0 CPU(s):                  0-31<br />
+Vulnerability Gather data sampling: Not affected<br />
+Vulnerability Itlb multihit:        Not affected<br />
+Vulnerability L1tf:                 Not affected<br />
+Vulnerability Mds:                  Not affected<br />
+Vulnerability Meltdown:             Not affected<br />
+Vulnerability Mmio stale data:      Not affected<br />
+Vulnerability Retbleed:             Not affected<br />
+Vulnerability Spec rstack overflow: Not affected<br />
+Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl<br />
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
+Vulnerability Spectre v2:           Mitigation; Enhanced / Automatic IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence<br />
+Vulnerability Srbds:                Not affected<br />
+Vulnerability Tsx async abort:      Not affected</p>
+<p>Versions of relevant libraries:<br />
+[pip3] numpy==1.26.4<br />
+[pip3] pytorch-triton==3.0.0+45fff310c8<br />
+[pip3] torch==2.4.0.dev20240422+cu118<br />
+[pip3] torchaudio==2.2.0.dev20240422+cu118<br />
+[pip3] torchvision==0.19.0.dev20240422+cu118<br />
+[pip3] triton==2.2.0<br />
+[conda] Could not collect</p>
+<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @chauhang @desertfire @chenyang78</p>]]></description>
+      <pubDate>Tue, 23 Apr 2024 22:51:13 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124821</guid>
+    </item>
+    <item>
+      <title>Compile doesn't guard on user NN module attribute</title>
+      <link>https://github.com/pytorch/pytorch/issues/124717</link>
+      <description><![CDATA[<h3>🐛 Describe the bug</h3>
+<p>TorchTune relies on mutating user NN module's attribute to decide whether to e.g. apply LoRA technique. The usage pattern looks like this:</p>
+<p>```python<br />
+import contextlib<br />
+import torch</p>
+<p>class TestModuleWithAdapter(torch.nn.Module):<br />
+    def <strong>init</strong>(self):<br />
+        super().<strong>init</strong>()<br />
+        self.disabled = False</p>
+<pre><code>def forward(self, x):
+    out = x * x
+    if self.disabled:
+        return out
+    out = out + 1
+    return out
+</code></pre>
+<p>@contextlib.contextmanager<br />
+def disable_adapter(mod):<br />
+    mod.disabled = True<br />
+    try:<br />
+        yield<br />
+    finally:<br />
+        mod.disabled = False</p>
+<p>mod = TestModuleWithAdapter()<br />
+mod = torch.compile(mod)<br />
+x = torch.randn(4, 4)<br />
+out_enable = mod(x)<br />
+with disable_adapter(mod):<br />
+    out_disable = mod(x)<br />
+assert torch.allclose(out_enable, x * x + 1)<br />
+assert torch.allclose(out_disable, x * x)   # &lt;-- fails<br />
+```</p>
+<p>User expects that by wrapping second <code>mod(x)</code> call with <code>with disable_adapter(mod):</code>, the <code>if self.disabled:</code> branch in TestModuleWithAdapter.forward takes effect. But currently we don't detect that an attribute of the compiled module is mutated and thus recompile is not triggered. This causes mismatch in behavior between eager and compile mode.</p>
+<p>(Corresponding issue on TorchTune repo: https://github.com/pytorch/torchtune/issues/721)</p>
+<h3>Versions</h3>
+<p>PyTorch nightly</p>
+<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78</p>]]></description>
+      <pubDate>Tue, 23 Apr 2024 01:11:45 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124717</guid>
     </item>
     <item>
       <title>inductor: Add Conv3d support</title>
@@ -64,70 +1452,13 @@ Compile w/ conv3d | 21.212 | 17.707 | 14.974 | 16.130 | 8.537</p>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124361</guid>
     </item>
     <item>
-      <title>[inductor] switch assume_aligned_inputs to False</title>
-      <link>https://github.com/pytorch/pytorch/pull/124336</link>
+      <title>[WIP][inductor] refine loop split logic</title>
+      <link>https://github.com/pytorch/pytorch/pull/124060</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124336</p>
-<p>In #123319, we guard some behavior behind the <code>assume_aligned_inputs</code> config option. If we set this to <code>False</code>, then the behavior added in #123319 becomes the default behavior. See the referenced PR for more details about the behavior affected.</p>
-<p>Side effects:<br />
-* It's possible that this will hurt performance in some scenarios. For example, if an unaligned input is used in a matmul, it might be better to perform the clone to align it first.<br />
-* This will occasionally cause recompiles. Specifically: the check we perform (<code>(storage_offset * get_dtype_size(dtype)) % ALIGNMENT == 0</code>) can be guarded on if the storage_offset becomes dynamic. storage_offset becomes dynamic during automatic_dynamic_shapes after a shape or stride changes. Previously, this was increasing graph breaks in cpu inductor torchbench tests (but is fixed by more carefully guarding checks on alignment, so that we don't run them and generate guards unless actually needed).</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 17 Apr 2024 15:14:43 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124336</guid>
-    </item>
-    <item>
-      <title>[Inductor][Quant] Change the QConv output scale name</title>
-      <link>https://github.com/pytorch/pytorch/pull/124246</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124246<br />
-* #124041</p>
-<p><strong>Summary</strong><br />
-Change the name of QConv output scale from <code>inv_output_scale</code> to <code>output_scale</code> after we move the optimization of quant/dequant from decomposition to lowering phase.</p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 16 Apr 2024 18:13:02 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124246</guid>
-    </item>
-    <item>
-      <title>[1/N] Non-Tensor: Scalar Support: Enable aot compile to support aten operations with scalar input like alpha</title>
-      <link>https://github.com/pytorch/pytorch/pull/124177</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124926<br />
-* #124070<br />
-* <strong>-&gt;</strong> #124177<br />
-* #116368<br />
-* #124836</p>
-<p>Some operations have a scalar input parameter, like <code>torch.add(a, b, alpha=2.0)</code>.  Currently, the aot compile does not support such a case because it requires the signature of the captured graph to align with the operation's signature. This means that some inputs in the captured graph may be scalar(float, int, bool, etc.). It breaks the assumption of <code>compile_fx_aot</code> as it assumes all the example inputs are tensor - https://github.com/pytorch/pytorch/blob/0f6ce45bcbd7026c00da43db0317ede10830378b/torch/_inductor/compile_fx.py#L1048</p>
-<p>This PR intends to support such cases by allowing not-aligned signature and filtering out the non-Tensor parameters. </p>
-<p>Captured graph for <code>torch.add(a, b, alpha=2.0)</code></p>
-<p>```<br />
-opcode         name      target           args              kwargs</p>
-<hr />
-<p>placeholder    arg0_1    arg0_1           ()                {}<br />
-placeholder    arg1_1    arg1_1           ()                {}<br />
-call_function  add       aten.add.Tensor  (arg0_1, arg1_1)  {'alpha': 2.0}<br />
-output         output_1  output           ((add,),)         {}<br />
-```</p>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Tue, 16 Apr 2024 07:05:26 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124177</guid>
-    </item>
-    <item>
-      <title>[2/N] Non-Tensor: Scalar Support: Add scalar to the cache for eager-through-torch.compile</title>
-      <link>https://github.com/pytorch/pytorch/pull/124070</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124926<br />
-* <strong>-&gt;</strong> #124070<br />
-* #124177<br />
-* #116368<br />
-* #124836</p>
-<p>Add scalar information to the kernel configuration.</p>
-<h4>Additional Context</h4>
-<p>Currently, the input parameters are orchestrated by input order in the kernel configuration and loaded/mapped to the kernel at runtime. For example, the cache order of the input parameters of <code>torch.add(a, b, alpha=2.0)</code> is <code>a' first, followed by</code>b<code>and then</code>alpha`. The same order is for cache loading.</p>
-<p>However, the orchestration mechanism does not support kwargs because the order of kwargs is useless. For example, the <code>out</code> of <code>aten::gelu.out(Tensor self, *, str approximate='none', Tensor(a!) out) -&gt; Tensor(a!)</code> may be before <code>approximate</code>. We will support it with subsequent PRs. </p>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 15 Apr 2024 07:04:35 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124070</guid>
+* <strong>-&gt;</strong> #124060</p>
+<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
+      <pubDate>Mon, 15 Apr 2024 05:52:29 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124060</guid>
     </item>
     <item>
       <title>[inductor] add cpp builder code.</title>
@@ -139,7 +1470,9 @@ Changes:<br />
 1. Add cpp builder code, the new cpp_builder support Windows OS.<br />
 2. Add CPU ISA checker which is cross OS and exported from backend cpuinfo.<br />
 3. Switch compiler ISA checker to new cpp builder.<br />
-4. CppCodeCache use the new ISA checker.</p>
+4. CppCodeCache use the new ISA checker.<br />
+5. Add temprary new and old cpp_builder command validator to help on transfer to new code.<br />
+<img width="848" alt="image" src="https://github.com/pytorch/pytorch/assets/8433590/e928462e-0b36-4dcc-a52f-363da8ba3234"></p>
 <p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Sun, 14 Apr 2024 23:55:25 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124045</guid>
@@ -148,112 +1481,20 @@ Changes:<br />
       <title>[inductor][cpp] GEMM template</title>
       <link>https://github.com/pytorch/pytorch/pull/124021</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124021</p>
+* <strong>-&gt;</strong> #124021<br />
+* #125159<br />
+* #125152</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Sun, 14 Apr 2024 06:21:12 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124021</guid>
     </item>
     <item>
-      <title>Add a cache mechanism to accelerate torch.compile-for-eager</title>
-      <link>https://github.com/pytorch/pytorch/pull/116368</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124926<br />
-* #124070<br />
-* #124177<br />
-* <strong>-&gt;</strong> #116368<br />
-* #124836</p>
-<p>This PR is a follow-up of RFC https://github.com/pytorch/pytorch/issues/115545.</p>
-<p>In this PR, we are trying to enable a cache mechanism to accelerate <strong>eager-through-torch.compile</strong>. When <strong>eager-through-torch.compile</strong> is enabled, we will store a persistent config to cache the kernel information for the aten operation. </p>
-<p>The persistent config consists of two parts - meta_info and kernel_path.</p>
-<ul>
-<li>meta_info: The input tensors' shape, stride, device type, data type, and symbolic flag.</li>
-<li>kernel_path: The path of the kernel produced by Inductor.</li>
-</ul>
-<p>When an aten operation is registered, the <code>kernel_holder</code> will load the persistent config and parse it to build the cache map;  the meta_info is key, and the kernel library is the value.</p>
-<p>Currently, this PR only supports static shape to guard the kernel.</p>
-<p>Take a <code>mul</code> as an example.<br />
-```python<br />
-class MulKernel:<br />
-  def <strong>init</strong>(self) -&gt; None:<br />
-    pass</p>
-<p>def <strong>call</strong>(self, <em>args: Any, </em><em>kwargs: Any) -&gt; Any:<br />
-    with torch._C._SetExcludeDispatchKeyGuard(torch._C.DispatchKey.Python, False):<br />
-      opt_fn = torch.compile(torch.ops.aten.mul, dynamic=False, options={<br />
-          "aot_inductor.eager_mode": True,<br />
-          "aot_inductor.eager_op_name": "mul_Tensor"<br />
-        }<br />
-      )<br />
-      return opt_fn(</em>args, **kwargs)</p>
-<p>torch_compile_op_lib_impl = torch.library.Library("aten", "IMPL")</p>
-<p>_, overload_names = torch._C._jit_get_operation("aten::mul")<br />
-schema = torch._C._get_schema("aten::mul", overload_name)<br />
-reg_name = schema.name<br />
-if schema.overload_name:<br />
-  reg_name = f"{reg_name}.{schema.overload_name}"<br />
-  torch_compile_op_lib_impl.impl(<br />
-    reg_name,<br />
-    MulKernel(),<br />
-    "CUDA",<br />
-    compile_mode=True)</p>
-<p>a = torch.randn(1024, 1024, device=device)<br />
-b = torch.randn(1024, 1024, device=device)<br />
-warm_up_iter = 1000<br />
-iter = 10000<br />
-fn = torch.mul</p>
-<h1>Warm up</h1>
-<p>for _ in range(warm_up_iter):<br />
-    fn(a, b)</p>
-<h1>Collect performance</h1>
-<p>beg = time.time()<br />
-for _ in range(iter):<br />
-    fn(a, b)<br />
-end = time.time()<br />
-print(f"E2E run: {end - beg}")<br />
-```<br />
-It will produce the config as follows.</p>
-<p><code>json
-[
-    {
-        "meta_info": [
-            {
-                "is_symbolic": false,
-                "device_type": "cuda",
-                "dtype": "torch.float32",
-                "sizes": [1024, 1024],
-                "strides": [1024, 1]
-            },
-            {
-                "is_symbolic": false,
-                "device_type": "cuda",
-                "dtype": "torch.float32",
-                "sizes": [1024, 1024],
-                "strides": [1024, 1]
-            }
-        ],
-        "kernel_path": "/tmp/torchinductor_eikan/e4/ce4jw46i5l2e7v3tvr2pyglpjmahnp7x3hxaqotrvxwoeh5t6qzc.so"
-    }
-]</code></p>
-<p>Performance-wise, we collected mul.Tensor through torch.compile w/ 10000 runs(e2e). The data is as follows. And we will collect data when we support dynamic shape.</p>
-<ul>
-<li>Eager: ~266.11ms</li>
-<li>W/O Cache: ~3455.54ms</li>
-<li>W/ Cache and Cache Miss: ~3555.3ms</li>
-<li>W/ Cache and Cache Hit: ~267.12ms</li>
-</ul>
-<p>Hardware:</p>
-<ul>
-<li>CPU: Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz</li>
-<li>GPU: CUDA A10</li>
-</ul>
-<p>Software:</p>
-<ul>
-<li>PyTorch Version: 39df084001c54cca5fe3174176f9b0206ddb7dcf</li>
-<li>GPU Driver Version: 525.147.05</li>
-<li>CUDA Version: 12.0</li>
-</ul>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 24 Dec 2023 03:21:18 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116368</guid>
+      <title>TorchInductor CPU Performance Dashboard</title>
+      <link>https://github.com/pytorch/pytorch/issues/93531</link>
+      <description><![CDATA[<p>Dashboard to track the performance of torchinductor on CPU.</p>
+<p>cc @ezyang @msaroufim @wconstab @bdhirsh @anijain2305 @zou3519 @soumith @ngimel @chauhang </p>]]></description>
+      <pubDate>Wed, 12 Oct 2022 18:29:48 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/93531</guid>
     </item>
   </channel>
 </rss>
