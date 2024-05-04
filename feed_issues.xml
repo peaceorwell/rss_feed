@@ -5,149 +5,11 @@
     <link>https://github.com/username/repo/issues</link>
     <description>Recent issues from GitHub repo</description>
     <item>
-      <title>[Compiled autograd] Support ser-defined triton kernel</title>
-      <link>https://github.com/pytorch/pytorch/issues/125489</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>To be filled, we want to support user-defined triton kernels in compiled autograd, esp. when subgraph_speculate fails. e.g. https://gist.github.com/xmfan/fd769f662107bc7b6eb8088595887f33</p>
-<h3>Error logs</h3>
-<p><em>No response</em></p>
-<h3>Minified repro</h3>
-<p><em>No response</em></p>
-<h3>Versions</h3>
-<p>main</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
-      <pubDate>Fri, 03 May 2024 10:59:32 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125489</guid>
-    </item>
-    <item>
-      <title>[dynamo] Do not turn on record relay with TORCH_COMPILE_DEBUG</title>
-      <link>https://github.com/pytorch/pytorch/pull/125488</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124501<br />
-* #125486<br />
-* <strong>-&gt;</strong> #125488</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng @chauhang</p>]]></description>
-      <pubDate>Fri, 03 May 2024 10:46:59 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125488</guid>
-    </item>
-    <item>
-      <title>[inductor] TorchInductor does not correctly recognize the grad status of model code</title>
-      <link>https://github.com/pytorch/pytorch/issues/125474</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>At https://github.com/pytorch/pytorch/blob/30610251ec7b8f7e0507df06c3aadbcf90658e0e/torch/_inductor/compile_fx.py#L1371, torchinductor finds <code>torch.is_grad_enabled()</code> is <code>True</code> even if the compiled code sets <code>with torch.no_grad()</code>.</p>
-<p>Reproduction script:</p>
-<p>```<br />
-import torch<br />
-import torch.nn.functional as F</p>
-<p>class TestModule(torch.nn.Module):<br />
-    def <strong>init</strong>(self):<br />
-        super().<strong>init</strong>()<br />
-        self.conv1 = torch.nn.Conv2d(1, 20, 5)</p>
-<pre><code>def forward(self, x):
-    return F.relu(self.conv1(x))
-</code></pre>
-<p>model = TestModule()<br />
-example_inputs = torch.randn([1, 1, 10, 10]).cpu()</p>
-<p>@torch.compile<br />
-def run(model, example_inputs):<br />
-    with torch.no_grad():<br />
-        # Check inductor grad status at<br />
-        # https://github.com/pytorch/pytorch/blob/30610251ec7b8f7e0507df06c3aadbcf90658e0e/torch/_inductor/compile_fx.py#L1371<br />
-        # If we print <code>torch._inductor.config.cpp.weight_prepack</code> , torchinductor believes torch.is_grad_enabled() is False<br />
-        # Otherwise, torchinductor believes torch.is_grad_enabled() is True <br />
-        # print("torch._inductor.config.cpp.weight_prepack", torch._inductor.config.cpp.weight_prepack)<br />
-        model(example_inputs)</p>
-<p>run(model, example_inputs)<br />
-```</p>
-<h3>Versions</h3>
-<p>The latest nightly release (20240503).</p>]]></description>
-      <pubDate>Fri, 03 May 2024 08:57:56 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125474</guid>
-    </item>
-    <item>
-      <title>[inductor] Remove symbol exports in C shim for Windows</title>
-      <link>https://github.com/pytorch/pytorch/pull/125472</link>
-      <description><![CDATA[<p>Summary:<br />
-This shim exports symbols on Windows, which can lead to symbol clashes at link time in the following scenario:<br />
-1. A DLL imports libtorch<br />
-2. A binary imports libtorch, and also depends on the DLL in (1)</p>
-<p>Under that scenario, the symbols exported from <code>shim.h</code> can clash at link time.</p>
-<p>Given that AOTInductor only works for PyTorch2, and PyTorch2 doesn't currently work for Windows, we can work around this problem by simply removing the symbols export on Windows. In the long term, this will need to be figured out when Windows support is added &amp; tested for PyTorch2.</p>
-<p>Differential Revision: D56936696</p>]]></description>
-      <pubDate>Fri, 03 May 2024 07:15:16 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125472</guid>
-    </item>
-    <item>
-      <title>[Draft] Composable Kernel backend for Inductor</title>
-      <link>https://github.com/pytorch/pytorch/pull/125453</link>
-      <description><![CDATA[<p>This PR adds an alternative backend for Inductor, adding Composable Kernel Universal GEMM instances to the autotune instance selection.</p>
-<p>The implementation is heavily influenced by the series of PRs which adds CUTLASS backend (https://github.com/pytorch/pytorch/issues/106991) and reuses the existing infrastructure for template generation and parallel cpp sources compilation. The main differences are <br />
- (1) customizing compiler for the ROCm platform<br />
- (2) customizing template code generation for Composable Kernel Universal GEMM instances. </p>
-<p>We conducted benchmarks based on the shapes listed in <a href="https://github.com/pytorch/benchmark/blob/main/torchbenchmark/operators/gemm/amd.csv">TorchBench</a> and found the CK instances being selected by autotune in all cases but <code>256/256/256</code>, using RCR layout and F16 input dtypes.</p>
-<p>We provide config tuning knobs for balancing between instance sources compilation time and finding the best instance.</p>
-<h3>Testing</h3>
-<p><code>TORCH_LOGS=+torch._inductor pytest --capture=tee-sys test/inductor/test_cutlass_backend.py -k test_max_autotune_precompile_ck</code></p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 02 May 2024 17:56:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125453</guid>
-    </item>
-    <item>
-      <title>[ignore] debug parallel compile in CI</title>
-      <link>https://github.com/pytorch/pytorch/pull/125451</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #125451<br />
-* #122941<br />
-* #124682</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 02 May 2024 16:36:30 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125451</guid>
-    </item>
-    <item>
-      <title>Add Inductor micro benchmark workflow</title>
-      <link>https://github.com/pytorch/pytorch/pull/125450</link>
-      <description><![CDATA[<p>Fixes #ISSUE_NUMBER</p>]]></description>
-      <pubDate>Thu, 02 May 2024 15:53:59 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125450</guid>
-    </item>
-    <item>
-      <title>Extend torch.utils._sympy.symbol for more Inductor symbols</title>
-      <link>https://github.com/pytorch/pytorch/pull/125419</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #125494<br />
-* #125483<br />
-* <strong>-&gt;</strong> #125419<br />
-* #125395</p>
-<p>I'm still missing a few, cdzq at least</p>
-<p>Signed-off-by: Edward Z. Yang <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;">&#101;&#122;&#121;&#97;&#110;&#103;&#64;&#109;&#101;&#116;&#97;&#46;&#99;&#111;&#109;</a></p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 02 May 2024 11:03:49 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125419</guid>
-    </item>
-    <item>
-      <title>[Inductor max autotune] Minor fix for AlgorithmSelectorCache verification.</title>
-      <link>https://github.com/pytorch/pytorch/pull/125407</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124928<br />
-* <strong>-&gt;</strong> #125407<br />
-* #125406<br />
-* #124930</p>
-<p>Existing benchmark verification code in select_algorithm.py assumes that ATen Kernels are always the first choice. This can lead to errors / exceptions.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>
-<p>Test Plan:<br />
- - CI<br />
-- This actually broke some tests in the past for me, until I always ensured that the ATen Kernels are added first ( in mm.py / bmm.py )</p>]]></description>
-      <pubDate>Thu, 02 May 2024 08:54:30 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125407</guid>
-    </item>
-    <item>
       <title>[Inductor cutlass backend] Enabled nonzero workspace and Cutlass StreamK</title>
       <link>https://github.com/pytorch/pytorch/pull/125406</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * #124928<br />
-* #125407<br />
-* <strong>-&gt;</strong> #125406<br />
-* #124930</p>
+* <strong>-&gt;</strong> #125406</p>
 <p>Enable nonzero workspace and Cutlass StreamK for Inductor Cutlass GEMM ops.</p>
 <p>This is a simpler rewrite of my original version of #119005 using @peterbell10 's workspace allocation mechanism from #117992</p>
 <p>Test Plan:<br />
@@ -158,703 +20,90 @@ This shim exports symbols on Windows, which can lead to symbol clashes at link t
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125406</guid>
     </item>
     <item>
-      <title>`torch.compile` gives correct index values (if those are returned), but not the indexed values.</title>
-      <link>https://github.com/pytorch/pytorch/issues/125387</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>(This is not 100% duplication of  #124357 (that one has a workaround by using <code>torch._dynamo.config.guard_nn_modules=True</code>, but that is not working for this issue.)</p>
-<h1></h1>
-<p>issue occurs for: <code>2.4.0.dev20240501+cu121</code> (possibly also earlier nightly versions)<br />
-no issue : torch 2.2 / 2.3</p>
-<h1>Description</h1>
-<p><code>torch.compile</code> gives the correct index values (if the function return those index values), but if I use those indices to index into a tensor and return those selected values, the outputs (and the indices implied) stay the same after a few iterations of calling.</p>
-<p>See the following (simple) code snippet. There is no effect in this example with or without adding <code>torch._dynamo.config.guard_nn_modules=True</code>, </p>
-<h1>Code snippet</h1>
-<p>```python<br />
-import torch<br />
-import torch._dynamo as dynamo<br />
-import torch._inductor as inductor<br />
-import torch.nn as nn</p>
-<p>dynamo.reset()</p>
-<h1>RETURN_INDEX = True: the outputs are 0, 1, 2, 3, 4, 5 (this is expected)</h1>
-<h1>RETURN_INDEX = False: the outputs are 2, 3, 4, 5, 5, 5 (it should be 2, 3, 4, 5, 6, 7)</h1>
-<p>RETURN_INDEX = True</p>
-<p>class ToyModel(torch.nn.Module):<br />
-    def <strong>init</strong>(self, return_index):<br />
-        super(ToyModel, self).<strong>init</strong>()<br />
-        self.value = -1<br />
-        self.return_index = return_index<br />
-        self.cache = torch.tensor([2, 3, 4, 5, 6, 7])</p>
-<pre><code>def forward(self, value):
-    self.value += 1
-    if self.return_index:
-        return self.value  # the outputs are: 0, 1, 2, 3, 4, 5
-    else:
-        return self.cache[self.value]  # the outputs are:  2, 3, 4, 5, 5, 5
+      <title>nn parameterization causing increased compile time</title>
+      <link>https://github.com/pytorch/pytorch/issues/125314</link>
+      <description><![CDATA[<p>Internal link: https://fb.workplace.com/groups/1075192433118967/permalink/1421189078519299/</p>
+<p>Minimal repro:<br />
+```python<br />
+"""<br />
+torch==2.3.0.dev20240226+cu121<br />
+parametrize=True: 4005ms<br />
+parametrize=False: 1285ms<br />
+parametrize=True: 1848ms<br />
+parametrize=False: 1417ms</p>
+<p>torch==2.4.0.dev20240415+cu118<br />
+parametrize=True: 18487ms<br />
+parametrize=False: 1064ms<br />
+parametrize=True: 17213ms<br />
+parametrize=False: 1064ms<br />
+"""</p>
+<p>import torch<br />
+from torch import nn<br />
+import time</p>
+<p>class Module(nn.Module):<br />
+    def <strong>init</strong>(self) -&gt; None:<br />
+        super().<strong>init</strong>()<br />
+        self.seq = nn.Sequential(*[<br />
+            nn.Linear(128, 128, bias=True)<br />
+            for _ in range(32)<br />
+        ])</p>
+<pre><code>def forward(self, x):
+    return self.seq(x)
 </code></pre>
-<p>model = ToyModel(return_index=RETURN_INDEX )<br />
-model.forward = torch.compile(model.forward, mode="reduce-overhead", fullgraph=True)</p>
-<p>values = [6, 8, 10, 12, 13, 14]<br />
-for value in values:<br />
-    output = model.forward(value)<br />
-    print(f"output = {output}")<br />
-```</p>
-<p><code>RETURN_INDEX = True</code> give (<code>0, 1, 2, 3, 4, 5</code>):</p>
-<p><code>bash
-output = 0
-output = 1
-output = 2
-output = 3
-output = 4
-output = 5</code></p>
-<p><code>RETURN_INDEX = False</code> gives (<code>2, 3, 4, 5, 5, 5</code>):</p>
-<p>```bash<br />
-output = 2<br />
-output = 3<br />
-output = 4<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542] Ignored guard s0 + 1 == 3, this could result in accuracy problems<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542] Stack (most recent call last):<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "temp.py", line 29, in <module><br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     output = model.forward(value)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_dynamo/eval_frame.py", line 403, in _fn<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     return fn(<em>args, </em><em>kwargs)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "temp.py", line 17, in forward<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     def forward(self, value):<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_dynamo/eval_frame.py", line 403, in _fn<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     return fn(</em>args, <strong>kwargs)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_dynamo/external_utils.py", line 36, in inner<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     return fn(*args, </strong>kwargs)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_functorch/aot_autograd.py", line 991, in forward<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     return compiled_fn(full_args)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 262, in runtime_wrapper<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     regenerated_out = gen_alias_from_base(<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/_functorch/_aot_autograd/functional_utils.py", line 230, in gen_alias_from_base<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     out = torch._functionalize_apply_view_metas(<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/fx/experimental/sym_node.py", line 355, in guard_int<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     r = self.shape_env.evaluate_expr(self.expr, self.hint, fx_node=self.fx_node)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/fx/experimental/recording.py", line 244, in wrapper<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     return fn(<em>args, </em>*kwargs)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/fx/experimental/symbolic_shapes.py", line 4708, in evaluate_expr<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     self._check_frozen(expr, concrete_val)<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]   File "/usr/local/lib/python3.8/dist-packages/torch/fx/experimental/symbolic_shapes.py", line 4542, in _check_frozen<br />
-W0502 10:15:04.605925 140253495338816 torch/fx/experimental/symbolic_shapes.py:4542]     log.warning("Ignored guard %s == %s, this could result in accuracy problems", expr, concrete_val, stack_info=True)<br />
-output = 5<br />
-output = 5<br />
-output = 5</p>
+<p>class Parametrization(torch.nn.Module):<br />
+    def forward(self, x):<br />
+        return x.half()</p>
+<pre><code>def right_inverse(self, x):
+    return x.float()
+</code></pre>
+<p>def parametrize(model: nn.Module):<br />
+    mods = list(model.modules())<br />
+    for mod in mods:<br />
+        params = list(mod._parameters.items())<br />
+        for name, p in params:<br />
+            if p is not None:<br />
+                torch.nn.utils.parametrize.register_parametrization(mod, name, Parametrization(), unsafe=True)</p>
+<p>x = torch.randn([1, 128], device="cuda", dtype=torch.half)</p>
+<h1>2 options:</h1>
+<p>print(f"torch=={torch.<strong>version</strong>}")<br />
+for USE_PARAMETRIZATION in [True, False, True, False]:<br />
+    torch._dynamo.reset()<br />
+    m = Module().cuda()<br />
+    if USE_PARAMETRIZATION:<br />
+        parametrize(m)<br />
+    else:<br />
+        m.half()<br />
+    m(x)</p>
+<pre><code>m.compile()
+
+t = time.time()
+m(x)
+dt = time.time() - t
+print(f"parametrize={USE_PARAMETRIZATION}: {int(1000 * dt)}ms")
+</code></pre>
 <p>```</p>
-<h3>Versions</h3>
-<p>```bash<br />
-Collecting environment information...<br />
-PyTorch version: 2.4.0.dev20240501+cu121<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 12.1<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Ubuntu 20.04.6 LTS (x86_64)<br />
-GCC version: (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0<br />
-Clang version: Could not collect<br />
-CMake version: version 3.20.3<br />
-Libc version: glibc-2.31</p>
-<p>Python version: 3.8.10 (default, Nov 22 2023, 10:22:35)  [GCC 9.4.0] (64-bit runtime)<br />
-Python platform: Linux-5.10.214-202.855.amzn2.x86_64-x86_64-with-glibc2.29<br />
-Is CUDA available: True<br />
-CUDA runtime version: Could not collect<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA A10G<br />
-Nvidia driver version: 535.161.08<br />
-cuDNN version: Probably one of the following:<br />
-/usr/lib/x86_64-linux-gnu/libcudnn.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.9.6<br />
-/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.9.6<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>CPU:<br />
-Architecture:                       x86_64<br />
-CPU op-mode(s):                     32-bit, 64-bit<br />
-Byte Order:                         Little Endian<br />
-Address sizes:                      48 bits physical, 48 bits virtual<br />
-CPU(s):                             16<br />
-On-line CPU(s) list:                0-15<br />
-Thread(s) per core:                 2<br />
-Core(s) per socket:                 8<br />
-Socket(s):                          1<br />
-NUMA node(s):                       1<br />
-Vendor ID:                          AuthenticAMD<br />
-CPU family:                         23<br />
-Model:                              49<br />
-Model name:                         AMD EPYC 7R32<br />
-Stepping:                           0<br />
-CPU MHz:                            3267.235<br />
-BogoMIPS:                           5600.00<br />
-Hypervisor vendor:                  KVM<br />
-Virtualization type:                full<br />
-L1d cache:                          256 KiB<br />
-L1i cache:                          256 KiB<br />
-L2 cache:                           4 MiB<br />
-L3 cache:                           32 MiB<br />
-NUMA node0 CPU(s):                  0-15<br />
-Vulnerability Gather data sampling: Not affected<br />
-Vulnerability Itlb multihit:        Not affected<br />
-Vulnerability L1tf:                 Not affected<br />
-Vulnerability Mds:                  Not affected<br />
-Vulnerability Meltdown:             Not affected<br />
-Vulnerability Mmio stale data:      Not affected<br />
-Vulnerability Retbleed:             Mitigation; untrained return thunk; SMT enabled with STIBP protection<br />
-Vulnerability Spec rstack overflow: Mitigation; safe RET<br />
-Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl and seccomp<br />
-Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br />
-Vulnerability Spectre v2:           Mitigation; Retpolines, IBPB conditional, STIBP always-on, RSB filling<br />
-Vulnerability Srbds:                Not affected<br />
-Vulnerability Tsx async abort:      Not affected<br />
-Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch topoext ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 clzero xsaveerptr rdpru wbnoinvd arat npt nrip_save rdpid</p>
-<p>Versions of relevant libraries:<br />
-[pip3] intel-extension-for-pytorch==2.2.0<br />
-[pip3] mypy-extensions==1.0.0<br />
-[pip3] natten==0.15.1+torch220cu118<br />
-[pip3] numpy==1.24.3<br />
-[pip3] onnx==1.16.0<br />
-[pip3] onnxconverter-common==1.13.0<br />
-[pip3] onnxruntime==1.17.3<br />
-[pip3] onnxruntime-tools==1.7.0<br />
-[pip3] pytorch-triton==3.0.0+45fff310c8<br />
-[pip3] tf2onnx==1.16.1<br />
-[pip3] torch==2.4.0.dev20240501+cu121<br />
-[pip3] torchaudio==2.2.0.dev20240501+cu121<br />
-[pip3] torchvision==0.19.0.dev20240501+cu121<br />
-[pip3] triton==2.2.0<br />
-[conda] Could not collect<br />
-```</p>
-<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78</p>
-<p>(just like #124357)</p>]]></description>
-      <pubDate>Thu, 02 May 2024 02:29:59 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125387</guid>
-    </item>
-    <item>
-      <title>[ignore] Test parallel compile with python threads</title>
-      <link>https://github.com/pytorch/pytorch/pull/125372</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #125372</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Wed, 01 May 2024 18:49:11 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125372</guid>
-    </item>
-    <item>
-      <title>[Inductor] Properly package target info for triton.compile </title>
-      <link>https://github.com/pytorch/pytorch/pull/125241</link>
-      <description><![CDATA[<p>Triton updated the interface for <code>triton.compile</code> https://github.com/openai/triton/commit/5162346487b3e3ebc062d9697429bafad25f22f6 </p>
-<p>The <code>target</code> argument to compile needs to be wrapped in a <code>GPUTarget</code> object. Without proper wrapping, we hit an assert in <code>compile</code>. If that assert is removed, Triton attempts to read device info from Torch while inside a torch thread, which hits an in bad fork assert. This change is required for compatibility with latest commits in Triton. The implementation is backwards compatible, so existing versions of Triton that work now continue to work.</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Tue, 30 Apr 2024 07:51:06 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125241</guid>
-    </item>
-    <item>
-      <title>torch.no_grad() is not working for dynamo inductor backend </title>
-      <link>https://github.com/pytorch/pytorch/issues/125236</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>torch dynamo context manager is not seeing the <code>torch.no_grad()</code> setting from torchbench framework.</p>
-<p>This is the reproducer<br />
-<code>python run_benchmark.py cpu --model hf_Bert --test eval --torchdynamo inductor</code></p>
-<p>Here is the code snippet from torchbench that sets the no_grad()<br />
-https://github.com/pytorch/benchmark/blob/main/torchbenchmark/util/framework/huggingface/model_factory.py#L120</p>
-<p><code>with torch.no_grad():
-            with self.amp_context():
-                out = self.model(**self.example_inputs)</code><br />
-but the torch dynamo inductor backend isn't seeing the grad disabled, and hence is not triggering the graph level optimizations.<br />
-https://github.com/pytorch/pytorch/blob/v2.3.0/torch/_inductor/compile_fx.py#L1270</p>
-<h3>Error logs</h3>
-<p>no error log, but the torch.compile didn't trigger the fx graph  optimizations</p>
-<h3>Minified repro</h3>
-<p><em>No response</em></p>
-<h3>Versions</h3>
-<p>torch mainline as well as torch 2.3<br />
-torchbench mainline<br />
-Ubuntu 22.04<br />
-aarch64 and x86_64</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang</p>]]></description>
-      <pubDate>Tue, 30 Apr 2024 07:23:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125236</guid>
-    </item>
-    <item>
-      <title>[inductor][cpp] move some common cpp utils to cpp_utils.py</title>
-      <link>https://github.com/pytorch/pytorch/pull/125152</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124021<br />
-* #125159<br />
-* <strong>-&gt;</strong> #125152</p>
-<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Mon, 29 Apr 2024 05:28:14 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/125152</guid>
-    </item>
-    <item>
-      <title>Remove Inductor IRs for legacy functional collectives</title>
-      <link>https://github.com/pytorch/pytorch/pull/124992</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124992</p>
-<p>This PR completely removes the Inductor IR for legacy functional collectives:<br />
-- Removed the <code>CollectiveKernel</code> hiearchy and <code>Wait</code>, as well as the corresponding lowerings. These IRs are target (i.e. Python) specific and don't model node dependencies propoerly (e.g. they rely on <code>never_reuse_buffers</code> for correct behavior). They've been superceded by <code>ir._CollectiveKernel</code>.<br />
-- Removed <code>InPlaceHint</code> and the scheduler logic for handling it. <code>InPlaceHint</code> is a codegen-time buffer reuse mechanism controlled by the IR's codegen. It's a bit hacky and overlaps with the default buffer reuse mechanism. Removing it since it is only used by legacy functional collectives.<br />
-- Removed <code>OutputBuffer</code> and <code>MultiOutputNoSizeAssert</code> which are designed for and only used by legacy functional collectives.</p>
-<p>cc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @rohan-varma @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu @penguinwu @fegin @XilunWu @wanchaol @fduwjj @wz337 @tianyu-l @wconstab @yf225 @chauhang @d4l3k @voznesenskym @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire</p>]]></description>
-      <pubDate>Thu, 25 Apr 2024 17:06:59 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124992</guid>
-    </item>
-    <item>
-      <title>PT2 Inductor ComboKernels</title>
-      <link>https://github.com/pytorch/pytorch/pull/124969</link>
-      <description><![CDATA[<p>Summary:<br />
-A ComboKernel combines independent Inductor Triton kernels into a single one.<br />
-Consolidation with Foreach kernel:<br />
-1) For the scheduler node, the logic is consolidated into ForeachKernelSchedulerNode<br />
-2) The backend kernel is consolidated into ComboKernel.</p>
-<p>Example:<br />
-- element wise kernels<br />
-original Pytorch function:<br />
-<code>def test_activations(a, b, c):
-     a1 = torch.nn.functional.relu(a)
-     b1 = torch.nn.functional.sigmoid(b)
-     c1 = torch.nn.functional.tanh(c)
-     return a1, b1, c1</code><br />
-combokernel<br />
-<code>triton_heuristics.pointwise(
-    size_hints=[512], tile_hint=TileHint.DEFAULT,
-    filename=__file__,
-    triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: '*fp32', 3: '*fp32', 4: '*fp32', 5: '*fp32'}, 'device': 0, 'device_type': 'cuda', 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3, 4, 5), equal_to_1=())]},
-    inductor_meta={'kernel_name': 'triton_poi_fused_0', 'mutated_arg_names': []}
-)
-triton.jit
-def triton_(in_ptr0, in_ptr1, in_ptr2, out_ptr0, out_ptr1, out_ptr2, XBLOCK : tl.constexpr):
-    pid = tl.program_id(0)
-    if pid % 3 == 0:
-        pid_offset = pid // 3
-        xnumel = 100
-        rnumel = 1
-        xoffset = pid_offset * XBLOCK
-        xindex = xoffset + tl.arange(0, XBLOCK)[:]
-        xmask = xindex &lt; xnumel
-        x0 = xindex
-        tmp0 = tl.load(in_ptr0 + (x0), xmask)
-        tmp1 = triton_helpers.maximum(0, tmp0)
-        tl.store(out_ptr0 + (x0), tmp1, xmask)
-    elif pid % 3 == 1:
-        pid_offset = pid // 3
-        xnumel = 400
-        rnumel = 1
-        xoffset = pid_offset * XBLOCK
-        xindex = xoffset + tl.arange(0, XBLOCK)[:]
-        xmask = xindex &lt; xnumel
-        x1 = xindex
-        tmp2 = tl.load(in_ptr1 + (x1), xmask)
-        tmp3 = tl.sigmoid(tmp2)
-        tl.store(out_ptr1 + (x1), tmp3, xmask)
-    elif pid % 3 == 2:
-        pid_offset = pid // 3
-        xnumel = 100
-        rnumel = 1
-        xoffset = pid_offset * XBLOCK
-        xindex = xoffset + tl.arange(0, XBLOCK)[:]
-        xmask = xindex &lt; xnumel
-        x2 = xindex
-        tmp4 = tl.load(in_ptr2 + (x2), xmask)
-        tmp5 = libdevice.tanh(tmp4)
-        tl.store(out_ptr2 + (x2), tmp5, xmask)
-    else:
-        pass</code><br />
-- reduction kernels<br />
-Original Pytorch function:<br />
-<code>def test_reduce(a, b, c):
-     a1 = torch.sum(a, dim=0)
-     b1 = torch.max(b, dim=0)
-     c1 = torch.min(c, dim=0)
-     return a1, b1, c1</code><br />
-Generated combokernal:<br />
-<code>triton_heuristics.persistent_reduction(
-     size_hints=[32, 32],
-     reduction_hint=ReductionHint.DEFAULT,
-     filename=__file__,
-     triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: '*fp32', 3: '*fp32', 4: '*i64', 5: '*fp32', 6: '*i64', 7: '*fp32'}, 'device': 0, 'device_type': 'cuda', 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3, 4, 5, 6, 7), equal_to_1=())]},
-     inductor_meta={'kernel_name': 'triton_per_fused_0', 'mutated_arg_names': []}
- )
- triton.jit
- def triton_(in_ptr0, in_ptr1, in_ptr2, out_ptr0, out_ptr1, out_ptr2, out_ptr3, out_ptr4, XBLOCK : tl.constexpr):
-     pid = tl.program_id(0)
-     if pid % 3 == 0:
-         pid_offset = pid // 3
-         xnumel = 20
-         rnumel = 20
-         RBLOCK_0: tl.constexpr = 32
-         xoffset = pid_offset * XBLOCK
-         xindex = xoffset + tl.arange(0, XBLOCK)[:, None]
-         xmask = xindex &lt; xnumel
-         rindex = tl.arange(0, RBLOCK_0)[None, :]
-         roffset = 0
-         rmask = rindex &lt; rnumel
-         r1 = rindex
-         x0 = xindex
-         tmp0 = tl.load(in_ptr0 + (x0 + (20*r1)), rmask &amp; xmask, other=0.0)
-         tmp1 = tl.broadcast_to(tmp0, [XBLOCK, RBLOCK_0])
-         tmp3 = tl.where(rmask &amp; xmask, tmp1, float("-inf"))
-         tmp4 = triton_helpers.max2(tmp3, 1)[:, None]
-         tmp6 = tl.broadcast_to(rindex, tmp3.shape)
-         _, tmp5_tmp = triton_helpers.max_with_index(tmp3, tmp6, 1)
-         tmp5 = tmp5_tmp[:, None]
-         tl.store(out_ptr0 + (x0), tmp4, xmask)
-         tl.store(out_ptr1 + (x0), tmp5, xmask)
-     elif pid % 3 == 1:
-         pid_offset = pid // 3
-         xnumel = 10
-         rnumel = 10
-         RBLOCK_1: tl.constexpr = 16
-         xoffset = pid_offset * XBLOCK
-         xindex = xoffset + tl.arange(0, XBLOCK)[:, None]
-         xmask = xindex &lt; xnumel
-         rindex = tl.arange(0, RBLOCK_1)[None, :]
-         roffset = 0
-         rmask = rindex &lt; rnumel
-         r3 = rindex
-         x2 = xindex
-         tmp7 = tl.load(in_ptr1 + (x2 + (10*r3)), rmask &amp; xmask, other=0.0)
-         tmp8 = tl.broadcast_to(tmp7, [XBLOCK, RBLOCK_1])
-         tmp10 = tl.where(rmask &amp; xmask, tmp8, float("inf"))
-         tmp11 = triton_helpers.min2(tmp10, 1)[:, None]
-         tmp13 = tl.broadcast_to(rindex, tmp10.shape)
-         _, tmp12_tmp = triton_helpers.min_with_index(tmp10, tmp13, 1)
-         tmp12 = tmp12_tmp[:, None]
-         tl.store(out_ptr2 + (x2), tmp11, xmask)
-         tl.store(out_ptr3 + (x2), tmp12, xmask)
-     elif pid % 3 == 2:
-         pid_offset = pid // 3
-         xnumel = 10
-         rnumel = 10
-         RBLOCK_2: tl.constexpr = 16
-         xoffset = pid_offset * XBLOCK
-         xindex = xoffset + tl.arange(0, XBLOCK)[:, None]
-         xmask = xindex &lt; xnumel
-         rindex = tl.arange(0, RBLOCK_2)[None, :]
-         roffset = 0
-         rmask = rindex &lt; rnumel
-         r5 = rindex
-         x4 = xindex
-         tmp14 = tl.load(in_ptr2 + (x4 + (10*r5)), rmask &amp; xmask, other=0.0)
-         tmp15 = tl.broadcast_to(tmp14, [XBLOCK, RBLOCK_2])
-         tmp17 = tl.where(rmask &amp; xmask, tmp15, 0)
-         tmp18 = tl.sum(tmp17, 1)[:, None]
-         tl.store(out_ptr4 + (x4), tmp18, xmask)
-     else:
-         pass</code></p>
-<p>Note: ComboKernels uses masks to allow combination of kernels working with tensors of different sizes.</p>
-<p>Test Plan:<br />
-<code>buck2 test mode/dev-nosan caffe2/test/inductor:foreach</code><br />
-<code>buck2 test mode/dev-nosan caffe2/test/inductor:combo_kernels</code></p>
-<p>Differential Revision: D54134695</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 25 Apr 2024 12:02:58 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124969</guid>
-    </item>
-    <item>
-      <title>[Inductor cutlass backend] Fix cutlass_utils.get_max_alignment() for strided layouts.</title>
-      <link>https://github.com/pytorch/pytorch/pull/124930</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #124928<br />
-* #125407<br />
-* #125406<br />
-* <strong>-&gt;</strong> #124930</p>
-<p>Fixes cutlass_utils.get_max_alignment() which was so far not checking the alignment properly. Basically<br />
-the method so far assumed that the passed layout is contiguous and row-major, which does not have to be true.</p>
-<p>Test Plan:<br />
-CI - test_cutlass_backend.py to prevent regressions<br />
-Added unit test</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Thu, 25 Apr 2024 03:21:03 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124930</guid>
+<p>Bisected to find the following commits responsible: https://github.com/pytorch/pytorch/pull/121041 (~200ms -&gt; ~4500ms locally) and https://github.com/pytorch/pytorch/pull/123804 (~4500ms -&gt; ~20000ms locally).</p>
+<p>cc @ezyang @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @chenyang78 @kadeng</p>]]></description>
+      <pubDate>Wed, 01 May 2024 10:00:34 GMT</pubDate>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/125314</guid>
     </item>
     <item>
       <title>[Inductor max autotune] Make autotune_select_algorithm more robust</title>
       <link>https://github.com/pytorch/pytorch/pull/124928</link>
       <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
 * <strong>-&gt;</strong> #124928<br />
-* #125407<br />
-* #125406<br />
-* #124930</p>
+* #125406</p>
 <p>This diff makes sure that a custom exception is thrown when no valid<br />
 choices remain during autotuning. This allows to gracefully fall back<br />
 to a default choice, even if that default choice has not been passed to<br />
 autotune_select_algorithm.</p>
 <p>Additionally, this diff handles RuntimeErrors during autotuning gracefully, e.g. the corresponding choice is ignored but it does not lead to the compilation failure of the entire model if a problematic choice is encountered during autotuning.<br />
 ( An error is being logged, though).</p>
-<p>TODO:<br />
- * Add unit test<br />
- * Add an assertion that we use autune_in_subproc when CUTLASS backend is enabled</p>
+<p>Test Plan:<br />
+CI</p>
 <p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
       <pubDate>Thu, 25 Apr 2024 03:14:12 GMT</pubDate>
       <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124928</guid>
-    </item>
-    <item>
-      <title>[inductor] Add thread+subproc-based worker_start_method</title>
-      <link>https://github.com/pytorch/pytorch/pull/124682</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #125451<br />
-* #122941<br />
-* <strong>-&gt;</strong> #124682</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 22 Apr 2024 15:47:49 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124682</guid>
-    </item>
-    <item>
-      <title>DISABLED test_pow_zero_tensor_gradient (__main__.TestAutogradWithCompiledAutograd)</title>
-      <link>https://github.com/pytorch/pytorch/issues/124608</link>
-      <description><![CDATA[<p>Platforms: asan, linux, rocm, slow, mac, macos</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_pow_zero_tensor_gradient&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/24086418995">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 13 workflow(s) with 39 failures and 13 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_pow_zero_tensor_gradient</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 22 Apr 2024 01:39:51 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124608</guid>
-    </item>
-    <item>
-      <title>DISABLED test_no_unnecessary_unwrapping (__main__.TestAutogradWithCompiledAutograd)</title>
-      <link>https://github.com/pytorch/pytorch/issues/124589</link>
-      <description><![CDATA[<p>Platforms: asan, linux, rocm, slow, mac, macos</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_no_unnecessary_unwrapping&amp;suite=TestAutogradWithCompiledAutograd&amp;limit=100">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/24079195027">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 11 workflow(s) with 33 failures and 11 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_no_unnecessary_unwrapping</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_compiled_autograd.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 21 Apr 2024 19:39:28 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/124589</guid>
-    </item>
-    <item>
-      <title>[WIP][inductor] refine loop split logic</title>
-      <link>https://github.com/pytorch/pytorch/pull/124060</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #124060</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Mon, 15 Apr 2024 05:52:29 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124060</guid>
-    </item>
-    <item>
-      <title>[inductor] add cpp builder code.</title>
-      <link>https://github.com/pytorch/pytorch/pull/124045</link>
-      <description><![CDATA[<p>Previous full PR https://github.com/pytorch/pytorch/pull/115248 is failed to merge due to fb_code is hard to debug.<br />
-I also tried to submit them as two pieces, https://github.com/pytorch/pytorch/pull/118514 https://github.com/pytorch/pytorch/pull/118515. And they have passed PreCI at that time.</p>
-<p>Now I tried to split https://github.com/pytorch/pytorch/pull/115248 into smaller piece, and it is the first step of RFC https://github.com/pytorch/pytorch/issues/124245.<br />
-Changes:<br />
-1. Add cpp builder code, the new cpp_builder support Windows OS.<br />
-2. Add CPU ISA checker which is cross OS and exported from backend cpuinfo.<br />
-3. Switch compiler ISA checker to new cpp builder.<br />
-4. CppCodeCache use the new ISA checker.<br />
-5. Add temprary <code>test_new_cpp_build_logical</code> UT to help on transfer to new code.<br />
-<img width="1853" alt="Image" src="https://github.com/pytorch/pytorch/assets/8433590/ce6519ab-ba92-4204-b1d6-7d15d2ba2cbe"></p>
-<p>cc @jgong5 @mingfeima @XiaobingSuper @sanchitintel @ashokei @jingxu10 @voznesenskym @penguinwu @EikanWang @Guobing-Chen @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 14 Apr 2024 23:55:25 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/124045</guid>
-    </item>
-    <item>
-      <title>[inductor] Make cpp_wrapper mode incrementally release memory</title>
-      <link>https://github.com/pytorch/pytorch/pull/118489</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* <strong>-&gt;</strong> #118489</p>
-<p>Previously memory wouldn't be freed because the Python/caller reference was still around.</p>
-<p>cc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sat, 27 Jan 2024 20:42:22 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/118489</guid>
-    </item>
-    <item>
-      <title>DISABLED test_dynamic_stride_nobreak_cuda (__main__.TestInductorDynamicCUDA)</title>
-      <link>https://github.com/pytorch/pytorch/issues/117954</link>
-      <description><![CDATA[<p>Platforms: linux, slow, rocm</p>
-<p>This test was disabled because it is failing in CI. See <a href="https://hud.pytorch.org/flakytest?name=test_dynamic_stride_nobreak_cuda&amp;suite=TestInductorDynamicCUDA">recent examples</a> and the most recent trunk <a href="https://github.com/pytorch/pytorch/runs/20705326851">workflow logs</a>.</p>
-<p>Over the past 3 hours, it has been determined flaky in 3 workflow(s) with 9 failures and 3 successes.</p>
-<p><strong>Debugging instructions (after clicking on the recent samples link):</strong><br />
-DO NOT ASSUME THINGS ARE OKAY IF THE CI IS GREEN. We now shield flaky tests from developers so CI will thus be green but it will be harder to parse the logs.<br />
-To find relevant log snippets:<br />
-1. Click on the workflow logs linked above<br />
-2. Click on the Test step of the job so that it is expanded. Otherwise, the grepping will not work.<br />
-3. Grep for <code>test_dynamic_stride_nobreak_cuda</code><br />
-4. There should be several instances run (as flaky tests are rerun in CI) from which you can study the logs.</p>
-<p>Test file path: <code>inductor/test_torchinductor_dynamic_shapes.py</code></p>
-<p>cc @clee2000 @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler</p>]]></description>
-      <pubDate>Sun, 21 Jan 2024 16:57:15 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/117954</guid>
-    </item>
-    <item>
-      <title>Add a cache mechanism to accelerate torch.compile-for-eager</title>
-      <link>https://github.com/pytorch/pytorch/pull/116368</link>
-      <description><![CDATA[<p>Stack from <a href="https://github.com/ezyang/ghstack">ghstack</a> (oldest at bottom):<br />
-* #125308<br />
-* #124926<br />
-* #124070<br />
-* #124177<br />
-* <strong>-&gt;</strong> #116368<br />
-* #124836</p>
-<p>This PR is a follow-up of RFC https://github.com/pytorch/pytorch/issues/115545.</p>
-<p>In this PR, we are trying to enable a cache mechanism to accelerate <strong>eager-through-torch.compile</strong>. When <strong>eager-through-torch.compile</strong> is enabled, we will store a persistent config to cache the kernel information for the aten operation. </p>
-<p>The persistent config consists of two parts - meta_info and kernel_path.</p>
-<ul>
-<li>meta_info: The input tensors' shape, stride, device type, data type, and symbolic flag.</li>
-<li>kernel_path: The path of the kernel produced by Inductor.</li>
-</ul>
-<p>When an aten operation is registered, the <code>kernel_holder</code> will load the persistent config and parse it to build the cache map;  the meta_info is key, and the kernel library is the value.</p>
-<p>Currently, this PR only supports static shape to guard the kernel.</p>
-<p>Take a <code>mul</code> as an example.<br />
-```python<br />
-class MulKernel:<br />
-  def <strong>init</strong>(self) -&gt; None:<br />
-    pass</p>
-<p>def <strong>call</strong>(self, <em>args: Any, </em><em>kwargs: Any) -&gt; Any:<br />
-    with torch._C._SetExcludeDispatchKeyGuard(torch._C.DispatchKey.Python, False):<br />
-      opt_fn = torch.compile(torch.ops.aten.mul, dynamic=False, options={<br />
-          "aot_inductor.eager_mode": True,<br />
-          "aot_inductor.eager_op_name": "mul_Tensor"<br />
-        }<br />
-      )<br />
-      return opt_fn(</em>args, **kwargs)</p>
-<p>torch_compile_op_lib_impl = torch.library.Library("aten", "IMPL")</p>
-<p>_, overload_names = torch._C._jit_get_operation("aten::mul")<br />
-schema = torch._C._get_schema("aten::mul", overload_name)<br />
-reg_name = schema.name<br />
-if schema.overload_name:<br />
-  reg_name = f"{reg_name}.{schema.overload_name}"<br />
-  torch_compile_op_lib_impl.impl(<br />
-    reg_name,<br />
-    MulKernel(),<br />
-    "CUDA",<br />
-    compile_mode=True)</p>
-<p>a = torch.randn(1024, 1024, device=device)<br />
-b = torch.randn(1024, 1024, device=device)<br />
-warm_up_iter = 1000<br />
-iter = 10000<br />
-fn = torch.mul</p>
-<h1>Warm up</h1>
-<p>for _ in range(warm_up_iter):<br />
-    fn(a, b)</p>
-<h1>Collect performance</h1>
-<p>beg = time.time()<br />
-for _ in range(iter):<br />
-    fn(a, b)<br />
-end = time.time()<br />
-print(f"E2E run: {end - beg}")<br />
-```<br />
-It will produce the config as follows.</p>
-<p><code>json
-[
-    {
-        "meta_info": [
-            {
-                "is_symbolic": false,
-                "device_type": "cuda",
-                "dtype": "torch.float32",
-                "sizes": [1024, 1024],
-                "strides": [1024, 1]
-            },
-            {
-                "is_symbolic": false,
-                "device_type": "cuda",
-                "dtype": "torch.float32",
-                "sizes": [1024, 1024],
-                "strides": [1024, 1]
-            }
-        ],
-        "kernel_path": "/tmp/torchinductor_eikan/e4/ce4jw46i5l2e7v3tvr2pyglpjmahnp7x3hxaqotrvxwoeh5t6qzc.so"
-    }
-]</code></p>
-<p>Performance-wise, we collected mul.Tensor through torch.compile w/ 10000 runs(e2e). The data is as follows. And we will collect data when we support dynamic shape.</p>
-<ul>
-<li>Eager: ~266.11ms</li>
-<li>W/O Cache: ~3455.54ms</li>
-<li>W/ Cache and Cache Miss: ~3555.3ms</li>
-<li>W/ Cache and Cache Hit: ~267.12ms</li>
-</ul>
-<p>Hardware:</p>
-<ul>
-<li>CPU: Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz</li>
-<li>GPU: CUDA A10</li>
-</ul>
-<p>Software:</p>
-<ul>
-<li>PyTorch Version: 39df084001c54cca5fe3174176f9b0206ddb7dcf</li>
-<li>GPU Driver Version: 525.147.05</li>
-<li>CUDA Version: 12.0</li>
-</ul>
-<p>cc @voznesenskym @penguinwu @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @chauhang</p>]]></description>
-      <pubDate>Sun, 24 Dec 2023 03:21:18 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/pull/116368</guid>
-    </item>
-    <item>
-      <title>torch.compile mode="max-autotune" precision appears to be lower</title>
-      <link>https://github.com/pytorch/pytorch/issues/96693</link>
-      <description><![CDATA[<h3>🐛 Describe the bug</h3>
-<p>I'm sorry, this is going to be a terrible bug report, but I wasn't able to simplify the problem. </p>
-<p>I'm running a training run with a model that is compiled with <code>torch.compile</code>. The blue line below is loss with the <code>default</code> mode, the red line below is loss with <code>max-autotune</code>, the training runs are otherwise identical:</p>
-<p><img alt="spiky_comparison" src="https://user-images.githubusercontent.com/22680696/224837823-788ccd48-6fb0-4099-9c87-46926dca134f.png" /></p>
-<p>It appears as if precision/stability is noticeably lower on the max-autotune training run. This is running on an RTXA600 GPU. The forward pass is wrapped in <br />
-<code>torch.autocast</code>, there are no graph breaks or warning messages. Max-autotune code is also noticeably a bit faster, so it is definitely doing something that the default mode is not.</p>
-<p>Feel free to close this issue if this is not enough info. I could also test more specific things or try to make a mini version to get to the bottom of this, but I have no idea what to look for, or which part would be relevant.</p>
-<h3>Error logs</h3>
-<p><em>No response</em></p>
-<h3>Minified repro</h3>
-<p><em>No response</em></p>
-<h3>Versions</h3>
-<p>```<br />
-PyTorch version: 2.1.0.dev20230307<br />
-Is debug build: False<br />
-CUDA used to build PyTorch: 11.8<br />
-ROCM used to build PyTorch: N/A</p>
-<p>OS: Pop!_OS 22.04 LTS (x86_64)<br />
-GCC version: (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0<br />
-Clang version: Could not collect<br />
-CMake version: Could not collect<br />
-Libc version: glibc-2.35</p>
-<p>Python version: 3.10.9 (main, Mar  1 2023, 18:23:06) [GCC 11.2.0] (64-bit runtime)<br />
-Python platform: Linux-6.2.0-76060200-generic-x86_64-with-glibc2.35<br />
-Is CUDA available: True<br />
-CUDA runtime version: 11.5.119<br />
-CUDA_MODULE_LOADING set to: LAZY<br />
-GPU models and configuration: GPU 0: NVIDIA GeForce RTX 3050 Ti Laptop GPU<br />
-Nvidia driver version: 525.85.05<br />
-cuDNN version: Could not collect<br />
-HIP runtime version: N/A<br />
-MIOpen runtime version: N/A<br />
-Is XNNPACK available: True</p>
-<p>Versions of relevant libraries:<br />
-[pip3] lion-pytorch==0.0.7<br />
-[pip3] numpy==1.23.5<br />
-[pip3] torch==2.1.0.dev20230307<br />
-[pip3] torchaudio==2.0.0.dev20230307<br />
-[pip3] torchvision==0.15.0.dev20230307<br />
-[conda] blas                      1.0                         mkl<br />
-[conda] lion-pytorch              0.0.7                    pypi_0    pypi<br />
-[conda] mkl                       2021.4.0           h06a4308_640<br />
-[conda] mkl-service               2.4.0           py310h7f8727e_0<br />
-[conda] mkl_fft                   1.3.1           py310hd6ae3a3_0<br />
-[conda] mkl_random                1.2.2           py310h00e6091_0<br />
-[conda] numpy                     1.23.5          py310hd5efca6_0<br />
-[conda] numpy-base                1.23.5          py310h8e6c178_0<br />
-[conda] pytorch                   2.1.0.dev20230307 py3.10_cuda11.8_cudnn8.7.0_0    pytorch-nightly<br />
-[conda] pytorch-cuda              11.8                 h7e8668a_3    pytorch-nightly<br />
-[conda] pytorch-mutex             1.0                        cuda    pytorch-nightly<br />
-[conda] torchaudio                2.0.0.dev20230307     py310_cu118    pytorch-nightly<br />
-[conda] torchtriton               2.0.0+b8b470bc59           py310    pytorch-nightly<br />
-[conda] torchvision               0.15.0.dev20230307     py310_cu118    pytorch-nightly</p>
-<p>```</p>
-<p>cc @ezyang @gchanan @zou3519 @kadeng @msaroufim @bdhirsh @anijain2305 @chauhang @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @peterbell10 @ipiszy @yf225 @chenyang78 @muchulee8 @aakhundov @ColinPeppler @amjames @desertfire @wconstab @soumith @ngimel</p>]]></description>
-      <pubDate>Mon, 13 Mar 2023 13:46:59 GMT</pubDate>
-      <guid isPermaLink="true">https://github.com/pytorch/pytorch/issues/96693</guid>
     </item>
   </channel>
 </rss>
